@@ -1,0 +1,253 @@
+!
+! Distributed Linear Algebra with Future (DLAF)
+!
+! Copyright (c) 2018-2024, ETH Zurich
+! All rights reserved.
+!
+! Please, refer to the LICENSE file in the root directory.
+! SPDX-License-Identifier: BSD-3-Clause
+!
+
+#:set precision = ['sp', 'dp']
+#:set types = ['real', 'complex']
+#:set names = {('sp', 'real'): 'ssy', ('sp', 'complex'): 'che', ('dp', 'real'): 'dsy', ('dp', 'complex'): 'zhe'}
+#:set symbols = {('sp', 'real'): 's', ('sp', 'complex'): 'c', ('dp', 'real'): 'd', ('dp', 'complex'): 'z'}
+module pxhegvx_tests
+   use iso_fortran_env, only: error_unit, sp => real32, dp => real64
+   use dlaf_fortran, only: dlaf_initialize, dlaf_finalize, dlaf_create_grid, dlaf_free_grid
+   #:for dtype in precision
+      #:for type in types
+         #:set name = names[(dtype, type)]
+         use dlaf_fortran, only: dlaf_p${name}$gvx
+      #:endfor
+   #:endfor
+
+   use testutils, only: allclose, terminate, setup_mpi, teardown_mpi, bcast_check, set_random_matrix, init_desc
+
+   implicit none
+
+   external blacs_pinfo
+   external blacs_get
+   external blacs_gridinit
+   external blas_gridinfo
+   external blacs_gridexit
+   external blacs_exit
+   integer, external :: numroc
+   real(kind=sp), external :: pslamch
+   real(kind=dp), external :: pdlamch
+
+   #:for dtype in precision
+      #:for type in types
+         #:set name = names[(dtype, type)]
+         public :: p${name}$gvx_test
+      #:endfor
+   #:endfor
+
+contains
+
+   #:for dtype in precision
+      #:for type in types
+         #:set name = names[(dtype, type)]
+         #:set symbol = symbols[(dtype, type)]
+         subroutine p${name}$gvx_test
+
+            integer, parameter :: n = 4
+
+            integer:: nprow, npcol
+            integer:: i, j
+
+            integer :: rank, numprocs, myrow, mycol
+            logical :: failed
+            integer :: ictxt, ictxt_0
+            integer :: info, lld, nb, ma, na
+            integer :: neig, neval
+            integer, dimension(n) :: ifail
+            integer, dimension(:), allocatable :: iclustr
+            real(kind=${dtype}$), dimension(:), allocatable :: gap
+            integer :: desca(9), desca_local_dlaf(9), desca_local_scalapack(9)
+            integer :: descb(9), descb_local_dlaf(9), descb_local_scalapack(9)
+            integer :: descz_local_dlaf(9), descz_local_scalapack(9)
+            integer :: descz_dlaf(9), descz_scalapack(9)
+            ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: A, A_local_dlaf, A_local_scalapack
+            ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: B, B_local_dlaf, B_local_scalapack
+            ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: Z_local_dlaf, Z_local_scalapack
+            ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: Z_dlaf, Z_scalapack
+            real(kind=${dtype}$), dimension(:), allocatable :: W_dlaf, W_scalapack
+            real(kind=${dtype}$), parameter :: abstol = #{if dtype == 'sp'}# 1e-5_${dtype}$ #{else}# 1e-8_${dtype}$ #{endif}#
+
+            integer, parameter :: lwork = 100, liwork = 100
+            #:if type == 'complex'
+               integer, parameter :: lrwork = 100
+               real(kind=${dtype}$), dimension(lrwork) :: rwork
+            #:endif
+            ${type}$ (kind=${dtype}$), dimension(lwork) :: work
+            integer, dimension(liwork) :: iwork
+
+            nprow = 2
+            npcol = 3
+            nb = 2
+
+            call setup_mpi(nprow, npcol, rank, numprocs)
+
+            ! Setup BLACS
+            call blacs_get(0, 0, ictxt)
+            ictxt_0 = ictxt
+            call blacs_gridinit(ictxt, 'R', nprow, npcol)
+            call blacs_gridinit(ictxt_0, 'R', 1, 1)
+            call blacs_pinfo(rank, numprocs)
+            call blacs_gridinfo(ictxt, nprow, npcol, myrow, mycol)
+
+            allocate (iclustr(2*nprow*npcol))
+            allocate (gap(nprow*npcol))
+
+            ! Setup full matrices on rank 0
+            call init_desc(desca)
+            call init_desc(descb)
+            call init_desc(descz_scalapack)
+            call init_desc(descz_dlaf)
+            if (rank == 0) then
+               allocate (A(n, n))
+               allocate (B(n, n))
+               allocate (Z_dlaf(n, n))
+               allocate (Z_scalapack(n, n))
+
+               call descinit(desca, n, n, n, n, 0, 0, ictxt_0, n, info)
+               call descinit(descb, n, n, n, n, 0, 0, ictxt_0, n, info)
+               call descinit(descz_dlaf, n, n, n, n, 0, 0, ictxt_0, n, info)
+               call descinit(descz_scalapack, n, n, n, n, 0, 0, ictxt_0, n, info)
+
+               call set_random_matrix(A, 1)
+               call set_random_matrix(B, 2)
+            end if
+
+            ! Allocate local matrices
+            ma = numroc(n, nb, myrow, 0, nprow)
+            na = numroc(n, nb, mycol, 0, npcol)
+            lld = max(1, ma)
+            allocate (A_local_dlaf(ma, na), A_local_scalapack(ma, na))
+            allocate (B_local_dlaf(ma, na), B_local_scalapack(ma, na))
+            allocate (Z_local_dlaf(ma, na), Z_local_scalapack(ma, na))
+            allocate (W_dlaf(n), W_scalapack(n))
+
+            ! + ---- +
+            ! | DLAF |
+            ! + ---- +
+
+            call descinit(desca_local_dlaf, n, n, nb, nb, 0, 0, ictxt, lld, info)
+            call descinit(descb_local_dlaf, n, n, nb, nb, 0, 0, ictxt, lld, info)
+            call descinit(descz_local_dlaf, n, n, nb, nb, 0, 0, ictxt, lld, info)
+            call p${symbol}$gemr2d(n, n, a, 1, 1, desca, A_local_dlaf, 1, 1, desca_local_dlaf, ictxt)
+            call p${symbol}$gemr2d(n, n, b, 1, 1, desca, B_local_dlaf, 1, 1, descb_local_dlaf, ictxt)
+
+            ! Solve with DLAF
+            call dlaf_initialize()
+            call dlaf_create_grid(ictxt)
+            call dlaf_p${name}$gvx( &
+               'L', &
+               n, A_local_dlaf, 1, 1, desca_local_dlaf, &
+               B_local_dlaf, 1, 1, descb_local_dlaf, &
+               W_dlaf, Z_local_dlaf, 1, 1, descz_local_dlaf, &
+               info &
+               )
+            call dlaf_free_grid(ictxt)
+            call dlaf_finalize()
+            if (info /= 0) then
+               write (error_unit, *) 'ERROR: dlaf_p${name}$evd returned info = ', info
+               call terminate(ictxt)
+            end if
+
+            call p${symbol}$gemr2d(n, n, Z_local_dlaf, 1, 1, descz_local_dlaf, Z_dlaf, 1, 1, descz_dlaf, ictxt)
+
+            ! + --------- +
+            ! | ScaLAPACK |
+            ! + --------- +
+
+            call descinit(desca_local_scalapack, n, n, nb, nb, 0, 0, ictxt, lld, info)
+            call descinit(descb_local_scalapack, n, n, nb, nb, 0, 0, ictxt, lld, info)
+            call descinit(descz_local_scalapack, n, n, nb, nb, 0, 0, ictxt, lld, info)
+            call p${symbol}$gemr2d(n, n, a, 1, 1, desca, A_local_scalapack, 1, 1, desca_local_scalapack, ictxt)
+            call p${symbol}$gemr2d(n, n, b, 1, 1, descb, B_local_scalapack, 1, 1, descb_local_scalapack, ictxt)
+
+            ! ScaLAPACK
+            #:if type == 'real'
+               call p${name}$gvx( &
+                  1, 'V', 'A', 'L', &
+                  n, A_local_scalapack, 1, 1, desca_local_scalapack, &
+                  B_local_scalapack, 1, 1, descb_local_scalapack, &
+                  0.0_${dtype}$, 0.0_${dtype}$, 0, 0, pdlamch(ictxt, 'U'), neig, neval, &
+                  W_scalapack, 0.0_${dtype}$, Z_local_scalapack, 1, 1, descz_local_scalapack, &
+                  work, lwork, iwork, liwork, ifail, iclustr, gap, info &
+                  )
+            #:else
+               call p${name}$gvx( &
+                  1, 'V', 'A', 'L', &
+                  n, A_local_scalapack, 1, 1, desca_local_scalapack, &
+                  B_local_scalapack, 1, 1, descb_local_scalapack, &
+                  0.0_${dtype}$, 0.0_${dtype}$, 0, 0, pdlamch(ictxt, 'U'), neig, neval, &
+                  W_scalapack, 0.0_${dtype}$, Z_local_scalapack, 1, 1, descz_local_scalapack, &
+                  work, lwork, rwork, lrwork, iwork, liwork, ifail, iclustr, gap, info &
+                  )
+            #:endif
+            if (info /= 0) then
+               write (error_unit, *) 'ERROR: p${name}$evd returned info = ', info
+               call terminate(ictxt)
+            end if
+
+            call p${symbol}$gemr2d(n, n, Z_local_scalapack, 1, 1, descz_local_scalapack, Z_scalapack, 1, 1, descz_scalapack, ictxt)
+
+            ! Check results
+            ! Results are checked only on rank 0
+
+            failed = .false.
+            if (rank == 0) then
+               if (.not. allclose(W_dlaf, W_scalapack)) then
+                  failed = .true.
+                  write (error_unit, *) "ERROR: DLAF != ScaLAPACK (eigenvalues)"
+               end if
+            end if
+
+            call bcast_check(failed)
+            if (failed) then
+               call terminate(ictxt)
+            end if
+
+            failed = .false.
+            if (rank == 0) then
+               if (.not. allclose(abs(Z_dlaf), abs(Z_scalapack), atol=abstol)) then
+                  failed = .true.
+                  write (error_unit, *) "ERROR: DLAF != ScaLAPACK (eigenvectors)"
+               end if
+            end if
+
+            call bcast_check(failed)
+            if (failed) then
+               call terminate(ictxt)
+            end if
+
+            ! Cleanup
+
+            if (rank == 0) then
+               if (allocated(A)) deallocate (A)
+               if (allocated(B)) deallocate (B)
+               if (allocated(Z_dlaf)) deallocate (Z_dlaf)
+               if (allocated(Z_scalapack)) deallocate (Z_scalapack)
+            end if
+            if (allocated(A_local_dlaf)) deallocate (A_local_dlaf)
+            if (allocated(A_local_scalapack)) deallocate (A_local_scalapack)
+            if (allocated(B_local_dlaf)) deallocate (B_local_dlaf)
+            if (allocated(B_local_scalapack)) deallocate (B_local_scalapack)
+            if (allocated(Z_local_dlaf)) deallocate (Z_local_dlaf)
+            if (allocated(Z_local_scalapack)) deallocate (Z_local_scalapack)
+            if (allocated(W_dlaf)) deallocate (W_dlaf)
+            if (allocated(W_scalapack)) deallocate (W_scalapack)
+            if (allocated(iclustr)) deallocate (iclustr)
+            if (allocated(gap)) deallocate (gap)
+
+            call blacs_gridexit(ictxt)
+            call blacs_exit(1)
+            call teardown_mpi()
+         end subroutine p${name}$gvx_test
+
+      #:endfor
+   #:endfor
+end module pxhegvx_tests

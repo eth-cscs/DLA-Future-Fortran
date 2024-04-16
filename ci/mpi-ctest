@@ -1,0 +1,14 @@
+#!/bin/bash -e
+
+pushd /DLAF-Fortran-build > /dev/null
+
+# Run the tests, only output on the first rank
+if [[ $SLURM_PROCID == "0" ]]; then
+    TZ=CET date +"Run started at: %H:%M:%S %z"
+    ctest -V $@
+    TZ=CET date +"Run finished at: %H:%M:%S %z"
+else
+    ctest -Q $@
+fi
+
+popd > /dev/null

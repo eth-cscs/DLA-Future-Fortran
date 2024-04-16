@@ -1,0 +1,98 @@
+#
+# Distributed Linear Algebra with Future (DLAF)
+#
+# Copyright (c) 2018-2024, ETH Zurich
+# All rights reserved.
+#
+# Please, refer to the LICENSE file in the root directory.
+# SPDX-License-Identifier: BSD-3-Clause
+#
+
+name: license
+
+on:
+  pull_request:
+    branches:
+      - '**'
+  push:
+    branches:
+      - main
+
+jobs:
+  check-licenses:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/javascript-action@v1
+      - uses: actions/checkout@v4
+
+      - name: Check file extensions
+        if: always()          # needed so that it runs even if previous one fails
+        run: |
+          # Highlight if in these folders there are files with other extensions.
+          # Hidden files are excluded from the check.
+          find src test -type f                                                   \
+               ! '('                                                              \
+                       -name '*.f90'                                              \
+                   -o  -name '*.fpp'                                              \
+                   -o  -name 'CMakeLists.txt'                                     \
+                   -o  -name '.*'                                                 \
+               ')'                                                                \
+            > result-extension.check
+          # Generate an error message for each file with an unkown extension
+          for filepath in `cat result-extension.check`; do                        \
+            echo "::error file=$filepath,line=1::check extension of $filepath";   \
+          done
+
+          test ! -s result-extension.check
+
+      - name: Check license in source code
+        if: always()          # needed so that it runs even if previous one fails
+        run: |
+          # Compare first lines of each source file with reference in misc/HEADER
+          find src test -type f                                                   \
+               '('                                                                \
+                       -name '*.f90'                                              \
+                   -o  -name '*.fpp'                                              \
+               ')'                                                                \
+            | xargs -I{} sh -c                                                    \
+                ".github/check_license.sh misc/HEADER {} > /dev/null || echo {}"  \
+            > result-cpp.check
+
+          # Generate an error message for each offending file
+          for filepath in `cat result-cpp.check`; do                              \
+            echo "::error file=$filepath,line=1::check the license in $filepath"; \
+          done
+
+          test ! -s result-cpp.check
+
+      - name: Check license in files using "#" comments
+        if: always()          # needed so that it runs even if previous one fails
+        run: |
+          # Generate header license CMake/Python compliant (with hashes)
+          sed 's|^!|#|g' misc/HEADER > HEADER_HASH
+
+          # Check license in files that should have the license at the very beginning
+          find  '(' -type f ! -path './misc*' ')'                                 \
+                '('                                                               \
+                        -name 'CMakeLists.txt'                                    \
+                    -o  -name '*.cmake'                                           \
+                    -o  -name '*.cmake.in'                                        \
+                    -o  -name '*.yaml'                                            \
+                ')'                                                               \
+            | xargs -I{} sh -c                                                    \
+                ".github/check_license.sh HEADER_HASH {} > /dev/null || echo {}"  \
+            >> result.check
+
+          # Check license in scripts which may start with #! shebang and other directives
+          find -type f '(' -name '*.py' -o -name '*.sh' ')'                           \
+            | xargs -I{} sh -c                                                        \
+                ".github/check_license.sh -r 4 HEADER_HASH {} > /dev/null || echo {}" \
+            >> result.check
+
+          # Generate an error message for each offending file
+          for filepath in `cat result.check`; do                                  \
+            echo "::error file=$filepath,line=1::check the license in $filepath"; \
+          done
+
+          test ! -s result.check

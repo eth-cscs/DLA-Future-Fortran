@@ -1,0 +1,3 @@
+include:
+  - local: 'ci/cpu/gcc11_openblas.yml'
+  - local: 'ci/cpu/gcc11_mkl.yml'
