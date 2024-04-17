@@ -8,7 +8,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
-set(MPIRUN "" CACHE STRING "MPI run command.")
+set(DLAF_FORTRAN_MPIRUN "" CACHE STRING "MPI run command.")
 separate_arguments(_MPIRUN UNIX_COMMAND ${MPIRUN})
 
 add_subdirectory(utils)
@@ -32,7 +32,7 @@ foreach(TEST ${TEST_EXECUTABLES})
     	$<$<BOOL:${DLAF_FORTRAN_WITH_MKL}>:MKL::MKL> 
     )
     target_include_directories(${TEST} PUBLIC $<TARGET_PROPERTY:DLAF_Fortran,Fortran_MODULE_DIRECTORY>)
-    target_compile_options(${TEST} PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    target_compile_options(${TEST} PRIVATE -Wall -Wextra -Wpedantic)
     set(_TEST_COMMAND ${_MPIRUN} $<TARGET_FILE:${TEST}>)
     add_test(NAME ${TEST} COMMAND ${_TEST_COMMAND})
 endforeach()

@@ -27,7 +27,6 @@ class DlaFutureFortran(CMakePackage):
     variant("mpi_f08", default=False, when="+test", description="Build tests.")
 
     generator("ninja")
-    depends_on("ninja", type="build")
     depends_on("cmake@3.22:", type="build")
 
     # Requires 0.3.0 for complex API

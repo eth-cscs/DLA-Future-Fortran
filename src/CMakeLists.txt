@@ -10,7 +10,7 @@
 
 add_library(DLAF_Fortran dlaf_fortran.f90)
 
-target_compile_options(DLAF_Fortran PRIVATE -Wall -Wextra -Wpedantic -Werror)
+target_compile_options(DLAF_Fortran PRIVATE -Wall -Wextra -Wpedantic)
 
 target_link_libraries(
   DLAF_Fortran

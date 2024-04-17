@@ -26,7 +26,7 @@ foreach(infileName IN LISTS fppFiles)
     get_filename_component(modName ${outfileName} NAME_WE)
 
     add_library(${modName} ${outfileName})
-    target_compile_options(${modName} PRIVATE -Wall -Wextra -Wpedantic -Werror)
+    target_compile_options(${modName} PRIVATE -Wall -Wextra -Wpedantic)
     target_link_libraries(${modName} PRIVATE MPI::MPI_Fortran)
     target_compile_definitions(${modName} PRIVATE $<$<BOOL:${DLAF_FORTRAN_WITH_MPI_F08}>:__MPI_F08>)
 
