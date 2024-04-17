@@ -9,7 +9,7 @@
 #
 
 set(DLAF_FORTRAN_MPIRUN "" CACHE STRING "MPI run command.")
-separate_arguments(_MPIRUN UNIX_COMMAND ${MPIRUN})
+separate_arguments(_DLAF_FORTRAN_MPIRUN UNIX_COMMAND ${DLAF_FORTRAN_MPIRUN})
 
 add_subdirectory(utils)
 add_subdirectory(fpp)
@@ -32,6 +32,6 @@ foreach(TEST ${TEST_EXECUTABLES})
     	$<$<BOOL:${DLAF_FORTRAN_WITH_MKL}>:MKL::MKL> 
     )
     target_compile_options(${TEST} PRIVATE -Wall -Wextra -Wpedantic)
-    set(_TEST_COMMAND ${_MPIRUN} $<TARGET_FILE:${TEST}>)
+    set(_TEST_COMMAND ${_DLAF_FORTRAN_MPIRUN} $<TARGET_FILE:${TEST}>)
     add_test(NAME ${TEST} COMMAND ${_TEST_COMMAND})
 endforeach()
