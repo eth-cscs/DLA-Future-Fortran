@@ -31,7 +31,6 @@ foreach(TEST ${TEST_EXECUTABLES})
         pxhegvx
     	$<$<BOOL:${DLAF_FORTRAN_WITH_MKL}>:MKL::MKL> 
     )
-    target_include_directories(${TEST} PUBLIC $<TARGET_PROPERTY:DLAF_Fortran,Fortran_MODULE_DIRECTORY>)
     target_compile_options(${TEST} PRIVATE -Wall -Wextra -Wpedantic)
     set(_TEST_COMMAND ${_MPIRUN} $<TARGET_FILE:${TEST}>)
     add_test(NAME ${TEST} COMMAND ${_TEST_COMMAND})
