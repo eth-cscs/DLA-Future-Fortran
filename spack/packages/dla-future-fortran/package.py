@@ -24,7 +24,6 @@ class DlaFutureFortran(CMakePackage):
 
     variant("shared", default=True, description="Build shared libraries.")
     variant("test", default=False, description="Build tests.")
-    variant("mpi_f08", default=False, when="+test", description="Build tests.")
 
     generator("ninja")
     depends_on("cmake@3.22:", type="build")
@@ -41,10 +40,9 @@ class DlaFutureFortran(CMakePackage):
         args = []
 
         args.append(self.define_from_variant("BUILD_SHARED_LIBS", "shared"))
-        args.append(self.define_from_variant("DLAF_FORTRAN_BUILD_TESTING", "test"))
 
         if self.spec.satisfies("+test"):
-            args.append(self.define_from_variant("DLAF_FORTRAN_WITH_MPI_F08", "mpi_f08"))
+            args.append(self.define("DLAF_FORTRAN_BUILD_TESTING", True))
             if self.spec.satisfies("^intel-oneapi-mkl"):
                 args.append(self.define("DLAF_FORTRAN_WITH_MKL", "ON"))
 
