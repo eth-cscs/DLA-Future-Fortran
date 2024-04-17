@@ -13,8 +13,8 @@ class DlaFutureFortran(CMakePackage):
     """
 
     homepage = "https://github.com/eth-cscs/DLA-Future-Fortran"
-    url      = "http://www.example.com/MyPackage-1.0.tar.gz"
-    git = "https://github.com/eth-cscs/DLA-Future-Fortran"
+    url = "https://github.com/eth-cscs/DLA-Future-Fortran/archive/v0.0.0.tar.gz"
+    git = "https://github.com/eth-cscs/DLA-Future-Fortran.git"
 
     maintainers("RMeli")
     
