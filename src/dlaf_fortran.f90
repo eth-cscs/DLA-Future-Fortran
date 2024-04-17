@@ -26,7 +26,7 @@ module dlaf_fortran
    private
 
    public :: dlaf_initialize, dlaf_finalize
-   public :: dlaf_create_grid, dlaf_free_grid
+   public :: dlaf_create_grid_from_blacs, dlaf_free_grid
    public :: dlaf_pspotrf, dlaf_pdpotrf, dlaf_pcpotrf, dlaf_pzpotrf
    public :: dlaf_pssyevd, dlaf_pdsyevd, dlaf_pcheevd, dlaf_pzheevd
    public :: dlaf_pssygvx, dlaf_pdsygvx, dlaf_pchegvx, dlaf_pzhegvx
@@ -73,19 +73,19 @@ contains
 
    end subroutine dlaf_finalize
 
-   subroutine dlaf_create_grid(blacs_context)
+   subroutine dlaf_create_grid_from_blacs(blacs_context)
       integer, intent(in) :: blacs_context
 
       interface
-         subroutine create_grid_dlaf(blacs_contxt) bind(C, name='dlaf_create_grid_from_blacs')
+         subroutine create_grid_from_blacs_dlaf(blacs_contxt) bind(C, name='dlaf_create_grid_from_blacs')
             import :: c_int
             integer(kind=c_int), value :: blacs_contxt
          end subroutine
       end interface
 
-      call create_grid_dlaf(blacs_context)
+      call create_grid_from_blacs_dlaf(blacs_context)
 
-   end subroutine dlaf_create_grid
+   end subroutine dlaf_create_grid_from_blacs
 
    subroutine dlaf_free_grid(blacs_context)
       integer, intent(in) :: blacs_context

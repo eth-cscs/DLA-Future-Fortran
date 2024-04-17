@@ -14,7 +14,7 @@
 #:set symbols = {('sp', 'real'): 's', ('sp', 'complex'): 'c', ('dp', 'real'): 'd', ('dp', 'complex'): 'z'}
 module pxhegvx_tests
    use iso_fortran_env, only: error_unit, sp => real32, dp => real64
-   use dlaf_fortran, only: dlaf_initialize, dlaf_finalize, dlaf_create_grid, dlaf_free_grid
+   use dlaf_fortran, only: dlaf_initialize, dlaf_finalize, dlaf_create_grid_from_blacs, dlaf_free_grid
    #:for dtype in precision
       #:for type in types
          #:set name = names[(dtype, type)]
@@ -141,7 +141,7 @@ contains
 
             ! Solve with DLAF
             call dlaf_initialize()
-            call dlaf_create_grid(ictxt)
+            call dlaf_create_grid_from_blacs(ictxt)
             call dlaf_p${name}$gvx( &
                'L', &
                n, A_local_dlaf, 1, 1, desca_local_dlaf, &

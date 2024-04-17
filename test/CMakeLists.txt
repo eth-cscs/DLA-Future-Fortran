@@ -29,7 +29,7 @@ foreach(TEST ${TEST_EXECUTABLES})
         pxpotrf
         pxheevd
         pxhegvx
-    	$<$<BOOL:${DLAF_FORTRAN_WITH_MKL}>:MKL::MKL> 
+    	  $<$<BOOL:${DLAF_FORTRAN_WITH_MKL}>:MKL::MKL> 
     )
     target_compile_options(${TEST} PRIVATE -Wall -Wextra -Wpedantic)
     set(_TEST_COMMAND ${_DLAF_FORTRAN_MPIRUN} $<TARGET_FILE:${TEST}>)

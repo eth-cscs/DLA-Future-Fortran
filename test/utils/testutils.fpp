@@ -13,7 +13,7 @@
 #:set symbols = {('sp', 'real'): 's', ('sp', 'complex'): 'c', ('dp', 'real'): 'd', ('dp', 'complex'): 'z'}
 module testutils
 
-#ifdef __MPI_F08
+#ifdef DLAF_FORTRAN_WITH_MPI_F08
    use mpi_f08
 #else
    use mpi
