@@ -22,7 +22,7 @@ RUN spack repo rm --scope site dla-future-fortran-repo && \
     spack repo add ${SOURCE}/spack && \
     spack -e ci develop --no-clone -p ${SOURCE} dla-future-fortran@main build_type=Debug && \
     spack -e ci concretize -f && \
-    mkdir -p $(spack -e ci location -b dla-future) && \
+    mkdir -p $(spack -e ci location -b dla-future-fortran) && \
     mkdir ${BUILD} && \
     ln -s ${BUILD} `spack -e ci location -b dla-future-fortran` && \
     spack -e ci --config "config:flags:keep_werror:all" install --jobs ${NUM_PROCS} --keep-stage --verbose
