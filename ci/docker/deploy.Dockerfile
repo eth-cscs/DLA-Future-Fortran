@@ -26,6 +26,8 @@ RUN spack repo rm --scope site dla-future-fortran-repo && \
     mkdir ${BUILD} && \
     ln -s ${BUILD} `spack -e ci location -b dla-future-fortran`
 
+RUN ls ${BUILD}
+
 # Prune and bundle binaries
 RUN mkdir ${BUILD}-tmp && cd ${BUILD} && \
     export TEST_BINARIES=`PATH=${SOURCE}/ci:$PATH ctest --show-only=json-v1 | jq '.tests | .[] | select(has("command")) | .command | .[-1]' | tr -d \"` && \
