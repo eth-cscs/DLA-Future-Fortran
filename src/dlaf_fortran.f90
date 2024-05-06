@@ -40,13 +40,13 @@ contains
       type(c_ptr), allocatable, dimension(:) :: dlaf_argv_ptr, pika_argv_ptr
 
       interface
-         subroutine dlaf_init(pika_argc_, pika_argv_, dlaf_argc_, dlaf_argv_) bind(C, name='dlaf_initialize')
+         subroutine dlaf_initialize_c(pika_argc_, pika_argv_, dlaf_argc_, dlaf_argv_) bind(C, name='dlaf_initialize')
             import :: c_ptr, c_int
             type(c_ptr), dimension(*) :: pika_argv_
             type(c_ptr), dimension(*) :: dlaf_argv_
             integer(kind=c_int), value :: pika_argc_
             integer(kind=c_int), value :: dlaf_argc_
-         end subroutine dlaf_init
+         end subroutine dlaf_initialize_c
       end interface
 
       allocate (pika_argv(pika_argc))
@@ -59,17 +59,17 @@ contains
       allocate (dlaf_argv_ptr(dlaf_argc))
       dlaf_argv_ptr(1) = c_loc(dlaf_argv(1))
 
-      call dlaf_init(pika_argc, pika_argv_ptr, dlaf_argc, dlaf_argv_ptr)
+      call dlaf_initialize_c(pika_argc, pika_argv_ptr, dlaf_argc, dlaf_argv_ptr)
 
    end subroutine dlaf_initialize
 
    subroutine dlaf_finalize()
       interface
-         subroutine finalize_dlaf() bind(C, name='dlaf_finalize')
-         end subroutine finalize_dlaf
+         subroutine dlaf_finalize_c() bind(C, name='dlaf_finalize')
+         end subroutine dlaf_finalize_c
       end interface
 
-      call finalize_dlaf()
+      call dlaf_finalize_c()
 
    end subroutine dlaf_finalize
 
@@ -77,13 +77,13 @@ contains
       integer, intent(in) :: blacs_context
 
       interface
-         subroutine create_grid_from_blacs_dlaf(blacs_contxt) bind(C, name='dlaf_create_grid_from_blacs')
+         subroutine dlaf_create_grid_from_blacs_c(blacs_contxt) bind(C, name='dlaf_create_grid_from_blacs')
             import :: c_int
             integer(kind=c_int), value :: blacs_contxt
-         end subroutine
+         end subroutine dlaf_create_grid_from_blacs_c
       end interface
 
-      call create_grid_from_blacs_dlaf(blacs_context)
+      call dlaf_create_grid_from_blacs_c(blacs_context)
 
    end subroutine dlaf_create_grid_from_blacs
 
@@ -91,13 +91,13 @@ contains
       integer, intent(in) :: blacs_context
 
       interface
-         subroutine free_grid_dlaf(blacs_contxt) bind(C, name='dlaf_free_grid')
+         subroutine dlaf_free_grid_c(blacs_contxt) bind(C, name='dlaf_free_grid')
             import :: c_int
             integer(kind=c_int), value :: blacs_contxt
-         end subroutine
+         end subroutine dlaf_free_grid_c
       end interface
 
-      call free_grid_dlaf(blacs_context)
+      call dlaf_free_grid_c(blacs_context)
 
    end subroutine dlaf_free_grid
 
@@ -110,7 +110,7 @@ contains
       integer, target, intent(out) :: info
 
       interface
-         subroutine pspotrf_dlaf(uplo_, n_, a_, ia_, ja_, desca_, info_) &
+         subroutine dlaf_pspotrf_c(uplo_, n_, a_, ia_, ja_, desca_, info_) &
             bind(C, name='dlaf_pspotrf')
 
             import :: c_ptr, c_int, c_signed_char
@@ -120,10 +120,10 @@ contains
             type(c_ptr), value :: info_
             integer(kind=c_int), dimension(*) :: desca_
             type(c_ptr), value :: a_
-         end subroutine pspotrf_dlaf
+         end subroutine dlaf_pspotrf_c
       end interface
 
-      call pspotrf_dlaf(iachar(uplo, c_signed_char), n, c_loc(a(1, 1)), ia, ja, desca, c_loc(info))
+      call dlaf_pspotrf_c(iachar(uplo, c_signed_char), n, c_loc(a(1, 1)), ia, ja, desca, c_loc(info))
 
    end subroutine dlaf_pspotrf
 
@@ -136,7 +136,7 @@ contains
       integer, target, intent(out) :: info
 
       interface
-         subroutine pdpotrf_dlaf(uplo_, n_, a_, ia_, ja_, desca_, info_) &
+         subroutine dlaf_pdpotrf_c(uplo_, n_, a_, ia_, ja_, desca_, info_) &
             bind(C, name='dlaf_pdpotrf')
 
             import :: c_ptr, c_int, c_double, c_signed_char
@@ -146,10 +146,10 @@ contains
             type(c_ptr), value :: info_
             integer(kind=c_int), dimension(*) :: desca_
             type(c_ptr), value :: a_
-         end subroutine pdpotrf_dlaf
+         end subroutine dlaf_pdpotrf_c
       end interface
 
-      call pdpotrf_dlaf(iachar(uplo, c_signed_char), n, c_loc(a(1, 1)), ia, ja, desca, c_loc(info))
+      call dlaf_pdpotrf_c(iachar(uplo, c_signed_char), n, c_loc(a(1, 1)), ia, ja, desca, c_loc(info))
 
    end subroutine dlaf_pdpotrf
 
@@ -162,7 +162,7 @@ contains
       integer, target, intent(out) :: info
 
       interface
-         subroutine pcpotrf_dlaf(uplo_, n_, a_, ia_, ja_, desca_, info_) &
+         subroutine dlaf_pcpotrf_c(uplo_, n_, a_, ia_, ja_, desca_, info_) &
             bind(C, name='dlaf_pcpotrf')
 
             import :: c_ptr, c_int, c_signed_char
@@ -172,10 +172,10 @@ contains
             type(c_ptr), value :: info_
             integer(kind=c_int), dimension(*) :: desca_
             type(c_ptr), value :: a_
-         end subroutine pcpotrf_dlaf
+         end subroutine dlaf_pcpotrf_c
       end interface
 
-      call pcpotrf_dlaf(iachar(uplo, c_signed_char), n, c_loc(a(1, 1)), ia, ja, desca, c_loc(info))
+      call dlaf_pcpotrf_c(iachar(uplo, c_signed_char), n, c_loc(a(1, 1)), ia, ja, desca, c_loc(info))
 
    end subroutine dlaf_pcpotrf
 
@@ -188,7 +188,7 @@ contains
       integer, target, intent(out) :: info
 
       interface
-         subroutine pzpotrf_dlaf(uplo_, n_, a_, ia_, ja_, desca_, info_) &
+         subroutine dlaf_pzpotrf_c(uplo_, n_, a_, ia_, ja_, desca_, info_) &
             bind(C, name='dlaf_pzpotrf')
 
             import :: c_ptr, c_int, c_signed_char
@@ -198,10 +198,10 @@ contains
             type(c_ptr), value :: info_
             integer(kind=c_int), dimension(*) :: desca_
             type(c_ptr), value :: a_
-         end subroutine pzpotrf_dlaf
+         end subroutine dlaf_pzpotrf_c
       end interface
 
-      call pzpotrf_dlaf(iachar(uplo, c_signed_char), n, c_loc(a(1, 1)), ia, ja, desca, c_loc(info))
+      call dlaf_pzpotrf_c(iachar(uplo, c_signed_char), n, c_loc(a(1, 1)), ia, ja, desca, c_loc(info))
 
    end subroutine dlaf_pzpotrf
 
@@ -214,7 +214,7 @@ contains
       real(kind=sp), dimension(:), target, intent(out) :: w
 
       interface
-         subroutine pssyevd_dlaf(uplo_, n_, a_, ia_, ja_, desca_, w_, z_, iz_, jz_, descz_, info_) &
+         subroutine dlaf_pssyevd_c(uplo_, n_, a_, ia_, ja_, desca_, w_, z_, iz_, jz_, descz_, info_) &
             bind(C, name='dlaf_pssyevd')
 
             import :: c_int, c_ptr, c_signed_char
@@ -224,12 +224,12 @@ contains
             type(c_ptr), value :: a_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descz_
             type(c_ptr), value :: info_
-         end subroutine pssyevd_dlaf
+         end subroutine dlaf_pssyevd_c
       end interface
 
       info = -1
 
-      call pssyevd_dlaf(iachar(uplo, c_signed_char), n, &
+      call dlaf_pssyevd_c(iachar(uplo, c_signed_char), n, &
                         c_loc(a(1, 1)), ia, ja, desca, &
                         c_loc(w(1)), &
                         c_loc(z(1, 1)), iz, jz, descz, &
@@ -247,7 +247,7 @@ contains
       real(kind=dp), dimension(:), target, intent(out) :: w
 
       interface
-         subroutine pdsyevd_dlaf(uplo_, n_, a_, ia_, ja_, desca_, w_, z_, iz_, jz_, descz_, info_) &
+         subroutine dlaf_pdsyevd_c(uplo_, n_, a_, ia_, ja_, desca_, w_, z_, iz_, jz_, descz_, info_) &
             bind(C, name='dlaf_pdsyevd')
 
             import :: c_int, c_ptr, c_signed_char
@@ -257,12 +257,12 @@ contains
             type(c_ptr), value :: a_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descz_
             type(c_ptr), value :: info_
-         end subroutine pdsyevd_dlaf
+         end subroutine dlaf_pdsyevd_c
       end interface
 
       info = -1
 
-      call pdsyevd_dlaf(iachar(uplo, c_signed_char), n, &
+      call dlaf_pdsyevd_c(iachar(uplo, c_signed_char), n, &
                         c_loc(a(1, 1)), ia, ja, desca, &
                         c_loc(w(1)), &
                         c_loc(z(1, 1)), iz, jz, descz, &
@@ -280,7 +280,7 @@ contains
       real(kind=sp), dimension(:), target, intent(out) :: w
 
       interface
-         subroutine pcheevd_dlaf(uplo_, n_, a_, ia_, ja_, desca_, w_, z_, iz_, jz_, descz_, info_) &
+         subroutine dlaf_pcheevd_c(uplo_, n_, a_, ia_, ja_, desca_, w_, z_, iz_, jz_, descz_, info_) &
             bind(C, name='dlaf_pcheevd')
 
             import :: c_int, c_ptr, c_signed_char
@@ -290,12 +290,12 @@ contains
             type(c_ptr), value :: a_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descz_
             type(c_ptr), value :: info_
-         end subroutine pcheevd_dlaf
+         end subroutine dlaf_pcheevd_c
       end interface
 
       info = -1
 
-      call pcheevd_dlaf(iachar(uplo, c_signed_char), n, &
+      call dlaf_pcheevd_c(iachar(uplo, c_signed_char), n, &
                         c_loc(a(1, 1)), ia, ja, desca, &
                         c_loc(w(1)), &
                         c_loc(z(1, 1)), iz, jz, descz, &
@@ -313,7 +313,7 @@ contains
       real(kind=dp), dimension(:), target, intent(out) :: w
 
       interface
-         subroutine pzheevd_dlaf(uplo_, n_, a_, ia_, ja_, desca_, w_, z_, iz_, jz_, descz_, info_) &
+         subroutine dlaf_pzheevd_c(uplo_, n_, a_, ia_, ja_, desca_, w_, z_, iz_, jz_, descz_, info_) &
             bind(C, name='dlaf_pzheevd')
 
             import :: c_int, c_ptr, c_signed_char
@@ -323,12 +323,12 @@ contains
             type(c_ptr), value :: a_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descz_
             type(c_ptr), value :: info_
-         end subroutine pzheevd_dlaf
+         end subroutine dlaf_pzheevd_c
       end interface
 
       info = -1
 
-      call pzheevd_dlaf(iachar(uplo, c_signed_char), n, &
+      call dlaf_pzheevd_c(iachar(uplo, c_signed_char), n, &
                         c_loc(a(1, 1)), ia, ja, desca, &
                         c_loc(w(1)), &
                         c_loc(z(1, 1)), iz, jz, descz, &
@@ -346,7 +346,7 @@ contains
       real(kind=sp), dimension(:), target, intent(out) :: w
 
       interface
-         subroutine pssygvx_dlaf(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_) &
+         subroutine dlaf_pssygvx_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_) &
             bind(C, name='dlaf_pssygvx')
 
             import :: c_int, c_ptr, c_signed_char
@@ -356,12 +356,12 @@ contains
             type(c_ptr), value :: a_, b_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
             type(c_ptr), value :: info_
-         end subroutine pssygvx_dlaf
+         end subroutine dlaf_pssygvx_c
       end interface
 
       info = -1
 
-      call pssygvx_dlaf(iachar(uplo, c_signed_char), n, &
+      call dlaf_pssygvx_c(iachar(uplo, c_signed_char), n, &
                         c_loc(a(1, 1)), ia, ja, desca, &
                         c_loc(b(1, 1)), ib, jb, descb, &
                         c_loc(w(1)), &
@@ -380,7 +380,7 @@ contains
       real(kind=dp), dimension(:), target, intent(out) :: w
 
       interface
-         subroutine pdsygvx_dlaf(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_) &
+         subroutine dlaf_pdsygvx_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_) &
             bind(C, name='dlaf_pdsygvx')
 
             import :: c_int, c_ptr, c_signed_char
@@ -390,12 +390,12 @@ contains
             type(c_ptr), value :: a_, b_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
             type(c_ptr), value :: info_
-         end subroutine pdsygvx_dlaf
+         end subroutine dlaf_pdsygvx_c
       end interface
 
       info = -1
 
-      call pdsygvx_dlaf(iachar(uplo, c_signed_char), n, &
+      call dlaf_pdsygvx_c(iachar(uplo, c_signed_char), n, &
                         c_loc(a(1, 1)), ia, ja, desca, &
                         c_loc(b(1, 1)), ib, jb, descb, &
                         c_loc(w(1)), &
@@ -414,7 +414,7 @@ contains
       real(kind=sp), dimension(:), target, intent(out) :: w
 
       interface
-         subroutine pchegvx_dlaf(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_) &
+         subroutine dlaf_pchegvx_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_) &
             bind(C, name='dlaf_pchegvx')
 
             import :: c_int, c_ptr, c_signed_char
@@ -424,12 +424,12 @@ contains
             type(c_ptr), value :: a_, b_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
             type(c_ptr), value :: info_
-         end subroutine pchegvx_dlaf
+         end subroutine dlaf_pchegvx_c
       end interface
 
       info = -1
 
-      call pchegvx_dlaf(iachar(uplo, c_signed_char), n, &
+      call dlaf_pchegvx_c(iachar(uplo, c_signed_char), n, &
                         c_loc(a(1, 1)), ia, ja, desca, &
                         c_loc(b(1, 1)), ib, jb, descb, &
                         c_loc(w(1)), &
@@ -448,7 +448,7 @@ contains
       real(kind=dp), dimension(:), target, intent(out) :: w
 
       interface
-         subroutine pzhegvx_dlaf(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_) &
+         subroutine dlaf_pzhegvx_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_) &
             bind(C, name='dlaf_pzhegvx')
 
             import :: c_int, c_ptr, c_signed_char
@@ -458,12 +458,12 @@ contains
             type(c_ptr), value :: a_, b_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
             type(c_ptr), value :: info_
-         end subroutine pzhegvx_dlaf
+         end subroutine dlaf_pzhegvx_c
       end interface
 
       info = -1
 
-      call pzhegvx_dlaf(iachar(uplo, c_signed_char), n, &
+      call dlaf_pzhegvx_c(iachar(uplo, c_signed_char), n, &
                         c_loc(a(1, 1)), ia, ja, desca, &
                         c_loc(b(1, 1)), ib, jb, descb, &
                         c_loc(w(1)), &
