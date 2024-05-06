@@ -10,9 +10,9 @@
 
 cmake_minimum_required(VERSION 3.22)
 
-# FIXME: CXX needed by DLA-Future
-# FIXME: C needed by HDF5 (dla-future +hdf5)
-project(DLAF-Fortran VERSION 0.1.0 LANGUAGES Fortran C CXX) # TODO: Remove C and CXX
+# NOTE: CXX needed with DLA-Future
+# NOTE: C needed with HDF5 (dla-future +hdf5)
+project(DLAFFortran VERSION 0.1.0 LANGUAGES Fortran C CXX)
 
 include(CMakeDependentOption)
 include(GNUInstallDirs)
@@ -26,7 +26,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 if(NOT CMAKE_Fortran_MODULE_DIRECTORY)
-    set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/fortran_mods)
+  set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/fortran_mods)
 endif ()
 
 find_package(DLAF REQUIRED) # TODO: Add version requirement
@@ -42,6 +42,8 @@ if(DLAF_FORTRAN_BUILD_TESTING)
     set(MKL_INTERFACE "lp64" CACHE STRING "")
     set(MKL_THREADING "sequential" CACHE STRING "")
     set(MKL_MPI "mpich" CACHE STRING "")
+    set(ENABLE_BLACS "ON" CACHE STRING "")
+    set(ENABLE_SCALAPACK "ON" CACHE STRING "")
     find_package(MKL REQUIRED)
   else()
     find_package(ScaLAPACK REQUIRED)
@@ -52,11 +54,11 @@ endif()
 # | Installation |
 # +--------------+
 
-set(_DEFAULT_CMAKE_INSTALL_MODULEDIR ${CMAKE_INSTALL_INCLUDEDIR})
-set(CMAKE_INSTALL_MODULEDIR ${_DEFAULT_CMAKE_INSTALL_MODULEDIR}
+set(DEFAULT_CMAKE_INSTALL_MODULEDIR ${CMAKE_INSTALL_INCLUDEDIR})
+set(CMAKE_INSTALL_MODULEDIR ${DEFAULT_CMAKE_INSTALL_MODULEDIR}
     CACHE STRING
     "Fortran module installation path"
-  )
+)
 
 include(CMakePackageConfigHelpers)
 
@@ -64,10 +66,10 @@ write_basic_package_version_file(
   ${CMAKE_PROJECT_NAME}ConfigVersion.cmake
     VERSION ${PACKAGE_VERSION}
     COMPATIBILITY AnyNewerVersion
-    )
+)
 
 configure_package_config_file(
-  cmake/DLAF-FortranConfig.cmake.in 
+  ${PROJECT_SOURCE_DIR}/cmake/${CMAKE_PROJECT_NAME}Config.cmake.in 
   "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake"
   INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${CMAKE_PROJECT_NAME}
 )

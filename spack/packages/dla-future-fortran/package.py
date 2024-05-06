@@ -30,6 +30,7 @@ class DlaFutureFortran(CMakePackage):
 
     # Requires 0.3.0 for complex API
     # Requires 0.4.0 for Intel OneAPI MKL
+    # Requires 0.4.1 for CMake version
     depends_on("dla-future@0.4.0: +scalapack")
 
     depends_on("mpi", when="+test")

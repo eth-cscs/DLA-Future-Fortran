@@ -16,4 +16,4 @@ endif()
 
 find_dependency(DLAF PATHS @DLAF_DIR@)
 
-check_required_components(DLAF-Fortran)
+check_required_components(DLAFFortran)
