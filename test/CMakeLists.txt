@@ -8,6 +8,25 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
+find_program(FYPP_PROGRAM fypp)
+
+if("${FYPP_PROGRAM}" MATCHES ".*-NOTFOUND")
+  message(FATAL_ERROR "fypp (Fortran preprocessor) not found. fypp is required to build tests.")
+endif()
+
+find_package(MPI REQUIRED COMPONENTS Fortran)
+
+if(DLAF_FORTRAN_WITH_MKL)
+  set(MKL_INTERFACE "lp64" CACHE STRING "")
+  set(MKL_THREADING "sequential" CACHE STRING "")
+  set(MKL_MPI "mpich" CACHE STRING "")
+  set(ENABLE_BLACS "ON" CACHE STRING "")
+  set(ENABLE_SCALAPACK "ON" CACHE STRING "")
+  find_package(MKL REQUIRED)
+else()
+  find_package(ScaLAPACK REQUIRED)
+endif()
+
 set(DLAF_FORTRAN_MPIRUN "" CACHE STRING "MPI run command.")
 separate_arguments(_DLAF_FORTRAN_MPIRUN UNIX_COMMAND ${DLAF_FORTRAN_MPIRUN})
 

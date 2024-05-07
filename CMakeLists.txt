@@ -34,29 +34,10 @@ find_package(DLAF REQUIRED) # TODO: Add version requirement
 add_subdirectory(src)
 
 if(DLAF_FORTRAN_BUILD_TESTING)
-  find_program(FYPP_PROGRAM fypp)
-
-  if("${FYPP_PROGRAM}" MATCHES ".*-NOTFOUND")
-    message(FATAL_ERROR "fypp (Fortran preprocessor) not found. fypp is required to build tests.")
-  endif()
-
   enable_testing()
   add_subdirectory(test)
-
-
-  find_package(MPI REQUIRED COMPONENTS Fortran)
-
-  if(DLAF_FORTRAN_WITH_MKL)
-    set(MKL_INTERFACE "lp64" CACHE STRING "")
-    set(MKL_THREADING "sequential" CACHE STRING "")
-    set(MKL_MPI "mpich" CACHE STRING "")
-    set(ENABLE_BLACS "ON" CACHE STRING "")
-    set(ENABLE_SCALAPACK "ON" CACHE STRING "")
-    find_package(MKL REQUIRED)
-  else()
-    find_package(ScaLAPACK REQUIRED)
-  endif()
 endif()
+
 
 # +--------------+
 # | Installation |
