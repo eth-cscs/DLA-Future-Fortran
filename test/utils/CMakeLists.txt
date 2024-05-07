@@ -8,11 +8,11 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
-set(fppFiles testutils.fpp)
+set(fyppFiles testutils.fypp)
 
-foreach(infileName IN LISTS fppFiles)
+foreach(infileName IN LISTS fyppFiles)
 
-    string(REGEX REPLACE ".fpp\$" ".f90" outfileName "${infileName}")
+    string(REGEX REPLACE ".fypp\$" ".f90" outfileName "${infileName}")
 
     set(outfile "${CMAKE_CURRENT_BINARY_DIR}/${outfileName}")
     set(infile "${CMAKE_CURRENT_SOURCE_DIR}/${infileName}")

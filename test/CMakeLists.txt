@@ -11,8 +11,8 @@
 set(DLAF_FORTRAN_MPIRUN "" CACHE STRING "MPI run command.")
 separate_arguments(_DLAF_FORTRAN_MPIRUN UNIX_COMMAND ${DLAF_FORTRAN_MPIRUN})
 
+add_subdirectory(helpers)
 add_subdirectory(utils)
-add_subdirectory(fpp)
 
 set(INIT_TEST_EXECUTABLES init)
 set(PXPOTRF_TEST_EXECUTABLES pspotrf pdpotrf pcpotrf pzpotrf)
