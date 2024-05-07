@@ -28,9 +28,7 @@ class DlaFutureFortran(CMakePackage):
     generator("ninja")
     depends_on("cmake@3.22:", type="build")
 
-    # Requires 0.3.0 for complex API
-    # Requires 0.4.0 for Intel OneAPI MKL
-    # Requires 0.4.1 for CMake version
+    # TODO: Change to 0.4.1 when it's released
     depends_on("dla-future@0.4.0: +scalapack")
 
     depends_on("mpi", when="+test")
