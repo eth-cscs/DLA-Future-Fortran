@@ -14,24 +14,28 @@ separate_arguments(_DLAF_FORTRAN_MPIRUN UNIX_COMMAND ${DLAF_FORTRAN_MPIRUN})
 add_subdirectory(utils)
 add_subdirectory(fpp)
 
-set(TEST_EXECUTABLES
-    init
-    pspotrf pdpotrf pcpotrf pzpotrf
-    pssyevd pdsyevd pcheevd pzheevd
-    pssygvx pdsygvx pchegvx pzhegvx
-)
+set(INIT_TEST_EXECUTABLES init)
+set(PXPOTRF_TEST_EXECUTABLES pspotrf pdpotrf pcpotrf pzpotrf)
+set(PXHEEVD_TEST_EXECUTABLES pssyevd pdsyevd pcheevd pzheevd)
+set(PXHEGVX_TEST_EXECUTABLES pssygvx pdsygvx pchegvx pzhegvx)
 
-foreach(TEST ${TEST_EXECUTABLES})
+function(add_tests tests library)
+foreach(TEST ${tests})
     add_executable(${TEST} ${TEST}.f90)
     target_link_libraries(${TEST} PRIVATE 
         DLAF_Fortran 
         testutils
-        pxpotrf
-        pxheevd
-        pxhegvx
+        ${library}
     	  $<$<BOOL:${DLAF_FORTRAN_WITH_MKL}>:MKL::MKL> 
     )
     target_compile_options(${TEST} PRIVATE -Wall -Wextra -Wpedantic)
     set(_TEST_COMMAND ${_DLAF_FORTRAN_MPIRUN} $<TARGET_FILE:${TEST}>)
     add_test(NAME ${TEST} COMMAND ${_TEST_COMMAND})
 endforeach()
+endfunction()
+
+
+add_tests("${INIT_TEST_EXECUTABLES}" "")
+add_tests("${PXPOTRF_TEST_EXECUTABLES}" pxpotrf)
+add_tests("${PXHEEVD_TEST_EXECUTABLES}" pxheevd)
+add_tests("${PXHEGVX_TEST_EXECUTABLES}" pxhegvx)
