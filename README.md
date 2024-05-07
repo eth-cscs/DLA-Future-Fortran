@@ -16,7 +16,7 @@ The [DLA-Future] Fortran API provides the following functionality:
 
 ## ScaLAPACK Drop-In
 
-The Fortran API (as well as the ScaLAPACK-like C API) are designed to as drop-in replacement for ScaLAPACK.
+The Fortran API (as well as the ScaLAPACK-like C API) is designed as drop-in replacement for ScaLAPACK.
 
 If you have a ScaLAPACK call in your code 
 ```fortran
