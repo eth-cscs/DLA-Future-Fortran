@@ -36,6 +36,13 @@ add_subdirectory(src)
 if(DLAF_FORTRAN_BUILD_TESTING)
   enable_testing()
   add_subdirectory(test)
+
+  find_program(FYPP_PROGRAM fypp)
+
+  if("${FYPP_PROGRAM}" MATCHES ".*-NOTFOUND")
+    message(FATAL_ERROR "fypp (Fortran preprocessor) not found. fypp is required to build tests.")
+  endif()
+
   find_package(MPI REQUIRED COMPONENTS Fortran)
 
   if(DLAF_FORTRAN_WITH_MKL)
