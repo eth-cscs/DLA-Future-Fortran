@@ -8,8 +8,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
-set(DLAF_FORTRAN_MPIRUN "" CACHE STRING "MPI run command.")
-separate_arguments(_DLAF_FORTRAN_MPIRUN UNIX_COMMAND ${DLAF_FORTRAN_MPIRUN})
+# set(DLAF_FORTRAN_MPIRUN "" CACHE STRING "MPI run command.")
+# separate_arguments(_DLAF_FORTRAN_MPIRUN UNIX_COMMAND ${DLAF_FORTRAN_MPIRUN})
+set(_DLAF_FORTRAN_MPIRUN ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} ${MPIEXEC_MAX_NUMPROCS} ${MPIEXEC_PREFLAGS})
 
 add_subdirectory(utils)
 add_subdirectory(fpp)
