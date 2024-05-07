@@ -39,7 +39,7 @@ class DlaFutureFortran(CMakePackage):
     # FIXME: Variables only available on the DLA-Future-Fortran repo
     # FIXME: Remove those variables from the official Spack package
 
-    variant("+cscs-ci", when="+test")
+    variant("+cscs-ci", default=False, when="+test", description="Run test in CSCS CI")
     # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     def cmake_args(self):
