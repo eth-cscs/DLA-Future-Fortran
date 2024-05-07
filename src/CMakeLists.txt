@@ -17,8 +17,6 @@ target_link_libraries(
   PRIVATE DLAF::DLAF
 )
 
-add_library(DLAF::DLAF_Fortran ALIAS DLAF_Fortran)
-
 install(
   TARGETS DLAF_Fortran
   EXPORT ${CMAKE_PROJECT_NAME}-Targets
