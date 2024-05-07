@@ -39,7 +39,6 @@ if(DLAF_FORTRAN_BUILD_TESTING)
   add_subdirectory(test)
 endif()
 
-
 # +--------------+
 # | Installation |
 # +--------------+

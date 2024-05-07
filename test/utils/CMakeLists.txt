@@ -29,5 +29,6 @@ foreach(infileName IN LISTS fyppFiles)
     target_compile_options(${modName} PRIVATE -Wall -Wextra -Wpedantic)
     target_link_libraries(${modName} PRIVATE MPI::MPI_Fortran)
     target_compile_definitions(${modName} PRIVATE $<$<BOOL:${DLAF_FORTRAN_WITH_MPI_F08}>:DLAF_FORTRAN_WITH_MPI_F08>)
+    set_target_properties(${modName} PROPERTIES Fortran_PREPROCESS "ON") # Use preprocessor on .f90 files
 
 endforeach()
