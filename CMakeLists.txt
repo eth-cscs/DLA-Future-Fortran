@@ -20,6 +20,7 @@ include(GNUInstallDirs)
 option(DLAF_FORTRAN_BUILD_TESTING "Build tests" OFF)
 cmake_dependent_option(DLAF_FORTRAN_WITH_MKL "Use MKL" OFF "DLAF_FORTRAN_BUILD_TESTING" OFF)
 cmake_dependent_option(DLAF_FORTRAN_WITH_MPI_F08 "Use MPI F08 interface" OFF "DLAF_FORTRAN_BUILD_TESTING" OFF)
+cmake_dependent_option(DLAF_FORTRAN_CSCS_CI "Use CSCS CI configuration" OFF "DLAF_FORTRAN_BUILD_TESTING" OFF)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Build Type" FORCE)

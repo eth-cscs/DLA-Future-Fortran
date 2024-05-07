@@ -8,6 +8,13 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
+# Define test executables
+set(INIT_TEST_EXECUTABLES init)
+set(PXPOTRF_TEST_EXECUTABLES pspotrf pdpotrf pcpotrf pzpotrf)
+set(PXHEEVD_TEST_EXECUTABLES pssyevd pdsyevd pcheevd pzheevd)
+set(PXHEGVX_TEST_EXECUTABLES pssygvx pdsygvx pchegvx pzhegvx)
+
+
 find_program(FYPP_PROGRAM fypp)
 
 if("${FYPP_PROGRAM}" MATCHES ".*-NOTFOUND")
@@ -27,16 +34,23 @@ else()
   find_package(ScaLAPACK REQUIRED)
 endif()
 
-set(DLAF_FORTRAN_MPIRUN "" CACHE STRING "MPI run command.")
-separate_arguments(_DLAF_FORTRAN_MPIRUN UNIX_COMMAND ${DLAF_FORTRAN_MPIRUN})
+if(DLAF_FORTRAN_CSCS_CI)
+  set(MPIEXEC_EXECUTABLE "")
+  set(MPIEXEC_NUMPROC_FLAG "")
+  set(MPIEXEC_MAX_NUMPROCS "")
+  set(MPIEXEC_MAX_PREFLAGS "")
+else()
+  if(NOT (${MPIEXEC_MAX_NUMPROCS} EQUAL 6))
+    message(FATAL_ERROR "Test run with 6 processes, got ${MPIEXEC_MAX_NUMPROCS}. Set -DMPIEXEC_MAX_NUMPROCS=6.")
+  endif()
+endif()
+
 
 add_subdirectory(helpers)
 add_subdirectory(utils)
 
-set(INIT_TEST_EXECUTABLES init)
-set(PXPOTRF_TEST_EXECUTABLES pspotrf pdpotrf pcpotrf pzpotrf)
-set(PXHEEVD_TEST_EXECUTABLES pssyevd pdsyevd pcheevd pzheevd)
-set(PXHEGVX_TEST_EXECUTABLES pssygvx pdsygvx pchegvx pzhegvx)
+set(DLAF_FORTRAN_MPIRUN "${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} ${MPIEXEC_MAX_NUMPROCS} ${MPIEXEC_PREFLAGS}")
+separate_arguments(_DLAF_FORTRAN_MPIRUN UNIX_COMMAND ${DLAF_FORTRAN_MPIRUN})
 
 function(add_tests tests library)
 foreach(TEST ${tests})

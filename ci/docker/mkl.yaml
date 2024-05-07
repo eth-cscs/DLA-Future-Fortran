@@ -12,7 +12,7 @@ spack:
   include:
     - /spack_environment/common.yaml
   specs:
-    - dla-future-fortran@main +test
+    - dla-future-fortran@main +test +cscs-ci
   packages:
     blas:
       require:
