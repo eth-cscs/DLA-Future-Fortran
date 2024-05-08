@@ -23,17 +23,6 @@ endif()
 
 find_package(MPI REQUIRED COMPONENTS Fortran)
 
-if(DLAF_FORTRAN_WITH_MKL)
-  set(MKL_INTERFACE "lp64" CACHE STRING "")
-  set(MKL_THREADING "sequential" CACHE STRING "")
-  set(MKL_MPI "mpich" CACHE STRING "")
-  set(ENABLE_BLACS "ON" CACHE STRING "")
-  set(ENABLE_SCALAPACK "ON" CACHE STRING "")
-  find_package(MKL REQUIRED)
-else()
-  find_package(ScaLAPACK REQUIRED)
-endif()
-
 if(DLAF_FORTRAN_CSCS_CI)
   set(MPIEXEC_EXECUTABLE "")
   set(MPIEXEC_NUMPROC_FLAG "")
@@ -59,7 +48,7 @@ foreach(TEST ${tests})
         DLAF_Fortran 
         testutils
         ${library}
-    	  $<$<BOOL:${DLAF_FORTRAN_WITH_MKL}>:MKL::MKL> 
+        DLAF::SCALAPACK
     )
     target_compile_options(${TEST} PRIVATE -Wall -Wextra -Wpedantic)
     set(_TEST_COMMAND ${_DLAF_FORTRAN_MPIRUN} $<TARGET_FILE:${TEST}>)

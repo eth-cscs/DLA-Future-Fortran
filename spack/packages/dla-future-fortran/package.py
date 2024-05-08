@@ -32,30 +32,25 @@ class DlaFutureFortran(CMakePackage):
     depends_on("dla-future@0.4.0: +scalapack")
 
     depends_on("mpi", when="+test")
-    depends_on("scalapack", when="+test")
     depends_on("py-fypp", when="+test", type="build")
 
-    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # FIXME: Variables only available on the DLA-Future-Fortran repo
     # FIXME: Remove those variables from the official Spack package
 
     variant("cscs-ci", default=False, when="+test", description="Run test in CSCS CI")
-    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     def cmake_args(self):
         args = []
 
         args.append(self.define_from_variant("BUILD_SHARED_LIBS", "shared"))
+        args.append(self.define_from_variant("DLAF_FORTRAN_BUILD_TESTING", "test"))
 
-        if self.spec.satisfies("+test"):
-            args.append(self.define("DLAF_FORTRAN_BUILD_TESTING", True))
-            if self.spec.satisfies("^intel-oneapi-mkl"):
-                args.append(self.define("DLAF_FORTRAN_WITH_MKL", "ON"))
-
-        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         # FIXME: Variables only available on the DLA-Future-Fortran repo
         # FIXME: Remove those variables from the official Spack package
         args.append(self.define_from_variant("DLAF_FORTRAN_CSCS_CI", "cscs-ci"))
-        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         return args
