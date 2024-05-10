@@ -18,7 +18,7 @@ RUN apt-get -yqq update && \
     ${EXTRA_APTGET} \
     gawk \
     python3 python3-distutils \
-    git tar wget curl ca-certificates gpg-agent jq tzdata \
+    git tar wget curl libcurl4-openssl-dev ca-certificates gpg-agent jq tzdata \
     patchelf unzip file gnupg2 libncurses-dev && \
     rm -rf /var/lib/apt/lists/*
 
