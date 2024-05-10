@@ -37,7 +37,7 @@ packages:
       - '~libxml2'
   curl:
     require:
-      - '@8.6.0'
+      - '@8.5'
   git:
     # Force git as non-buildable to allow deprecated versions in environments
     # https://github.com/spack/spack/pull/30040
