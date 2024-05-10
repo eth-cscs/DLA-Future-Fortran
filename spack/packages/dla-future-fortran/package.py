@@ -28,8 +28,7 @@ class DlaFutureFortran(CMakePackage):
     generator("ninja")
     depends_on("cmake@3.22:", type="build")
 
-    # TODO: Change to 0.4.1 when it's released
-    depends_on("dla-future@0.4.0: +scalapack")
+    depends_on("dla-future@0.4.1: +scalapack")
 
     depends_on("mpi", when="+test")
     depends_on("py-fypp", when="+test", type="build")

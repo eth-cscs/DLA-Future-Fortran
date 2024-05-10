@@ -30,7 +30,7 @@ if(NOT CMAKE_Fortran_MODULE_DIRECTORY)
   set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/fortran_mods)
 endif ()
 
-find_package(DLAF REQUIRED) # TODO: Add version requirement
+find_package(0.4.1 DLAF REQUIRED)
 
 add_subdirectory(src)
 
