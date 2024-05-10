@@ -45,6 +45,7 @@ RUN spack external find \
     automake \
     bzip2 \
     cuda \
+    curl \
     diffutils \
     findutils \
     git \
