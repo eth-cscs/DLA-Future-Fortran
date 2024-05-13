@@ -17,7 +17,7 @@ set(PXHEGVX_TEST_EXECUTABLES pssygvx pdsygvx pchegvx pzhegvx)
 
 find_program(FYPP_PROGRAM fypp)
 
-if("${FYPP_PROGRAM}" MATCHES ".*-NOTFOUND")
+if(NOT FYPP_PROGRAM)
   message(FATAL_ERROR "fypp (Fortran preprocessor) not found. fypp is required to build tests.")
 endif()
 
