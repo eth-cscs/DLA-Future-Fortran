@@ -19,7 +19,7 @@ foreach(infileName IN LISTS fyppFiles)
 
     add_custom_command(
         OUTPUT "${outfile}"
-        COMMAND "$CACHE{FYPP_PROGRAM}" "${infile}" "${outfile}"
+        COMMAND "${FYPP_PROGRAM}" "${infile}" "${outfile}"
         MAIN_DEPENDENCY "${infile}"
         VERBATIM)
 
