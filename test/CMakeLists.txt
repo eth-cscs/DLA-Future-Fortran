@@ -30,7 +30,7 @@ if(DLAF_FORTRAN_CSCS_CI)
   set(MPIEXEC_MAX_PREFLAGS "")
 else()
   if(NOT (${MPIEXEC_MAX_NUMPROCS} EQUAL 6))
-    message(FATAL_ERROR "Test run with 6 processes, got ${MPIEXEC_MAX_NUMPROCS}. Set -DMPIEXEC_MAX_NUMPROCS=6.")
+    message(FATAL_ERROR "Tests run with 6 processes, got ${MPIEXEC_MAX_NUMPROCS}. Set -DMPIEXEC_MAX_NUMPROCS=6.")
   endif()
 endif()
 
