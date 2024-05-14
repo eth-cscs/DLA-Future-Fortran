@@ -230,11 +230,11 @@ contains
       info = -1
 
       call dlaf_pssyevd_c(iachar(uplo, c_signed_char), n, &
-                        c_loc(a(1, 1)), ia, ja, desca, &
-                        c_loc(w(1)), &
-                        c_loc(z(1, 1)), iz, jz, descz, &
-                        c_loc(info) &
-                        )
+                          c_loc(a(1, 1)), ia, ja, desca, &
+                          c_loc(w(1)), &
+                          c_loc(z(1, 1)), iz, jz, descz, &
+                          c_loc(info) &
+                          )
 
    end subroutine dlaf_pssyevd
 
@@ -263,11 +263,11 @@ contains
       info = -1
 
       call dlaf_pdsyevd_c(iachar(uplo, c_signed_char), n, &
-                        c_loc(a(1, 1)), ia, ja, desca, &
-                        c_loc(w(1)), &
-                        c_loc(z(1, 1)), iz, jz, descz, &
-                        c_loc(info) &
-                        )
+                          c_loc(a(1, 1)), ia, ja, desca, &
+                          c_loc(w(1)), &
+                          c_loc(z(1, 1)), iz, jz, descz, &
+                          c_loc(info) &
+                          )
 
    end subroutine dlaf_pdsyevd
 
@@ -296,11 +296,11 @@ contains
       info = -1
 
       call dlaf_pcheevd_c(iachar(uplo, c_signed_char), n, &
-                        c_loc(a(1, 1)), ia, ja, desca, &
-                        c_loc(w(1)), &
-                        c_loc(z(1, 1)), iz, jz, descz, &
-                        c_loc(info) &
-                        )
+                          c_loc(a(1, 1)), ia, ja, desca, &
+                          c_loc(w(1)), &
+                          c_loc(z(1, 1)), iz, jz, descz, &
+                          c_loc(info) &
+                          )
 
    end subroutine dlaf_pcheevd
 
@@ -329,11 +329,11 @@ contains
       info = -1
 
       call dlaf_pzheevd_c(iachar(uplo, c_signed_char), n, &
-                        c_loc(a(1, 1)), ia, ja, desca, &
-                        c_loc(w(1)), &
-                        c_loc(z(1, 1)), iz, jz, descz, &
-                        c_loc(info) &
-                        )
+                          c_loc(a(1, 1)), ia, ja, desca, &
+                          c_loc(w(1)), &
+                          c_loc(z(1, 1)), iz, jz, descz, &
+                          c_loc(info) &
+                          )
 
    end subroutine dlaf_pzheevd
 
@@ -362,12 +362,12 @@ contains
       info = -1
 
       call dlaf_pssygvx_c(iachar(uplo, c_signed_char), n, &
-                        c_loc(a(1, 1)), ia, ja, desca, &
-                        c_loc(b(1, 1)), ib, jb, descb, &
-                        c_loc(w(1)), &
-                        c_loc(z(1, 1)), iz, jz, descz, &
-                        c_loc(info) &
-                        )
+                          c_loc(a(1, 1)), ia, ja, desca, &
+                          c_loc(b(1, 1)), ib, jb, descb, &
+                          c_loc(w(1)), &
+                          c_loc(z(1, 1)), iz, jz, descz, &
+                          c_loc(info) &
+                          )
 
    end subroutine dlaf_pssygvx
 
@@ -396,12 +396,12 @@ contains
       info = -1
 
       call dlaf_pdsygvx_c(iachar(uplo, c_signed_char), n, &
-                        c_loc(a(1, 1)), ia, ja, desca, &
-                        c_loc(b(1, 1)), ib, jb, descb, &
-                        c_loc(w(1)), &
-                        c_loc(z(1, 1)), iz, jz, descz, &
-                        c_loc(info) &
-                        )
+                          c_loc(a(1, 1)), ia, ja, desca, &
+                          c_loc(b(1, 1)), ib, jb, descb, &
+                          c_loc(w(1)), &
+                          c_loc(z(1, 1)), iz, jz, descz, &
+                          c_loc(info) &
+                          )
 
    end subroutine dlaf_pdsygvx
 
@@ -430,12 +430,12 @@ contains
       info = -1
 
       call dlaf_pchegvx_c(iachar(uplo, c_signed_char), n, &
-                        c_loc(a(1, 1)), ia, ja, desca, &
-                        c_loc(b(1, 1)), ib, jb, descb, &
-                        c_loc(w(1)), &
-                        c_loc(z(1, 1)), iz, jz, descz, &
-                        c_loc(info) &
-                        )
+                          c_loc(a(1, 1)), ia, ja, desca, &
+                          c_loc(b(1, 1)), ib, jb, descb, &
+                          c_loc(w(1)), &
+                          c_loc(z(1, 1)), iz, jz, descz, &
+                          c_loc(info) &
+                          )
 
    end subroutine dlaf_pchegvx
 
@@ -464,12 +464,12 @@ contains
       info = -1
 
       call dlaf_pzhegvx_c(iachar(uplo, c_signed_char), n, &
-                        c_loc(a(1, 1)), ia, ja, desca, &
-                        c_loc(b(1, 1)), ib, jb, descb, &
-                        c_loc(w(1)), &
-                        c_loc(z(1, 1)), iz, jz, descz, &
-                        c_loc(info) &
-                        )
+                          c_loc(a(1, 1)), ia, ja, desca, &
+                          c_loc(b(1, 1)), ib, jb, descb, &
+                          c_loc(w(1)), &
+                          c_loc(z(1, 1)), iz, jz, descz, &
+                          c_loc(info) &
+                          )
 
    end subroutine dlaf_pzhegvx
 

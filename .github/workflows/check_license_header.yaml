@@ -34,7 +34,7 @@ jobs:
           find src test -type f                                                   \
                ! '('                                                              \
                        -name '*.f90'                                              \
-                   -o  -name '*.fpp'                                              \
+                   -o  -name '*.fypp'                                             \
                    -o  -name 'CMakeLists.txt'                                     \
                    -o  -name '.*'                                                 \
                ')'                                                                \
