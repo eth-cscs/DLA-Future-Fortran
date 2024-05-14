@@ -1,0 +1,15 @@
+# CMake
+build/
+
+# Python
+__pycache__
+
+# Fortran
+*.mod
+
+# direnv
+.envrc
+
+# Spack
+spack-*
+build-*

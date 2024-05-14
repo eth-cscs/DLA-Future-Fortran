@@ -1,0 +1,169 @@
+!
+! Distributed Linear Algebra with Future (DLAF)
+!
+! Copyright (c) 2018-2024, ETH Zurich
+! All rights reserved.
+!
+! Please, refer to the LICENSE file in the root directory.
+! SPDX-License-Identifier: BSD-3-Clause
+!
+
+#:set precision = ['sp', 'dp']
+#:set types = ['real', 'complex']
+#:set names = {('sp', 'real'): 's', ('sp', 'complex'): 'c', ('dp', 'real'): 'd', ('dp', 'complex'): 'z'}
+module pxpotrf_tests
+   use iso_fortran_env, only: error_unit, sp => real32, dp => real64
+   use dlaf_fortran, only: dlaf_initialize, dlaf_finalize, dlaf_create_grid_from_blacs, dlaf_free_grid
+   #:for dtype in precision
+      #:for type in types
+         #:set name = names[(dtype, type)]
+         use dlaf_fortran, only: dlaf_p${name}$potrf
+      #:endfor
+   #:endfor
+
+   use testutils, only: allclose, terminate, setup_mpi, teardown_mpi, bcast_check, set_random_matrix, init_desc
+
+   implicit none
+
+   external blacs_pinfo
+   external blacs_get
+   external blacs_gridinit
+   external blas_gridinfo
+   external blacs_gridexit
+   external blacs_exit
+   integer, external :: numroc
+
+   #:for dtype in precision
+      #:for type in types
+         #:set name = names[(dtype, type)]
+         public :: p${name}$potrf_test
+      #:endfor
+   #:endfor
+
+contains
+
+   #:for dtype in precision
+      #:for type in types
+         #:set name = names[(dtype, type)]
+         subroutine p${name}$potrf_test
+
+            integer, parameter :: n = 4
+
+            integer:: nprow, npcol
+            integer:: i, j
+            logical :: failed
+            integer :: rank, numprocs, myrow, mycol
+            integer :: ictxt, ictxt_0
+            integer :: info, lld, nb, ma, na
+            integer :: desca(9), desca_local_dlaf(9), desca_local_scalapack(9)
+            integer :: descr_dlaf(9), descr_scalapack(9)
+            ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: A, A_local_dlaf, A_local_scalapack
+            ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: R_dlaf, R_scalapack
+
+            nprow = 2
+            npcol = 3
+            nb = 2
+
+            call setup_mpi(nprow, npcol, rank, numprocs)
+
+            ! Setup BLACS
+            call blacs_get(0, 0, ictxt)
+            ictxt_0 = ictxt
+            call blacs_gridinit(ictxt, 'R', nprow, npcol)
+            call blacs_gridinit(ictxt_0, 'R', 1, 1)
+            call blacs_pinfo(rank, numprocs)
+            call blacs_gridinfo(ictxt, nprow, npcol, myrow, mycol)
+
+            ! Setup full matrices on rank 0
+            call init_desc(desca)
+            call init_desc(descr_scalapack)
+            call init_desc(descr_dlaf)
+            if (rank == 0) then
+               allocate (A(n, n))
+               allocate (R_dlaf(n, n))
+               allocate (R_scalapack(n, n))
+
+               call descinit(desca, n, n, n, n, 0, 0, ictxt_0, n, info)
+               call descinit(descr_dlaf, n, n, n, n, 0, 0, ictxt_0, n, info)
+               call descinit(descr_scalapack, n, n, n, n, 0, 0, ictxt_0, n, info)
+
+               call set_random_matrix(A)
+            end if
+
+            ! Allocate local matrices
+            ma = numroc(n, nb, myrow, 0, nprow)
+            na = numroc(n, nb, mycol, 0, npcol)
+            lld = max(1, ma)
+            allocate (A_local_dlaf(ma, na), A_local_scalapack(ma, na))
+
+            ! + ---- +
+            ! | DLAF |
+            ! + ---- +
+
+            call descinit(desca_local_dlaf, n, n, nb, nb, 0, 0, ictxt, lld, info)
+            call p${name}$gemr2d(n, n, a, 1, 1, desca, A_local_dlaf, 1, 1, desca_local_dlaf, ictxt)
+
+            ! Solve with DLAF
+            call dlaf_initialize()
+            call dlaf_create_grid_from_blacs(ictxt)
+            call dlaf_p${name}$potrf('L', n, A_local_dlaf, 1, 1, desca_local_dlaf, info)
+            call dlaf_free_grid(ictxt)
+            call dlaf_finalize()
+            if (info /= 0) then
+               write (error_unit, *) 'ERROR: dlaf_p${name}$potrf returned info = ', info
+               call terminate(ictxt)
+            end if
+
+            call p${name}$gemr2d(n, n, A_local_dlaf, 1, 1, desca_local_dlaf, R_dlaf, 1, 1, descr_dlaf, ictxt)
+
+            ! + --------- +
+            ! | ScaLAPACK |
+            ! + --------- +
+
+            call descinit(desca_local_scalapack, n, n, nb, nb, 0, 0, ictxt, lld, info)
+            call p${name}$gemr2d(n, n, a, 1, 1, desca, A_local_scalapack, 1, 1, desca_local_scalapack, ictxt)
+
+            ! ScaLAPACK
+            call p${name}$potrf('L', n, A_local_scalapack, 1, 1, desca_local_scalapack, info)
+            if (info /= 0) then
+               write (error_unit, *) 'ERROR: p${name}$potrf returned info = ', info
+               call terminate(ictxt)
+            end if
+
+            call p${name}$gemr2d(n, n, A_local_scalapack, 1, 1, desca_local_scalapack, R_scalapack, 1, 1, descr_scalapack, ictxt)
+
+            ! Check results
+            ! Results are checked only on rank 0
+
+            failed = .false.
+            if (rank == 0) then
+               if (.not. allclose(R_dlaf, R_scalapack, uplo='L')) then
+                  failed = .true.
+                  write (error_unit, *) "ERROR: DLAF != ScaLAPACK"
+                  call terminate(ictxt)
+               end if
+            end if
+
+            call bcast_check(failed)
+            if (failed) then
+               call terminate(ictxt)
+            end if
+
+            ! Cleanup
+
+            if (rank == 0) then
+               if (allocated(A)) deallocate (A)
+               if (allocated(R_dlaf)) deallocate (R_dlaf)
+               if (allocated(R_scalapack)) deallocate (R_scalapack)
+            end if
+            if (allocated(A_local_dlaf)) deallocate (A_local_dlaf)
+            if (allocated(A_local_scalapack)) deallocate (A_local_scalapack)
+
+            call blacs_gridexit(ictxt)
+            call blacs_exit(1)
+            call teardown_mpi()
+         end subroutine p${name}$potrf_test
+
+      #:endfor
+   #:endfor
+end module pxpotrf_tests
