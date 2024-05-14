@@ -1,0 +1,45 @@
+cff-version: 1.2.0
+title: DLA-Future-Fortran 0.1.0
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: John
+    family-names: Biddiscombe
+    orcid: 'https://orcid.org/0000-0002-6552-2833'
+  - given-names: Alberto
+    family-names: Invernizzi
+    orcid: 'https://orcid.org/0009-0004-4948-0313'
+  - given-names: Rocco
+    family-names: Meli
+    orcid: 'https://orcid.org/0000-0002-2845-3410'
+  - given-names: Auriane
+    family-names: Reverdell
+    orcid: 'https://orcid.org/0000-0002-5531-0458'
+  - given-names: Mikael
+    family-names: Simberg
+    orcid: 'https://orcid.org/0000-0002-7238-8935'
+  - given-names: Raffaele
+    family-names: Solcà
+    orcid: 'https://orcid.org/0009-0009-9346-4376'
+  - given-names: Mathieu  
+    family-names: Taillefumier
+    orcid: 'https://orcid.org/0000-0002-3983-5625'
+identifiers:
+  - type: doi
+    value:
+    description: The concept DOI of the work.
+repository-code: 'https://github.com/eth-cscs/DLA-Future-Fortran'
+abstract: Fortran interface for DLA-Future (Distributed Linear Algebra from the Future)
+keywords:
+  - fortran
+  - eigensolver
+  - "generalized eigensolver"
+  - scalapack
+  - "high performance computing"
+  - "linear algebra"
+  - mpi
+license: BSD-3-Clause
+version: 0.1.0
+date-released: '2024-05-14'
