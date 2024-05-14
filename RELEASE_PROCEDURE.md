@@ -16,16 +16,16 @@ DLA-Future-Fortran follows [Semantic Versioning](https://semver.org).
 
 1. Update the minimum required versions if necessary.
 
-1. Ensure you have [GitHub CLI]() installed. Run `gh auth login` to authenticate with your GitHub account,
-   or set the `GITHUB_TOKEN` to a token with `public_repo` access.
+1. Ensure you have [GitHub CLI](https://cli.github.com) installed. Run `gh auth login` to authenticate with
+   your GitHub account, or set the `GITHUB_TOKEN` to a token with `public_repo` access.
 
 1. Create a release on GitHub using the script `scripts/roll_release.sh`.
 
-1. Update spack recipe in `spack/packages/dla-future/package.py` adding the new release.
+1. Update Spack recipe in `spack/packages/dla-future-fortran/package.py` adding the new release.
 
-1. Synchronize [upstream spack
+1. Synchronize [upstream Spack
    package](https://github.com/spack/spack/blob/develop/var/spack/repos/builtin/packages/dla-future-fortran/package.py)
-   with local repository. Exclude blocks delimited by `###` comments. These are only intended for the
-   internal spack package.
+   with local repository. Exclude blocks delimited by `# !!!` comments. These are only intended for the
+   internal Spack package.
 
 1. Delete your `GITHUB_TOKEN` if created only for the release.
