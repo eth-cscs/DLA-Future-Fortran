@@ -22,6 +22,7 @@ VERSION_FULL="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
 VERSION_FULL_TAG="v${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
 VERSION_TITLE="DLA-Future-Fortran ${VERSION_FULL}"
 CURRENT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+RELEASE_DATE=$(date '+%Y-%m-%d')
 
 if ! which gh >/dev/null 2>&1; then
     echo "GitHub CLI not installed on this system (see https://cli.github.com). Exiting."
@@ -42,7 +43,6 @@ if ! [[ "$CURRENT_BRANCH" == "$RELEASE_BRANCH" ]]; then
 fi
 
 changelog_path="CHANGELOG.md"
-readme_path="README.md"
 cff_path="CITATION.cff"
 
 echo "You are about to tag and create a final release on GitHub."
@@ -56,7 +56,7 @@ printf "Checking that %s has an entry for %s... " "${changelog_path}" "${VERSION
 if grep "## DLA-Future-Fortran ${VERSION_FULL}" "${changelog_path}"; then
     echo "OK"
 else
-    echo "Missing"
+    echo "ERROR"
     sanity_errors=$((sanity_errors + 1))
 fi
 
@@ -64,7 +64,7 @@ printf "Checking that %s has correct version for %s... " "${cff_path}" "${VERSIO
 if grep "^version: ${VERSION_FULL}" "${cff_path}"; then
     echo "OK"
 else
-    echo "Missing"
+    echo "ERROR"
     sanity_errors=$((sanity_errors + 1))
 fi
 
@@ -72,7 +72,15 @@ printf "Checking that %s has correct title for %s... " "${cff_path}" "${VERSION_
 if grep "^title: ${VERSION_TITLE}" "${cff_path}"; then
     echo "OK"
 else
-    echo "Missing"
+    echo "ERROR"
+    sanity_errors=$((sanity_errors + 1))
+fi
+
+printf "Checking that %s has today's date... " "${cff_path}"
+if grep "^date-released: '${RELEASE_DATE}'" "${cff_path}"; then
+    echo "OK"
+else
+    echo "ERROR"
     sanity_errors=$((sanity_errors + 1))
 fi
 
@@ -97,6 +105,7 @@ VERSION_DESCRIPTION=$(
 echo ""
 echo "The version is: ${VERSION_FULL}"
 echo "The version title is: ${VERSION_TITLE}"
+echo "The release date is: ${RELEASE_DATE}"
 echo "The version description is:"
 echo "${VERSION_DESCRIPTION}"
 
