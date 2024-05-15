@@ -26,10 +26,6 @@ authors:
   - given-names: Mathieu  
     family-names: Taillefumier
     orcid: 'https://orcid.org/0000-0002-3983-5625'
-identifiers:
-  - type: doi
-    value:
-    description: The concept DOI of the work.
 repository-code: 'https://github.com/eth-cscs/DLA-Future-Fortran'
 abstract: Fortran interface for DLA-Future (Distributed Linear Algebra from the Future)
 keywords:
