@@ -28,7 +28,7 @@ if ! which gh >/dev/null 2>&1; then
     exit 1
 fi
 
-# Major and minor releases are made directly from master. Patch releases are branched out from the major
+# Major and minor releases are made directly from main. Patch releases are branched out from the major
 # and minor releases with a version_X.Y branch.
 if [[ "${VERSION_PATCH}" -eq 0 ]]; then
     RELEASE_BRANCH="main"
