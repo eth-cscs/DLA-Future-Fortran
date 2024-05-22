@@ -15,5 +15,4 @@ spack-*
 build-*
 
 # Documentation
-docs/
-!docs/images
+doc-ford
