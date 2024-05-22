@@ -16,7 +16,7 @@ class DlaFutureFortran(CMakePackage):
     url = "https://github.com/eth-cscs/DLA-Future-Fortran/archive/v0.0.0.tar.gz"
     git = "https://github.com/eth-cscs/DLA-Future-Fortran.git"
 
-    maintainers("RMeli")
+    maintainers("RMeli", "rasolca")
 
     license("BSD-3-Clause")
 
