@@ -1,5 +1,7 @@
 # DLA-Future Fortran Interface
 
+ [![zenodo](https://zenodo.org/badge/DOI/10.5281/zenodo.11241331.svg)](https://doi.org/10.5281/zenodo.11241331) [![pipeline status](https://gitlab.com/cscs-ci/ci-testing/webhook-ci/mirrors/657496524998283/7598378243915359/badges/main/pipeline.svg)](https://gitlab.com/cscs-ci/ci-testing/webhook-ci/mirrors/657496524998283/7598378243915359/-/commits/main)
+
 Fortran interface for [DLA-Future], a task-based linear algebra library providing GPU-enabled distributed eigensolver.
 
 ## Fortran API
