@@ -5,15 +5,15 @@ message: >-
   metadata from this file.
 type: software
 authors:
+  - given-names: Rocco
+    family-names: Meli
+    orcid: 'https://orcid.org/0000-0002-2845-3410'
   - given-names: John
     family-names: Biddiscombe
     orcid: 'https://orcid.org/0000-0002-6552-2833'
   - given-names: Alberto
     family-names: Invernizzi
     orcid: 'https://orcid.org/0009-0004-4948-0313'
-  - given-names: Rocco
-    family-names: Meli
-    orcid: 'https://orcid.org/0000-0002-2845-3410'
   - given-names: Auriane
     family-names: Reverdell
     orcid: 'https://orcid.org/0000-0002-5531-0458'
@@ -32,6 +32,7 @@ keywords:
   - fortran
   - eigensolver
   - "generalized eigensolver"
+  - "Cholesky decomposition"
   - scalapack
   - "high performance computing"
   - "linear algebra"
