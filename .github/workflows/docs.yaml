@@ -18,8 +18,7 @@ jobs:
         run: |
           python -m ford --output_dir doc-ford DLA-Future-Fortran.md
       - name: Deploy
-        if: success()
-        if: github.repository == 'eth-cscs/DLA-Future-Fortran'
+        if: success() #&& github.repository == 'eth-cscs/DLA-Future-Fortran'
         uses: crazy-max/ghaction-github-pages@v1
         with:
           build_dir: doc-ford
