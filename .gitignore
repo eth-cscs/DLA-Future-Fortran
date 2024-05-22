@@ -13,3 +13,7 @@ __pycache__
 # Spack
 spack-*
 build-*
+
+# Documentation
+docs/
+!docs/images
