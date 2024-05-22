@@ -23,5 +23,4 @@ build-*
 *.orig
 
 # Documentation
-docs/
-!docs/images
+doc-ford

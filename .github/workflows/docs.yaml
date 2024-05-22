@@ -1,0 +1,31 @@
+name: Docs
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install ford
+      - name: Build
+        run: |
+          python -m ford --output_dir doc-ford DLA-Future-Fortran.md
+      - name: Deploy
+        if: success()
+        if: github.repository == 'eth-cscs/DLA-Future-Fortran'
+        uses: crazy-max/ghaction-github-pages@v1
+        with:
+          build_dir: doc-ford
+          committer: Rocco Meli <rocco.meli@cscs.ch>
+          author: Rocco Meli <rocco.meli@cscs.ch>
+          dry_run: true
+          verbose: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
