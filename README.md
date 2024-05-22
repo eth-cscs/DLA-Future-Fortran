@@ -45,5 +45,20 @@ call dlaf_free_grid(ictxt)
 call dlaf_finalize()
 ```
 
+
+## Acknowledgements
+
+The development of [DLA-Future-Fortran] is supported by the following organizations:
+
+* [CSCS]: Swiss National Supercomputing Center
+* [ETH Zurich]: Swiss Federal Institute of Technology Zurich
+* [PASC]: Platform for Advanced Scientific Computing
+
+<img height="50" src="./doc/images/logo-cscs.jpg"><img height="50" src="./doc/images/logo-eth.svg"><img height="50" src="./doc/images/logo-pasc.png">
+
 [DLA-Future]: https://github.com/eth-cscs/DLA-Future
 [pika]: https://pikacpp.org/
+[DLA-Future-Fortran]: https://github.com/eth-cscs/DLA-Future-Fortran
+[CSCS]: https://www.cscs.ch
+[ETH Zurich]: https://ethz.ch/en.html
+[PASC]: https://www.pasc-ch.org/
