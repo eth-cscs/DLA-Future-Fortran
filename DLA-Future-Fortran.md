@@ -74,6 +74,18 @@ The following is an example of how a code using [ScaLAPACK]'s hermitian generali
  call mpi_finalize(...)
 ```
 
+## Optimal parameters
+
+### Block size
+
+| Device | Block size |
+| :----: | :--------: |
+| CPU    | 512        |
+| GPU    | 1024       |
+
+### Ranks per node
+
+For CPU-only calculations it is recommended to use one rank per NUMA domain. For GPU calculations it is recommended to use one rank per GPU.
 
 ## Acknowledgements
 
