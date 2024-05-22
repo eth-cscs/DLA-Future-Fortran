@@ -4,7 +4,7 @@ summary: Fortan interface for DLA-Future
 project_github: https://github.com/eth-cscs/DLA-Future-Fortran
 author: Rocco Meli
 print_creation_date: true
-output_dir: docs
+output_dir: doc-ford
 doc_license: bsd
 ---
 
