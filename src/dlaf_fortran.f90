@@ -34,6 +34,12 @@ module dlaf_fortran
 contains
 
    subroutine dlaf_initialize()
+      !! Initialize DLA-Future and pika
+      !!
+      !! @note
+      !! If DLA-Future has already been initialized, this function does nothing.
+      !! @endnote
+
       integer, parameter :: dlaf_argc = 1, pika_argc = 1
 
       character(len=5, kind=c_char), allocatable, target :: dlaf_argv(:), pika_argv(:)
@@ -64,6 +70,12 @@ contains
    end subroutine dlaf_initialize
 
    subroutine dlaf_finalize()
+      !! Finalize DLA-Future and pika
+      !!
+      !! @note
+      !! If DLA-Future has already been finalized, this function does nothing.
+      !! @endnote
+
       interface
          subroutine dlaf_finalize_c() bind(C, name='dlaf_finalize')
          end subroutine dlaf_finalize_c
@@ -74,9 +86,15 @@ contains
    end subroutine dlaf_finalize
 
    subroutine dlaf_create_grid_from_blacs(blacs_context)
-    !! Create DLA-Future grid from existing BLACS context
+      !! Create DLA-Future grid from existing BLACS context
+      !!
+      !! @warning
+      !! The grid ordering is automatically inferred from the BLACS grid ordering. Only row-major and column-major
+      !! grids are supported (created with `blacs_gridinit`). Grids created with `blacs_gridmap` are _not_ supported.
+      !! @endwarning
+
       integer, intent(in) :: blacs_context
-      !! BLACS context
+        !! BLACS context
 
       interface
          subroutine dlaf_create_grid_from_blacs_c(blacs_contxt) bind(C, name='dlaf_create_grid_from_blacs')
@@ -90,10 +108,15 @@ contains
    end subroutine dlaf_create_grid_from_blacs
 
    subroutine dlaf_free_grid(blacs_context)
-    !! Free DLA-Future grid corresponding to given BLACS context
+      !! Free DLA-Future grid corresponding to given BLACS context
+      !!
+      !! @warning
+      !! Only the DLA-Future internal grid is freed. The associated BLACS grid will need to be freed explicitly
+      !! with `blacs_gridexit`.
+      !! @endwarning
 
       integer, intent(in) :: blacs_context
-      !! BLACS context
+        !! BLACS context
 
       interface
          subroutine dlaf_free_grid_c(blacs_contxt) bind(C, name='dlaf_free_grid')
@@ -107,12 +130,32 @@ contains
    end subroutine dlaf_free_grid
 
    subroutine dlaf_pspotrf(uplo, n, a, ia, ja, desca, info)
+      !! Cholesky decomposition for a distributed single-precision real symmetric positive definite matrix \(\mathbf{A}\)
+      !!
+      !! @note
+      !! The input matrix is assumed to be distributed in host memory. Moving to and from GPU memory is
+      !! handled internally.
+      !! @endnote
+
       character, intent(in) :: uplo
       integer, intent(in) :: n
+        !! Order of the matrix sub-matrix \(\mathbf{A}\) used in the computation
       real(kind=sp), dimension(:, :), target, intent(inout) :: a
-      integer, intent(in) :: ia, ja
+        !! Local part of the global matrix \(\mathbf{A}\)
+      integer, intent(in) :: ia
+        !! Row index of the global matrix identifying the first row of the sub-matrix \(\mathbf{A}\)
+        !! @warning
+        !! Has to be `1`.
+        !! @endwarning
+      integer, intent(in) :: ja
+        !! Column index of the global matrix identifying the first column of the sub-matrix \(\mathbf{A}\)
+        !! @warning
+        !! Has to be `1`.
+        !! @endwarning
       integer, dimension(9), intent(in) :: desca
+        !! ScaLAPACK descriptor of the global matrix \(\mathbf{A}\)
       integer, target, intent(out) :: info
+        !! `0` if the Cholesky decomposition completed normally
 
       interface
          subroutine dlaf_pspotrf_c(uplo_, n_, a_, ia_, ja_, desca_, info_) &
@@ -211,12 +254,59 @@ contains
    end subroutine dlaf_pzpotrf
 
    subroutine dlaf_pssyevd(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, info)
+      !! Eigensolver for a distributed single-precision real symmetric matrix \(\mathbf{A}\)
+      !!
+      !! @note
+      !! The input matrix and the matrix of eigenvectors are assumed to be distributed in host memory.
+      !! Moving to and from GPU memory is handled internally.
+      !! @endnote
+      !!
+      !! @note
+      !! The vector of eigenvalues is assumed to be local (non-distributed) and in host memory.
+      !! Moving to and from GPU memory is handled internally.
+      !! @endnote
+      !!
+      !! @note
+      !! The pika runtime is resumed when this function is called and suspended when the call terminates.
+      !! @endnote
+
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, iz, jz
-      integer, dimension(9), intent(in) :: desca, descz
-      integer, target, intent(out) :: info
-      real(kind=sp), dimension(:, :), target, intent(inout) :: a, z
+        !! Indicates whether the upper (`"U"`) or lower (`"L"`) triangular part of the global sub-matrix
+        !! \(\mathbf{A}\) is referenced
+      integer, intent(in) :: n
+        !! Order of the sub-matrix \(\mathbf{A}\) used in the computation
+      real(kind=sp), dimension(:, :), target, intent(inout) :: a
+        !! Local part of the global matrix \(\mathbf{A}\)
+      integer, intent(in) :: ia
+        !! Row index in the global matrix identifying the first row of the sub-matrix \(\mathbf{A}\)
+        !! @warning
+        !! Has to be `1`.
+        !! @endwarning
+      integer, intent(in) :: ja
+        !! Column index in the global matrix identifying the first column of the sub-matrix \(\mathbf{A}\)
+        !! @warning
+        !! Has to be `1`.
+        !! @endwarning
+      integer, dimension(9), intent(in) :: desca
+        !! ScaLAPACK descriptor of the gloabl matrix \(\mathbf{A}\)
       real(kind=sp), dimension(:), target, intent(out) :: w
+        !! Local (non-distributed) vector of eigenvalues
+      real(kind=sp), dimension(:, :), target, intent(inout) :: z
+        !! Local part of the global matrix \(\mathbf{Z}\)
+      integer, intent(in) :: iz
+        !! Row index in the global matrix identifying the first row of the sub-matrix \(\mathbf{Z}\)
+        !! @warning
+        !! Has to be `1`.
+        !! @endwarning
+      integer, intent(in) :: jz
+        !! Column index in the global matrix identifying the first column of the sub-matrix \(\mathbf{Z}\)
+        !! @warning
+        !! Has to be `1`.
+        !! @endwarning
+      integer, dimension(9), intent(in) :: descz
+        !! ScaLAPACK descriptor of the gloabl matrix \(\mathbf{Z}\)
+      integer, target, intent(out) :: info
+        !! `0` if the eigensolver completed normally
 
       interface
          subroutine dlaf_pssyevd_c(uplo_, n_, a_, ia_, ja_, desca_, w_, z_, iz_, jz_, descz_, info_) &
@@ -343,12 +433,73 @@ contains
    end subroutine dlaf_pzheevd
 
    subroutine dlaf_pssygvx(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
+      !! Generalized eigensolver for a distributed symmetric-definite eigenproblem of the form
+      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !!
+      !! @note
+      !! The input matrix and the matrix of eigenvectors are assumed to be distributed in host memory.
+      !! Moving to and from GPU memory is handled internally.
+      !! @endnote
+      !!
+      !! @note
+      !! The vector of eigenvalues is assumed to be local (non-distributed) and in host memory.
+      !! Moving to and from GPU memory is handled internally.
+      !! @endnote
+      !!
+      !! @note
+      !! The pika runtime is resumed when this function is called and suspended when the call terminates.
+      !! @endnote
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
-      integer, dimension(9), intent(in) :: desca, descb, descz
-      integer, target, intent(out) :: info
-      real(kind=sp), dimension(:, :), target, intent(inout) :: a, b, z
+        !! Indicates whether the upper (`"U"`) or lower (`"L"`) triangular part of the global sub-matrix
+        !! \(\mathbf{A}\) is referenced
+      integer, intent(in) :: n
+        !! Order of the sub-matrix \(\mathbf{A}\) used in the computation
+      real(kind=sp), dimension(:, :), target, intent(inout) :: a
+        !! Local part of the global matrix \(\mathbf{A}\)
+      integer, intent(in) :: ia
+        !! Row index in the global matrix identifying the first row of the sub-matrix \(\mathbf{A}\)
+        !! @warning
+        !! Has to be `1`.
+        !! @endwarning
+      integer, intent(in) :: ja
+        !! Column index in the global matrix identifying the first column of the sub-matrix \(\mathbf{A}\)
+        !! @warning
+        !! Has to be `1`.
+        !! @endwarning
+      integer, dimension(9), intent(in) :: desca
+        !! ScaLAPACK descriptor of the gloabl matrix \(\mathbf{A}\)
+      real(kind=sp), dimension(:, :), target, intent(inout) :: b
+        !! Local part of the global matrix \(\mathbf{B}\)
+      integer, intent(in) :: ib
+        !! Row index in the global matrix identifying the first row of the sub-matrix \(\mathbf{B}\)
+        !! @warning
+        !! Has to be `1`.
+        !! @endwarning
+      integer, intent(in) :: jb
+        !! Column index in the global matrix identifying the first column of the sub-matrix \(\mathbf{B}\)
+        !! @warning
+        !! Has to be `1`.
+        !! @endwarning
+      integer, dimension(9), intent(in) :: descb
+        !! ScaLAPACK descriptor of the gloabl matrix \(\mathbf{B}\)
       real(kind=sp), dimension(:), target, intent(out) :: w
+        !! Local (non-distributed) vector of eigenvalues
+      real(kind=sp), dimension(:, :), target, intent(inout) :: z
+        !! Local part of the global matrix \(\mathbf{Z}\)
+      integer, intent(in) :: iz
+        !! Row index in the global matrix identifying the first row of the sub-matrix \(\mathbf{Z}\)
+        !! @warning
+        !! Has to be `1`.
+        !! @endwarning
+      integer, intent(in) :: jz
+        !! Column index in the global matrix identifying the first column of the sub-matrix \(\mathbf{Z}\)
+        !! @warning
+        !! Has to be `1`.
+        !! @endwarning
+      integer, dimension(9), intent(in) :: descz
+        !! ScaLAPACK descriptor of the gloabl matrix \(\mathbf{Z}\)
+      integer, target, intent(out) :: info
+        !! `0` if the eigensolver completed normally
 
       interface
          subroutine dlaf_pssygvx_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_) &
