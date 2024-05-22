@@ -1,8 +1,14 @@
 name: Docs
 
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+      - main
+      - 'release-*'
+  pull_request:
+    branches:
+      - main
+      - 'release-*'
 
 jobs:
   publish:
