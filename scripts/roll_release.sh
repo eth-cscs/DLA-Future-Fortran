@@ -53,11 +53,11 @@ echo "Sanity checking release"
 sanity_errors=0
 
 printf "Checking that the git repository is in a clean state... "
-if [[ `git status --porcelain` ]] ; then
+if [[ $(git status --porcelain | wc -l) -eq 0 ]] ; then
+    echo "OK"
+else
     echo "ERROR"
     sanity_errors=$((sanity_errors + 1))
-else
-    echo "OK"
 fi
 
 printf "Checking that %s has an entry for %s... " "${changelog_path}" "${VERSION_FULL}"
