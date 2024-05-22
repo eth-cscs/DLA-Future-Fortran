@@ -18,14 +18,11 @@ jobs:
         run: |
           python -m ford --output_dir doc-ford DLA-Future-Fortran.md
       - name: Deploy
-        if: success() #&& github.repository == 'eth-cscs/DLA-Future-Fortran'
-        uses: crazy-max/ghaction-github-pages@v1
+        if: success()
+        uses: crazy-max/ghaction-github-pages@v4
         with:
           build_dir: doc-ford
           committer: Rocco Meli <rocco.meli@cscs.ch>
           author: Rocco Meli <rocco.meli@cscs.ch>
-          dry_run: true
-          verbose: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
