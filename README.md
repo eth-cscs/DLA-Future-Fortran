@@ -54,7 +54,7 @@ The development of [DLA-Future-Fortran] is supported by the following organizati
 * [ETH Zurich]: Swiss Federal Institute of Technology Zurich
 * [PASC]: Platform for Advanced Scientific Computing
 
-<img height="50" src="./doc/images/logo-cscs.jpg"><img height="50" src="./doc/images/logo-eth.svg"><img height="50" src="./doc/images/logo-pasc.png">
+<img height="50" src="./docs/images/logo-cscs.jpg"><img height="50" src="./docs/images/logo-eth.svg"><img height="50" src="./docs/images/logo-pasc.png">
 
 [DLA-Future]: https://github.com/eth-cscs/DLA-Future
 [pika]: https://pikacpp.org/
