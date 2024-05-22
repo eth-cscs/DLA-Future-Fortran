@@ -46,22 +46,32 @@ call dlaf_free_grid(blacs_context)
 
 [DLA-Future-Fortran] can be used as a [ScaLAPACK] drop-in. [DLA-Future] takes a subset of [ScaLAPACK] arguments. For example, workspaces are managed internally in [DLA-Future].
 
-#### Example
-
+#### Example: Hermitian generalized eigensolver
 
 The following is an example of how a code using [ScaLAPACK]'s hermitian generalized eigensolver can be adapted to use [DLA-Future] instead:
 
 ```diff
-! There is an existing blacs_context associated to the matrices A and Z
-
+ call mpi_init_thread(...)
 +call dlaf_initialize()
+ call blacs_get(0, 0, blacs_context)
+ call blacs_gridinit(blacs_context, ...)
 +call dlaf_create_grid_from_blacs(blacs_context)
+
+ ! ...
+
+-! Workspaces setup (work, rwork, iwork)
 
 -call pzheevd('V', 'L', n, a, 1, 1, desca, w, z, 1, 1, descz, work, lwork, rwork, lrwork, iwork, liwork, info)
 +call call dlaf_pzheevd('L', n, a, 1, 1, desca, w, z, 1, 1, descz, info)
 
+-! Workspaces cleanup (work, rwork, iwork)
+ 
+ ! ...
+
 +call dlaf_free_grid(blacs_context)
+ call blacs_gridexit(blacs_context)
 +call dlaf_finalize()
+ call mpi_finalize(...)
 ```
 
 
