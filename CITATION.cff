@@ -26,6 +26,10 @@ authors:
   - given-names: Mathieu  
     family-names: Taillefumier
     orcid: 'https://orcid.org/0000-0002-3983-5625'
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.11241331
+    description: Zenodo DOI representing all versions
 repository-code: 'https://github.com/eth-cscs/DLA-Future-Fortran'
 abstract: Fortran interface for DLA-Future (Distributed Linear Algebra from the Future)
 keywords:
