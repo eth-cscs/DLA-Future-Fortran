@@ -12,8 +12,8 @@ packages:
   all:
     target: [x86_64]
     require:
-    - "platform=linux"
-    - "os=ubuntu22.04"
+      - "platform=linux"
+      - "os=ubuntu22.04"
   blas:
     require: 'intel-oneapi-mkl'
   lapack:
