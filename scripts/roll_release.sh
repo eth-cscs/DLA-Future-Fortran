@@ -52,6 +52,14 @@ echo "Sanity checking release"
 
 sanity_errors=0
 
+printf "Checking that the git repository is in a clean state... "
+if [[ $(git status --porcelain | wc -l) -eq 0 ]] ; then
+    echo "OK"
+else
+    echo "ERROR"
+    sanity_errors=$((sanity_errors + 1))
+fi
+
 printf "Checking that %s has an entry for %s... " "${changelog_path}" "${VERSION_FULL}"
 if grep "## DLA-Future-Fortran ${VERSION_FULL}" "${changelog_path}"; then
     echo "OK"
@@ -125,7 +133,7 @@ else
     git tag --annotate "${VERSION_FULL_TAG}" --message="${VERSION_TITLE}"
 fi
 
-remote=$(git remote -v | grep github.com:eth-cscs\/DLA-Future-Fortran.git | cut -f1 | uniq)
+remote=$(git remote -v | grep "github.com[/:]eth-cscs/DLA-Future-Fortran.git" | cut -f1 | uniq)
 if [[ "$(git ls-remote --tags --refs $remote | grep -o ${VERSION_FULL_TAG})" == "${VERSION_FULL_TAG}" ]]; then
     echo "Tag already exists remotely."
 else
