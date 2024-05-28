@@ -59,7 +59,7 @@ RUN spack external find \
 
 # Enable Spack build cache
 ARG SPACK_BUILDCACHE
-RUN spack mirror add develop-2024-03-24 https://binaries.spack.io/${SPACK_BUILDCACHE}
+RUN spack mirror add ${SPACK_BUILDCACHE} https://binaries.spack.io/${SPACK_BUILDCACHE}
 RUN spack buildcache keys --install --trust
 
 # Add custom Spack repo
