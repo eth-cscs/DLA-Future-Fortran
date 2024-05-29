@@ -12,7 +12,6 @@ class DlaFutureFortran(CMakePackage):
     Fortran interface to the DLA-Future library.
     """
 
-
     homepage = "https://github.com/eth-cscs/DLA-Future-Fortran"
     url = "https://github.com/eth-cscs/DLA-Future-Fortran/archive/v0.0.0.tar.gz"
     git = "https://github.com/eth-cscs/DLA-Future-Fortran.git"
@@ -47,7 +46,11 @@ class DlaFutureFortran(CMakePackage):
         args = []
 
         args.append(self.define_from_variant("BUILD_SHARED_LIBS", "shared"))
-        args.append(self.define_from_variant("DLAF_FORTRAN_BUILD_TESTING", "test"))
+
+        if self.spec.satisfies("+test"):
+            args.append(self.define_from_variant("DLAF_FORTRAN_BUILD_TESTING", "test"))
+            # Tests run with 6 MPI ranks
+            args.append(self.define("MPIEXEC_MAX_NUMPROCS", 6))
 
         # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         # FIXME: Variables only available on the DLA-Future-Fortran repo
