@@ -48,7 +48,7 @@ class DlaFutureFortran(CMakePackage):
         args.append(self.define_from_variant("BUILD_SHARED_LIBS", "shared"))
 
         if self.spec.satisfies("+test"):
-            args.append(self.define_from_variant("DLAF_FORTRAN_BUILD_TESTING", "test"))
+            args.append(self.define("DLAF_FORTRAN_BUILD_TESTING", True))
             # Tests run with 6 MPI ranks
             args.append(self.define("MPIEXEC_MAX_NUMPROCS", 6))
 
