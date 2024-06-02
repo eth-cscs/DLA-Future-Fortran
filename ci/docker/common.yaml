@@ -26,6 +26,7 @@ packages:
     require:
       - 'threads=openmp'
       - '+cluster'
+      - '+gfortran'
   openblas:
     variants:
       - 'threads=openmp'
