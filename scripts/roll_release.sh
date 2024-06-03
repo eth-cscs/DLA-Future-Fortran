@@ -15,6 +15,7 @@
 
 set -o errexit
 
+REPO="eth-cscs/DLA-Future-Fortran"
 VERSION_MAJOR=$(sed -n 's/project(DLAFFortran VERSION \([0-9]\+\)\.[0-9]\+\.[0-9]\+ .*)/\1/p' CMakeLists.txt)
 VERSION_MINOR=$(sed -n 's/project(DLAFFortran VERSION [0-9]\+\.\([0-9]\+\)\.[0-9]\+ .*)/\1/p' CMakeLists.txt)
 VERSION_PATCH=$(sed -n 's/project(DLAFFortran VERSION [0-9]\+\.[0-9]\+\.\([0-9]\+\) .*)/\1/p' CMakeLists.txt)
@@ -26,6 +27,11 @@ RELEASE_DATE=$(date '+%Y-%m-%d')
 
 if ! which gh >/dev/null 2>&1; then
     echo "GitHub CLI not installed on this system (see https://cli.github.com). Exiting."
+    exit 1
+fi
+
+if ! gh auth status >/dev/null 2>&1; then
+    echo "gh is not logged in. Run `gh auth login` to authenticate with your GitHub account, or set `GITHUB_TOKEN` to a token with `public_repo` access. Exiting."
     exit 1
 fi
 
@@ -144,5 +150,6 @@ fi
 echo ""
 echo "Creating release."
 gh release create "${VERSION_FULL_TAG}" \
+   --repo "${REPO}" \
    --title "${VERSION_TITLE}" \
    --notes "${VERSION_DESCRIPTION}"
