@@ -16,14 +16,17 @@
 set -o errexit
 
 REPO="eth-cscs/DLA-Future-Fortran"
-VERSION_MAJOR=$(sed -n 's/project(DLAFFortran VERSION \([0-9]\+\)\.[0-9]\+\.[0-9]\+ .*)/\1/p' CMakeLists.txt)
-VERSION_MINOR=$(sed -n 's/project(DLAFFortran VERSION [0-9]\+\.\([0-9]\+\)\.[0-9]\+ .*)/\1/p' CMakeLists.txt)
-VERSION_PATCH=$(sed -n 's/project(DLAFFortran VERSION [0-9]\+\.[0-9]\+\.\([0-9]\+\) .*)/\1/p' CMakeLists.txt)
+VERSION_MAJOR=$(sed -n 's/project(DLAFFortran VERSION \([0-9][0-9]*\)\.\([0-9][0-9]*\)\.\([0-9][0-9]*\).*)/\1/p' CMakeLists.txt)
+VERSION_MINOR=$(sed -n 's/project(DLAFFortran VERSION \([0-9][0-9]*\)\.\([0-9][0-9]*\)\.\([0-9][0-9]*\).*)/\2/p' CMakeLists.txt)
+VERSION_PATCH=$(sed -n 's/project(DLAFFortran VERSION \([0-9][0-9]*\)\.\([0-9][0-9]*\)\.\([0-9][0-9]*\).*)/\3/p' CMakeLists.txt)
 VERSION_FULL="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
 VERSION_FULL_TAG="v${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
 VERSION_TITLE="DLA-Future-Fortran ${VERSION_FULL}"
 CURRENT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 RELEASE_DATE=$(date '+%Y-%m-%d')
+
+GREP_VERSION_FULL="$(echo ${VERSION_FULL} | sed s/\\./\\\\./g)"
+GREP_VERSION_TITLE="$(echo ${VERSION_TITLE} | sed s/\\./\\\\./g)"
 
 if ! which gh >/dev/null 2>&1; then
     echo "GitHub CLI not installed on this system (see https://cli.github.com). Exiting."
@@ -67,7 +70,7 @@ else
 fi
 
 printf "Checking that %s has an entry for %s... " "${changelog_path}" "${VERSION_FULL}"
-if grep "## DLA-Future-Fortran ${VERSION_FULL}" "${changelog_path}"; then
+if grep "## DLA-Future-Fortran ${GREP_VERSION_FULL}" "${changelog_path}"; then
     echo "OK"
 else
     echo "ERROR"
@@ -75,7 +78,7 @@ else
 fi
 
 printf "Checking that %s has correct version for %s... " "${cff_path}" "${VERSION_FULL}"
-if grep "^version: ${VERSION_FULL}" "${cff_path}"; then
+if grep "^version: ${GREP_VERSION_FULL}" "${cff_path}"; then
     echo "OK"
 else
     echo "ERROR"
@@ -83,7 +86,7 @@ else
 fi
 
 printf "Checking that %s has correct title for %s... " "${cff_path}" "${VERSION_FULL}"
-if grep "^title: ${VERSION_TITLE}" "${cff_path}"; then
+if grep "^title: ${GREP_VERSION_TITLE}" "${cff_path}"; then
     echo "OK"
 else
     echo "ERROR"
