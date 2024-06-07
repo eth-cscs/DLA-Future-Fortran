@@ -13,3 +13,6 @@ __pycache__
 # Spack
 spack-*
 build-*
+
+# Documentation
+doc-ford

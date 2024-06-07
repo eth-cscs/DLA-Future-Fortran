@@ -1,0 +1,40 @@
+#
+# Distributed Linear Algebra with Future (DLAF)
+#
+# Copyright (c) 2018-2024, ETH Zurich
+# All rights reserved.
+#
+# Please, refer to the LICENSE file in the root directory.
+# SPDX-License-Identifier: BSD-3-Clause
+#
+
+name: Docs
+
+on:
+  - push
+  # push:
+  #   branches:
+  #     - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install ford
+      - name: Build
+        run: |
+          python -m ford --output_dir doc-ford DLA-Future-Fortran.md
+      - name: Deploy
+        if: success()
+        uses: crazy-max/ghaction-github-pages@v4
+        with:
+          build_dir: doc-ford
+          committer: Rocco Meli <rocco.meli@cscs.ch>
+          author: Rocco Meli <rocco.meli@cscs.ch>
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
