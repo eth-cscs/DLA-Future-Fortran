@@ -29,7 +29,7 @@ module dlaf_fortran
    public :: dlaf_create_grid_from_blacs, dlaf_free_grid
    public :: dlaf_pspotrf, dlaf_pdpotrf, dlaf_pcpotrf, dlaf_pzpotrf
    public :: dlaf_pssyevd, dlaf_pdsyevd, dlaf_pcheevd, dlaf_pzheevd
-   public :: dlaf_pssygvx, dlaf_pdsygvx, dlaf_pchegvx, dlaf_pzhegvx
+   public :: dlaf_pssygvd, dlaf_pdsygvd, dlaf_pchegvd, dlaf_pzhegvd
    public :: dlaf_pssygvd_factorized, dlaf_pdsygvd_factorized, dlaf_pchegvd_factorized, dlaf_pzhegvd_factorized
 
 contains
@@ -338,7 +338,7 @@ contains
 
    end subroutine dlaf_pzheevd
 
-   subroutine dlaf_pssygvx(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
+   subroutine dlaf_pssygvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
       integer, dimension(9), intent(in) :: desca, descb, descz
@@ -347,8 +347,8 @@ contains
       real(kind=sp), dimension(:), target, intent(out) :: w
 
       interface
-         subroutine dlaf_pssygvx_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_) &
-            bind(C, name='dlaf_pssygvx')
+         subroutine dlaf_pssygvd_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_) &
+            bind(C, name='dlaf_pssygvd')
 
             import :: c_int, c_ptr, c_signed_char
 
@@ -357,12 +357,12 @@ contains
             type(c_ptr), value :: a_, b_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
             type(c_ptr), value :: info_
-         end subroutine dlaf_pssygvx_c
+         end subroutine dlaf_pssygvd_c
       end interface
 
       info = -1
 
-      call dlaf_pssygvx_c(iachar(uplo, c_signed_char), n, &
+      call dlaf_pssygvd_c(iachar(uplo, c_signed_char), n, &
                           c_loc(a(1, 1)), ia, ja, desca, &
                           c_loc(b(1, 1)), ib, jb, descb, &
                           c_loc(w(1)), &
@@ -370,7 +370,7 @@ contains
                           c_loc(info) &
                           )
 
-   end subroutine dlaf_pssygvx
+   end subroutine dlaf_pssygvd
 
    subroutine dlaf_pssygvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
@@ -408,7 +408,7 @@ contains
 
    end subroutine dlaf_pssygvd_factorized
 
-   subroutine dlaf_pdsygvx(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
+   subroutine dlaf_pdsygvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
       integer, dimension(9), intent(in) :: desca, descb, descz
@@ -417,8 +417,8 @@ contains
       real(kind=dp), dimension(:), target, intent(out) :: w
 
       interface
-         subroutine dlaf_pdsygvx_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_) &
-            bind(C, name='dlaf_pdsygvx')
+         subroutine dlaf_pdsygvd_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_) &
+            bind(C, name='dlaf_pdsygvd')
 
             import :: c_int, c_ptr, c_signed_char
 
@@ -427,12 +427,12 @@ contains
             type(c_ptr), value :: a_, b_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
             type(c_ptr), value :: info_
-         end subroutine dlaf_pdsygvx_c
+         end subroutine dlaf_pdsygvd_c
       end interface
 
       info = -1
 
-      call dlaf_pdsygvx_c(iachar(uplo, c_signed_char), n, &
+      call dlaf_pdsygvd_c(iachar(uplo, c_signed_char), n, &
                           c_loc(a(1, 1)), ia, ja, desca, &
                           c_loc(b(1, 1)), ib, jb, descb, &
                           c_loc(w(1)), &
@@ -440,7 +440,7 @@ contains
                           c_loc(info) &
                           )
 
-   end subroutine dlaf_pdsygvx
+   end subroutine dlaf_pdsygvd
 
    subroutine dlaf_pdsygvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
@@ -478,7 +478,7 @@ contains
 
    end subroutine dlaf_pdsygvd_factorized
 
-   subroutine dlaf_pchegvx(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
+   subroutine dlaf_pchegvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
       integer, dimension(9), intent(in) :: desca, descb, descz
@@ -487,8 +487,8 @@ contains
       real(kind=sp), dimension(:), target, intent(out) :: w
 
       interface
-         subroutine dlaf_pchegvx_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_) &
-            bind(C, name='dlaf_pchegvx')
+         subroutine dlaf_pchegvd_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_) &
+            bind(C, name='dlaf_pchegvd')
 
             import :: c_int, c_ptr, c_signed_char
 
@@ -497,12 +497,12 @@ contains
             type(c_ptr), value :: a_, b_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
             type(c_ptr), value :: info_
-         end subroutine dlaf_pchegvx_c
+         end subroutine dlaf_pchegvd_c
       end interface
 
       info = -1
 
-      call dlaf_pchegvx_c(iachar(uplo, c_signed_char), n, &
+      call dlaf_pchegvd_c(iachar(uplo, c_signed_char), n, &
                           c_loc(a(1, 1)), ia, ja, desca, &
                           c_loc(b(1, 1)), ib, jb, descb, &
                           c_loc(w(1)), &
@@ -510,7 +510,7 @@ contains
                           c_loc(info) &
                           )
 
-   end subroutine dlaf_pchegvx
+   end subroutine dlaf_pchegvd
 
    subroutine dlaf_pchegvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
@@ -548,7 +548,7 @@ contains
 
    end subroutine dlaf_pchegvd_factorized
 
-   subroutine dlaf_pzhegvx(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
+   subroutine dlaf_pzhegvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
       integer, dimension(9), intent(in) :: desca, descb, descz
@@ -557,8 +557,8 @@ contains
       real(kind=dp), dimension(:), target, intent(out) :: w
 
       interface
-         subroutine dlaf_pzhegvx_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_) &
-            bind(C, name='dlaf_pzhegvx')
+         subroutine dlaf_pzhegvd_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_) &
+            bind(C, name='dlaf_pzhegvd')
 
             import :: c_int, c_ptr, c_signed_char
 
@@ -567,12 +567,12 @@ contains
             type(c_ptr), value :: a_, b_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
             type(c_ptr), value :: info_
-         end subroutine dlaf_pzhegvx_c
+         end subroutine dlaf_pzhegvd_c
       end interface
 
       info = -1
 
-      call dlaf_pzhegvx_c(iachar(uplo, c_signed_char), n, &
+      call dlaf_pzhegvd_c(iachar(uplo, c_signed_char), n, &
                           c_loc(a(1, 1)), ia, ja, desca, &
                           c_loc(b(1, 1)), ib, jb, descb, &
                           c_loc(w(1)), &
@@ -580,7 +580,7 @@ contains
                           c_loc(info) &
                           )
 
-   end subroutine dlaf_pzhegvx
+   end subroutine dlaf_pzhegvd
 
    subroutine dlaf_pzhegvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo

@@ -12,7 +12,7 @@
 set(INIT_TEST_EXECUTABLES init)
 set(PXPOTRF_TEST_EXECUTABLES pspotrf pdpotrf pcpotrf pzpotrf)
 set(PXHEEVD_TEST_EXECUTABLES pssyevd pdsyevd pcheevd pzheevd)
-set(PXHEGVX_TEST_EXECUTABLES pssygvx pdsygvx pchegvx pzhegvx)
+set(PXHEGVX_TEST_EXECUTABLES pssygvd pdsygvd pchegvd pzhegvd)
 
 
 find_program(FYPP_PROGRAM fypp)
@@ -60,4 +60,4 @@ endfunction()
 add_tests("${INIT_TEST_EXECUTABLES}" "")
 add_tests("${PXPOTRF_TEST_EXECUTABLES}" pxpotrf)
 add_tests("${PXHEEVD_TEST_EXECUTABLES}" pxheevd)
-add_tests("${PXHEGVX_TEST_EXECUTABLES}" pxhegvx)
+add_tests("${PXHEGVX_TEST_EXECUTABLES}" pxhegvd)
