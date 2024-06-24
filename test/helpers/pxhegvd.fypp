@@ -170,7 +170,7 @@ contains
 
             ! ScaLAPACK
             #:if type == 'real'
-               call p${name}$gvd( &
+               call p${name}$gvx( &
                   1, 'V', 'A', 'L', &
                   n, A_local_scalapack, 1, 1, desca_local_scalapack, &
                   B_local_scalapack, 1, 1, descb_local_scalapack, &
@@ -179,7 +179,7 @@ contains
                   work, lwork, iwork, liwork, ifail, iclustr, gap, info &
                   )
             #:else
-               call p${name}$gvd( &
+               call p${name}$gvx( &
                   1, 'V', 'A', 'L', &
                   n, A_local_scalapack, 1, 1, desca_local_scalapack, &
                   B_local_scalapack, 1, 1, descb_local_scalapack, &
