@@ -371,6 +371,42 @@ contains
 
    end subroutine dlaf_pssygvx
 
+   subroutine dlaf_pssygvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
+      integer, dimension(9), intent(in) :: desca, descb, descz
+      integer, target, intent(out) :: info
+      real(kind=sp), dimension(:, :), target, intent(inout) :: a, b, z
+      real(kind=sp), dimension(:), target, intent(out) :: w
+
+      interface
+         subroutine dlaf_pssygvd_factorized_c( &
+            uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_ &
+            ) &
+            bind(C, name='dlaf_pssygvd_factorized')
+
+            import :: c_int, c_ptr, c_signed_char
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_
+            type(c_ptr), value :: a_, b_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pssygvd_factorized_c
+      end interface
+
+      info = -1
+
+      call dlaf_pssygvd_factorized_c(iachar(uplo, c_signed_char), n, &
+                                     c_loc(a(1, 1)), ia, ja, desca, &
+                                     c_loc(b(1, 1)), ib, jb, descb, &
+                                     c_loc(w(1)), &
+                                     c_loc(z(1, 1)), iz, jz, descz, &
+                                     c_loc(info) &
+                                     )
+
+   end subroutine dlaf_pssygvd_factorized
+
    subroutine dlaf_pdsygvx(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
@@ -404,6 +440,42 @@ contains
                           )
 
    end subroutine dlaf_pdsygvx
+
+   subroutine dlaf_pdsygvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
+      integer, dimension(9), intent(in) :: desca, descb, descz
+      integer, target, intent(out) :: info
+      real(kind=dp), dimension(:, :), target, intent(inout) :: a, b, z
+      real(kind=dp), dimension(:), target, intent(out) :: w
+
+      interface
+         subroutine dlaf_pdsygvd_factorized_c( &
+            uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_ &
+            ) &
+            bind(C, name='dlaf_pdsygvd_factorized')
+
+            import :: c_int, c_ptr, c_signed_char
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_
+            type(c_ptr), value :: a_, b_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pdsygvd_factorized_c
+      end interface
+
+      info = -1
+
+      call dlaf_pdsygvd_factorized_c(iachar(uplo, c_signed_char), n, &
+                                     c_loc(a(1, 1)), ia, ja, desca, &
+                                     c_loc(b(1, 1)), ib, jb, descb, &
+                                     c_loc(w(1)), &
+                                     c_loc(z(1, 1)), iz, jz, descz, &
+                                     c_loc(info) &
+                                     )
+
+   end subroutine dlaf_pdsygvd_factorized
 
    subroutine dlaf_pchegvx(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
@@ -439,6 +511,42 @@ contains
 
    end subroutine dlaf_pchegvx
 
+   subroutine dlaf_pchegvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
+      integer, dimension(9), intent(in) :: desca, descb, descz
+      integer, target, intent(out) :: info
+      complex(kind=sp), dimension(:, :), target, intent(inout) :: a, b, z
+      real(kind=sp), dimension(:), target, intent(out) :: w
+
+      interface
+         subroutine dlaf_pchegvd_factorized_c( &
+            uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_ &
+            ) &
+            bind(C, name='dlaf_pchegvd_factorized')
+
+            import :: c_int, c_ptr, c_signed_char
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_
+            type(c_ptr), value :: a_, b_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pchegvd_factorized_c
+      end interface
+
+      info = -1
+
+      call dlaf_pchegvd_factorized_c(iachar(uplo, c_signed_char), n, &
+                                     c_loc(a(1, 1)), ia, ja, desca, &
+                                     c_loc(b(1, 1)), ib, jb, descb, &
+                                     c_loc(w(1)), &
+                                     c_loc(z(1, 1)), iz, jz, descz, &
+                                     c_loc(info) &
+                                     )
+
+   end subroutine dlaf_pchegvd_factorized
+
    subroutine dlaf_pzhegvx(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
@@ -472,5 +580,41 @@ contains
                           )
 
    end subroutine dlaf_pzhegvx
+
+   subroutine dlaf_pzhegvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
+      integer, dimension(9), intent(in) :: desca, descb, descz
+      integer, target, intent(out) :: info
+      complex(kind=dp), dimension(:, :), target, intent(inout) :: a, b, z
+      real(kind=dp), dimension(:), target, intent(out) :: w
+
+      interface
+         subroutine dlaf_pzhegvd_factorized_c( &
+            uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_ &
+            ) &
+            bind(C, name='dlaf_pzhegvd_factorized')
+
+            import :: c_int, c_ptr, c_signed_char
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_
+            type(c_ptr), value :: a_, b_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pzhegvd_factorized_c
+      end interface
+
+      info = -1
+
+      call dlaf_pzhegvd_factorized_c(iachar(uplo, c_signed_char), n, &
+                                     c_loc(a(1, 1)), ia, ja, desca, &
+                                     c_loc(b(1, 1)), ib, jb, descb, &
+                                     c_loc(w(1)), &
+                                     c_loc(z(1, 1)), iz, jz, descz, &
+                                     c_loc(info) &
+                                     )
+
+   end subroutine dlaf_pzhegvd_factorized
 
 end module dlaf_fortran
