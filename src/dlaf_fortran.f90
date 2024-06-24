@@ -30,6 +30,7 @@ module dlaf_fortran
    public :: dlaf_pspotrf, dlaf_pdpotrf, dlaf_pcpotrf, dlaf_pzpotrf
    public :: dlaf_pssyevd, dlaf_pdsyevd, dlaf_pcheevd, dlaf_pzheevd
    public :: dlaf_pssygvx, dlaf_pdsygvx, dlaf_pchegvx, dlaf_pzhegvx
+   public :: dlaf_pssygvd_factorized, dlaf_pdsygvd_factorized, dlaf_pchegvd_factorized, dlaf_pzhegvd_factorized
 
 contains
 
