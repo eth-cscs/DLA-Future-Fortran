@@ -29,7 +29,7 @@ class DlaFutureFortran(CMakePackage):
     generator("ninja")
     depends_on("cmake@3.22:", type="build")
 
-    depends_on("dla-future@0.4.1:5 +scalapack", when="@0.1.0")
+    depends_on("dla-future@0.4.1:0.5 +scalapack", when="@0.1.0")
     depends_on("dla-future@0.6.0: +scalapack", when="@0.2.0:")
     depends_on("dla-future +shared", when="+shared")
 
