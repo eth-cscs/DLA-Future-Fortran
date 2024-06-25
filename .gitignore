@@ -13,3 +13,11 @@ __pycache__
 # Spack
 spack-*
 build-*
+
+# MacOS
+.DS_Store
+
+# temp
+*~
+*.swp
+*.orig
