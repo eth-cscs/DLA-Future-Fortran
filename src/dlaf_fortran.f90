@@ -372,7 +372,6 @@ contains
 
    end subroutine dlaf_pssygvd
 
-<<<<<<< HEAD
    subroutine dlaf_pssygvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
@@ -409,8 +408,6 @@ contains
 
    end subroutine dlaf_pssygvd_factorized
 
-=======
->>>>>>> main
    subroutine dlaf_pdsygvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
@@ -445,7 +442,6 @@ contains
 
    end subroutine dlaf_pdsygvd
 
-<<<<<<< HEAD
    subroutine dlaf_pdsygvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
@@ -482,8 +478,6 @@ contains
 
    end subroutine dlaf_pdsygvd_factorized
 
-=======
->>>>>>> main
    subroutine dlaf_pchegvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
@@ -518,7 +512,6 @@ contains
 
    end subroutine dlaf_pchegvd
 
-<<<<<<< HEAD
    subroutine dlaf_pchegvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
@@ -555,8 +548,6 @@ contains
 
    end subroutine dlaf_pchegvd_factorized
 
-=======
->>>>>>> main
    subroutine dlaf_pzhegvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
@@ -590,7 +581,6 @@ contains
                           )
 
    end subroutine dlaf_pzhegvd
-<<<<<<< HEAD
 
    subroutine dlaf_pzhegvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
@@ -627,7 +617,5 @@ contains
                                      )
 
    end subroutine dlaf_pzhegvd_factorized
-=======
->>>>>>> main
 
 end module dlaf_fortran
