@@ -2,6 +2,10 @@
 
 ## DLA-Future-Fortran X.Y.Z
 
+### Changed
+
+* Name of the generalized eigenvalue solver from `*gvx` to `*gvd` [PR #16]
+
 ### Fixed
 
 * Spack installation with `+test` variant by setting `-DMPIEXEC_MAX_NUMPROCS=6` [PR #10]
