@@ -157,7 +157,7 @@ contains
                info &
                )
 
-            ! Solve with Cholesky from the previous 
+            ! Solve with Cholesky factorisation from the previous call 
             A_local_dlaf(:, :) = A_local_store(:, :)
             call dlaf_p${name}$gvd_factorized( &
                'L', &
