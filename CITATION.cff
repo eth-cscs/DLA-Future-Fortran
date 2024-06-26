@@ -1,8 +1,9 @@
 cff-version: 1.2.0
 title: DLA-Future-Fortran 0.1.0
-message: >-
-  If you use this software, please cite it using the
-  metadata from this file.
+repository-code: 'https://github.com/eth-cscs/DLA-Future-Fortran'
+abstract: Fortran interface for DLA-Future (Distributed Linear Algebra from the Future)
+version: 0.1.0
+date-released: '2024-05-22'
 type: software
 authors:
   - given-names: Rocco
@@ -30,8 +31,9 @@ identifiers:
   - type: doi
     value: 10.5281/zenodo.11241331
     description: Zenodo DOI representing all versions
-repository-code: 'https://github.com/eth-cscs/DLA-Future-Fortran'
-abstract: Fortran interface for DLA-Future (Distributed Linear Algebra from the Future)
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
 keywords:
   - fortran
   - eigensolver
@@ -42,5 +44,14 @@ keywords:
   - "linear algebra"
   - mpi
 license: BSD-3-Clause
-version: 0.1.0
-date-released: '2024-05-22'
+license-url: https://opensource.org/license/BSD-3-Clause
+references:
+  - abbreviation: DLAF
+    type: software
+    title: DLA-Future
+    repository-code: 'https://github.com/eth-cscs/DLA-Future'
+    doi: 10.5281/zenodo.10518288
+    license: BSD-3-Clause
+    authors:
+      - name: "DLA-Future Developers"
+        affiliation: "CSCS / ETH Zürich"
