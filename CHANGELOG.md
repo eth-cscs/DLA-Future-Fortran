@@ -2,6 +2,10 @@
 
 ## DLA-Future-Fortran X.Y.Z
 
+### Added
+
+* Generalized eigensolver for an already factorized $\mathbf{B}$ matrix [PR #18]
+
 ### Changed
 
 * Name of the generalized eigenvalue solver from `*gvx` to `*gvd` [PR #16]
