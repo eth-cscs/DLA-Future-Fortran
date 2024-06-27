@@ -255,6 +255,19 @@ contains
             if (failed) then
                call terminate(ictxt)
             end if
+            
+            failed = .false.
+            if (rank == 0) then
+               if (.not. allclose(abs(Z_dlaf), abs(Z_dlaf_factorized))) then
+                  failed = .true.
+                  write (error_unit, *) "ERROR: DLAF != DLAF Factorized (eigenvectors)"
+               end if
+            end if
+
+            call bcast_check(failed)
+            if (failed) then
+               call terminate(ictxt)
+            end if
 
             ! Cleanup
 
