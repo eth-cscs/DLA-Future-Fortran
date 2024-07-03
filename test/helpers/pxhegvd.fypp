@@ -19,6 +19,7 @@ module pxhegvd_tests
       #:for type in types
          #:set name = names[(dtype, type)]
          use dlaf_fortran, only: dlaf_p${name}$gvd
+         use dlaf_fortran, only: dlaf_p${name}$gvd_factorized
       #:endfor
    #:endfor
 
@@ -68,11 +69,11 @@ contains
             integer :: descb(9), descb_local_dlaf(9), descb_local_scalapack(9)
             integer :: descz_local_dlaf(9), descz_local_scalapack(9)
             integer :: descz_dlaf(9), descz_scalapack(9)
-            ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: A, A_local_dlaf, A_local_scalapack
+            ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: A, A_local_dlaf, A_local_scalapack, A_local_store
             ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: B, B_local_dlaf, B_local_scalapack
-            ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: Z_local_dlaf, Z_local_scalapack
-            ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: Z_dlaf, Z_scalapack
-            real(kind=${dtype}$), dimension(:), allocatable :: W_dlaf, W_scalapack
+            ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: Z_local_dlaf, Z_local_scalapack, Z_local_dlaf_factorized
+            ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: Z_dlaf, Z_scalapack, Z_dlaf_factorized
+            real(kind=${dtype}$), dimension(:), allocatable :: W_dlaf, W_scalapack, W_dlaf_factorized
             real(kind=${dtype}$), parameter :: abstol = #{if dtype == 'sp'}# 1e-5_${dtype}$ #{else}# 1e-8_${dtype}$ #{endif}#
 
             integer, parameter :: lwork = 100, liwork = 100
@@ -110,6 +111,7 @@ contains
                allocate (B(n, n))
                allocate (Z_dlaf(n, n))
                allocate (Z_scalapack(n, n))
+               allocate (Z_dlaf_factorized(n, n))
 
                call descinit(desca, n, n, n, n, 0, 0, ictxt_0, n, info)
                call descinit(descb, n, n, n, n, 0, 0, ictxt_0, n, info)
@@ -124,10 +126,10 @@ contains
             ma = numroc(n, nb, myrow, 0, nprow)
             na = numroc(n, nb, mycol, 0, npcol)
             lld = max(1, ma)
-            allocate (A_local_dlaf(ma, na), A_local_scalapack(ma, na))
+            allocate (A_local_dlaf(ma, na), A_local_scalapack(ma, na), A_local_store(ma, na))
             allocate (B_local_dlaf(ma, na), B_local_scalapack(ma, na))
-            allocate (Z_local_dlaf(ma, na), Z_local_scalapack(ma, na))
-            allocate (W_dlaf(n), W_scalapack(n))
+            allocate (Z_local_dlaf(ma, na), Z_local_scalapack(ma, na), Z_local_dlaf_factorized(ma, na))
+            allocate (W_dlaf(n), W_scalapack(n), W_dlaf_factorized(n))
 
             ! + ---- +
             ! | DLAF |
@@ -139,9 +141,14 @@ contains
             call p${symbol}$gemr2d(n, n, a, 1, 1, desca, A_local_dlaf, 1, 1, desca_local_dlaf, ictxt)
             call p${symbol}$gemr2d(n, n, b, 1, 1, desca, B_local_dlaf, 1, 1, descb_local_dlaf, ictxt)
 
+            ! Store local copy
+            A_local_store(:, :) = A_local_dlaf(:, :)
+
             ! Solve with DLAF
             call dlaf_initialize()
             call dlaf_create_grid_from_blacs(ictxt)
+
+            ! Solve with Cholesky factorization
             call dlaf_p${name}$gvd( &
                'L', &
                n, A_local_dlaf, 1, 1, desca_local_dlaf, &
@@ -149,6 +156,17 @@ contains
                W_dlaf, Z_local_dlaf, 1, 1, descz_local_dlaf, &
                info &
                )
+
+            ! Solve with Cholesky factorisation from the previous call 
+            A_local_dlaf(:, :) = A_local_store(:, :)
+            call dlaf_p${name}$gvd_factorized( &
+               'L', &
+               n, A_local_dlaf, 1, 1, desca_local_dlaf, &
+               B_local_dlaf, 1, 1, descb_local_dlaf, &
+               W_dlaf_factorized, Z_local_dlaf_factorized, 1, 1, descz_local_dlaf, &
+               info &
+               )
+
             call dlaf_free_grid(ictxt)
             call dlaf_finalize()
             if (info /= 0) then
@@ -157,6 +175,7 @@ contains
             end if
 
             call p${symbol}$gemr2d(n, n, Z_local_dlaf, 1, 1, descz_local_dlaf, Z_dlaf, 1, 1, descz_dlaf, ictxt)
+            call p${symbol}$gemr2d(n, n, Z_local_dlaf_factorized, 1, 1, descz_local_dlaf, Z_dlaf_factorized, 1, 1, descz_dlaf, ictxt)
 
             ! + --------- +
             ! | ScaLAPACK |
@@ -210,12 +229,38 @@ contains
             if (failed) then
                call terminate(ictxt)
             end if
+            
+            failed = .false.
+            if (rank == 0) then
+               if (.not. allclose(W_dlaf, W_dlaf_factorized)) then
+                  failed = .true.
+                  write (error_unit, *) "ERROR: DLAF != DLAF Factorized (eigenvalues)"
+               end if
+            end if
+
+            call bcast_check(failed)
+            if (failed) then
+               call terminate(ictxt)
+            end if
 
             failed = .false.
             if (rank == 0) then
                if (.not. allclose(abs(Z_dlaf), abs(Z_scalapack), atol=abstol)) then
                   failed = .true.
                   write (error_unit, *) "ERROR: DLAF != ScaLAPACK (eigenvectors)"
+               end if
+            end if
+
+            call bcast_check(failed)
+            if (failed) then
+               call terminate(ictxt)
+            end if
+            
+            failed = .false.
+            if (rank == 0) then
+               if (.not. allclose(abs(Z_dlaf), abs(Z_dlaf_factorized))) then
+                  failed = .true.
+                  write (error_unit, *) "ERROR: DLAF != DLAF Factorized (eigenvectors)"
                end if
             end if
 
@@ -234,12 +279,15 @@ contains
             end if
             if (allocated(A_local_dlaf)) deallocate (A_local_dlaf)
             if (allocated(A_local_scalapack)) deallocate (A_local_scalapack)
+            if (allocated(A_local_store)) deallocate (A_local_store)
             if (allocated(B_local_dlaf)) deallocate (B_local_dlaf)
             if (allocated(B_local_scalapack)) deallocate (B_local_scalapack)
             if (allocated(Z_local_dlaf)) deallocate (Z_local_dlaf)
             if (allocated(Z_local_scalapack)) deallocate (Z_local_scalapack)
+            if (allocated(Z_local_dlaf_factorized)) deallocate (Z_local_dlaf_factorized)
             if (allocated(W_dlaf)) deallocate (W_dlaf)
             if (allocated(W_scalapack)) deallocate (W_scalapack)
+            if (allocated(W_dlaf_factorized)) deallocate (W_dlaf_factorized)
             if (allocated(iclustr)) deallocate (iclustr)
             if (allocated(gap)) deallocate (gap)
 
