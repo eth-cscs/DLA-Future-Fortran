@@ -38,9 +38,8 @@ class DlaFutureFortran(CMakePackage):
     depends_on("py-fypp", when="+test", type="build")
 
     # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    # FIXME: Variables only available on the DLA-Future-Fortran repo
-    # FIXME: Remove those variables from the official Spack package
-
+    # FIXME: Variants only available on the DLA-Future-Fortran repo
+    # FIXME: Remove those variants from the official Spack package
     variant("cscs-ci", default=False, when="+test", description="Run test in CSCS CI")
     # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -55,8 +54,8 @@ class DlaFutureFortran(CMakePackage):
             args.append(self.define("MPIEXEC_MAX_NUMPROCS", 6))
 
         # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        # FIXME: Variables only available on the DLA-Future-Fortran repo
-        # FIXME: Remove those variables from the official Spack package
+        # FIXME: CMake arguments only used by DLA-Future-Fortran CI
+        # FIXME: Remove these CMake arguments from the official Spack package
         args.append(self.define_from_variant("DLAF_FORTRAN_CSCS_CI", "cscs-ci"))
         # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
