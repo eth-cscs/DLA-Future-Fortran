@@ -45,6 +45,31 @@ call dlaf_free_grid(ictxt)
 call dlaf_finalize()
 ```
 
+## Citation
+
+If you are using DLA-Future-Fortran, please cite the following conference paper in addition to this repository and the [DLA-Future] repository:
+
+```
+@InProceedings{10.1007/978-3-031-61763-8_13,
+    author="Solc{\`a}, Raffaele
+        and Simberg, Mikael
+        and Meli, Rocco
+        and Invernizzi, Alberto
+        and Reverdell, Auriane
+        and Biddiscombe, John",
+    editor="Diehl, Patrick
+        and Schuchart, Joseph
+        and Valero-Lara, Pedro
+        and Bosilca, George",
+    title="DLA-Future: A Task-Based Linear Algebra Library Which Provides a GPU-Enabled Distributed Eigensolver",
+    booktitle="Asynchronous Many-Task Systems and Applications",
+    year="2024",
+    publisher="Springer Nature Switzerland",
+    address="Cham",
+    pages="135--141",
+    isbn="978-3-031-61763-8"
+}
+```
 
 ## Acknowledgements
 
