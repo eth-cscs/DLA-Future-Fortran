@@ -1,6 +1,6 @@
 # Changelog
 
-## DLA-Future-Fortran X.Y.Z
+## DLA-Future-Fortran 0.2.0
 
 ### Added
 
