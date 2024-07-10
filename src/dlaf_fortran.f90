@@ -549,12 +549,92 @@ contains
    end subroutine dlaf_pssygvd
 
    subroutine dlaf_pssygvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
+      !! Generalized eigensolver for a distributed symmetric-definite eigenproblem of the form
+      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !!
+      !! @note
+      !! The input matrix and the matrix of eigenvectors are assumed to be distributed in host memory.
+      !! Moving to and from GPU memory is handled internally.
+      !! @endnote
+      !!
+      !! @note
+      !! The vector of eigenvalues is assumed to be local (non-distributed) and in host memory.
+      !! Moving to and from GPU memory is handled internally.
+      !! @endnote
+      !!
+      !! @note
+      !! The pika runtime is resumed when this function is called and suspended when the call terminates.
+      !! @endnote
+      !!
+      !! @note
+      !! The matrix \[\mathbf{B}\] is assumed to be factorized; it is the result of a Cholesky factorization
+      !! (`dlaf_pspotrf`).
+      !! @endnote
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
-      integer, dimension(9), intent(in) :: desca, descb, descz
-      integer, target, intent(out) :: info
-      real(kind=sp), dimension(:, :), target, intent(inout) :: a, b, z
+        !! Indicates whether the upper (`"U"`) or lower (`"L"`) triangular part of the global sub-matrix
+        !! \(\mathbf{A}\) is referenced
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
+      integer, intent(in) :: n
+        !! Order of the sub-matrix \(\mathbf{A}\) used in the computation
+      real(kind=sp), dimension(:, :), target, intent(inout) :: a
+        !! Local part of the global matrix \(\mathbf{A}\)
+      integer, intent(in) :: ia
+        !! Row index in the global matrix identifying the first row of the sub-matrix \(\mathbf{A}\)
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
+      integer, intent(in) :: ja
+        !! Column index in the global matrix identifying the first column of the sub-matrix \(\mathbf{A}\)
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
+      integer, dimension(9), intent(in) :: desca
+        !! ScaLAPACK descriptor of the global matrix \(\mathbf{A}\)
+      real(kind=sp), dimension(:, :), target, intent(inout) :: b
+        !! Local part of the Cholesky factorization of global matrix \(\mathbf{B}\)
+        !! @note
+        !! The matrix \[\mathbf{B}\] is assumed to be factorized; it is the result of a Cholesky factorization
+        !! (`dlaf_pspotrf`).
+        !! @endnote
+      integer, intent(in) :: ib
+        !! Row index in the global matrix identifying the first row of the sub-matrix \(\mathbf{B}\)
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
+      integer, intent(in) :: jb
+        !! Column index in the global matrix identifying the first column of the sub-matrix \(\mathbf{B}\)
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
+      integer, dimension(9), intent(in) :: descb
+        !! ScaLAPACK descriptor of the global matrix \(\mathbf{B}\)
       real(kind=sp), dimension(:), target, intent(out) :: w
+        !! Local (non-distributed) vector of eigenvalues
+      real(kind=sp), dimension(:, :), target, intent(inout) :: z
+        !! Local part of the global matrix \(\mathbf{Z}\)
+      integer, intent(in) :: iz
+        !! Row index in the global matrix identifying the first row of the sub-matrix \(\mathbf{Z}\)
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
+      integer, intent(in) :: jz
+        !! Column index in the global matrix identifying the first column of the sub-matrix \(\mathbf{Z}\)
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
+      integer, dimension(9), intent(in) :: descz
+        !! ScaLAPACK descriptor of the global matrix \(\mathbf{Z}\)
+      integer, target, intent(out) :: info
+        !! `0` if the eigensolver completed normally
 
       interface
          subroutine dlaf_pssygvd_factorized_c( &
