@@ -289,7 +289,7 @@ contains
         !! Has to be `1`.
         !! @endwarning
       integer, dimension(9), intent(in) :: desca
-        !! ScaLAPACK descriptor of the gloabl matrix \(\mathbf{A}\)
+        !! ScaLAPACK descriptor of the global matrix \(\mathbf{A}\)
       real(kind=sp), dimension(:), target, intent(out) :: w
         !! Local (non-distributed) vector of eigenvalues
       real(kind=sp), dimension(:, :), target, intent(inout) :: z
@@ -305,7 +305,7 @@ contains
         !! Has to be `1`.
         !! @endwarning
       integer, dimension(9), intent(in) :: descz
-        !! ScaLAPACK descriptor of the gloabl matrix \(\mathbf{Z}\)
+        !! ScaLAPACK descriptor of the global matrix \(\mathbf{Z}\)
       integer, target, intent(out) :: info
         !! `0` if the eigensolver completed normally
 
@@ -468,7 +468,7 @@ contains
         !! Has to be `1`.
         !! @endwarning
       integer, dimension(9), intent(in) :: desca
-        !! ScaLAPACK descriptor of the gloabl matrix \(\mathbf{A}\)
+        !! ScaLAPACK descriptor of the global matrix \(\mathbf{A}\)
       real(kind=sp), dimension(:, :), target, intent(inout) :: b
         !! Local part of the global matrix \(\mathbf{B}\)
       integer, intent(in) :: ib
@@ -482,7 +482,7 @@ contains
         !! Has to be `1`.
         !! @endwarning
       integer, dimension(9), intent(in) :: descb
-        !! ScaLAPACK descriptor of the gloabl matrix \(\mathbf{B}\)
+        !! ScaLAPACK descriptor of the global matrix \(\mathbf{B}\)
       real(kind=sp), dimension(:), target, intent(out) :: w
         !! Local (non-distributed) vector of eigenvalues
       real(kind=sp), dimension(:, :), target, intent(inout) :: z
@@ -498,7 +498,7 @@ contains
         !! Has to be `1`.
         !! @endwarning
       integer, dimension(9), intent(in) :: descz
-        !! ScaLAPACK descriptor of the gloabl matrix \(\mathbf{Z}\)
+        !! ScaLAPACK descriptor of the global matrix \(\mathbf{Z}\)
       integer, target, intent(out) :: info
         !! `0` if the eigensolver completed normally
 
