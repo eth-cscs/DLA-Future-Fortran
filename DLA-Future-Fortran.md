@@ -3,7 +3,7 @@ project: DLA-Future-Fortran
 summary: Fortan interface for DLA-Future
 project_github: https://github.com/eth-cscs/DLA-Future-Fortran
 print_creation_date: true
-output_dir: doc-ford
+output_dir: documentation
 doc_license: bsd
 ---
 

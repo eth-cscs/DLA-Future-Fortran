@@ -21,7 +21,9 @@ The documentation is pushed by the [GitHub Action] to the `docs-ghpages` branch.
 
 ```bash
 git checkout --orphan docs-ghpages
-git push
+mkdir main && tourch main/index.html
+git add main/index.html && git commit -m "empty docs" 
+git push --set-upstream origin docs-ghpages
 ```
 
 [GitHub Pages]: https://pages.github.com
