@@ -2,6 +2,7 @@
 project: DLA-Future-Fortran
 summary: Fortan interface for DLA-Future
 project_github: https://github.com/eth-cscs/DLA-Future-Fortran
+project_download: https://github.com/eth-cscs/DLA-Future-Fortran/releases
 print_creation_date: true
 output_dir: documentation
 media_dir: docs
@@ -82,7 +83,7 @@ The development of [DLA-Future-Fortran] is supported by the following organizati
 * [ETH Zurich]: Swiss Federal Institute of Technology Zurich
 0* [PASC]: Platform for Advanced Scientific Computing
 
-<img height="50" src="media/images/logo-cscs.jpg"><img height="50" src="media/images/logo-eth.svg"><img height="50" src="media/images/logo-pasc.png">
+<img height="50" src="|media|/images/logo-cscs.jpg"><img height="50" src="|media|/images/logo-eth.svg"><img height="50" src="|media|/images/logo-pasc.png">
 
 [AMD]: https://www.amd.com/en.html
 [BLACS]: https://www.netlib.org/blacs/
