@@ -145,14 +145,16 @@ contains
         !! Local part of the global matrix \(\mathbf{A}\)
       integer, intent(in) :: ia
         !! Row index of the global matrix identifying the first row of the sub-matrix \(\mathbf{A}\)
-        !! @warning
-        !! Has to be `1`.
-        !! @endwarning
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
       integer, intent(in) :: ja
         !! Column index of the global matrix identifying the first column of the sub-matrix \(\mathbf{A}\)
-        !! @warning
-        !! Has to be `1`.
-        !! @endwarning
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
       integer, dimension(9), intent(in) :: desca
         !! ScaLAPACK descriptor of the global matrix \(\mathbf{A}\)
       integer, target, intent(out) :: info
@@ -274,20 +276,26 @@ contains
       character, intent(in) :: uplo
         !! Indicates whether the upper (`"U"`) or lower (`"L"`) triangular part of the global sub-matrix
         !! \(\mathbf{A}\) is referenced
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
       integer, intent(in) :: n
         !! Order of the sub-matrix \(\mathbf{A}\) used in the computation
       real(kind=sp), dimension(:, :), target, intent(inout) :: a
         !! Local part of the global matrix \(\mathbf{A}\)
       integer, intent(in) :: ia
         !! Row index in the global matrix identifying the first row of the sub-matrix \(\mathbf{A}\)
-        !! @warning
-        !! Has to be `1`.
-        !! @endwarning
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
       integer, intent(in) :: ja
         !! Column index in the global matrix identifying the first column of the sub-matrix \(\mathbf{A}\)
-        !! @warning
-        !! Has to be `1`.
-        !! @endwarning
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
       integer, dimension(9), intent(in) :: desca
         !! ScaLAPACK descriptor of the global matrix \(\mathbf{A}\)
       real(kind=sp), dimension(:), target, intent(out) :: w
@@ -296,14 +304,16 @@ contains
         !! Local part of the global matrix \(\mathbf{Z}\)
       integer, intent(in) :: iz
         !! Row index in the global matrix identifying the first row of the sub-matrix \(\mathbf{Z}\)
-        !! @warning
-        !! Has to be `1`.
-        !! @endwarning
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
       integer, intent(in) :: jz
         !! Column index in the global matrix identifying the first column of the sub-matrix \(\mathbf{Z}\)
-        !! @warning
-        !! Has to be `1`.
-        !! @endwarning
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
       integer, dimension(9), intent(in) :: descz
         !! ScaLAPACK descriptor of the global matrix \(\mathbf{Z}\)
       integer, target, intent(out) :: info
@@ -453,34 +463,42 @@ contains
       character, intent(in) :: uplo
         !! Indicates whether the upper (`"U"`) or lower (`"L"`) triangular part of the global sub-matrix
         !! \(\mathbf{A}\) is referenced
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
       integer, intent(in) :: n
         !! Order of the sub-matrix \(\mathbf{A}\) used in the computation
       real(kind=sp), dimension(:, :), target, intent(inout) :: a
         !! Local part of the global matrix \(\mathbf{A}\)
       integer, intent(in) :: ia
         !! Row index in the global matrix identifying the first row of the sub-matrix \(\mathbf{A}\)
-        !! @warning
-        !! Has to be `1`.
-        !! @endwarning
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
       integer, intent(in) :: ja
         !! Column index in the global matrix identifying the first column of the sub-matrix \(\mathbf{A}\)
-        !! @warning
-        !! Has to be `1`.
-        !! @endwarning
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
       integer, dimension(9), intent(in) :: desca
         !! ScaLAPACK descriptor of the global matrix \(\mathbf{A}\)
       real(kind=sp), dimension(:, :), target, intent(inout) :: b
         !! Local part of the global matrix \(\mathbf{B}\)
       integer, intent(in) :: ib
         !! Row index in the global matrix identifying the first row of the sub-matrix \(\mathbf{B}\)
-        !! @warning
-        !! Has to be `1`.
-        !! @endwarning
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
       integer, intent(in) :: jb
         !! Column index in the global matrix identifying the first column of the sub-matrix \(\mathbf{B}\)
-        !! @warning
-        !! Has to be `1`.
-        !! @endwarning
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
       integer, dimension(9), intent(in) :: descb
         !! ScaLAPACK descriptor of the global matrix \(\mathbf{B}\)
       real(kind=sp), dimension(:), target, intent(out) :: w
@@ -489,14 +507,16 @@ contains
         !! Local part of the global matrix \(\mathbf{Z}\)
       integer, intent(in) :: iz
         !! Row index in the global matrix identifying the first row of the sub-matrix \(\mathbf{Z}\)
-        !! @warning
-        !! Has to be `1`.
-        !! @endwarning
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
       integer, intent(in) :: jz
         !! Column index in the global matrix identifying the first column of the sub-matrix \(\mathbf{Z}\)
-        !! @warning
-        !! Has to be `1`.
-        !! @endwarning
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
       integer, dimension(9), intent(in) :: descz
         !! ScaLAPACK descriptor of the global matrix \(\mathbf{Z}\)
       integer, target, intent(out) :: info
