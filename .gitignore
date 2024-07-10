@@ -21,3 +21,6 @@ build-*
 *~
 *.swp
 *.orig
+
+# Documentation
+documentation
