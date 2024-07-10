@@ -12,9 +12,9 @@ doc_license: bsd
 
 ## Usage
 
-### Initialization and finalisation
+### Initialization and finalization
 
-Before calling any [DLA-Future] routine, the library (and the underlying [pika] runtime) need to be initialsed:
+Before calling any [DLA-Future] routine, the library (and the underlying [pika] runtime) need to be initialized:
 
 ```Fortran
 call dlaf_initialize()
@@ -28,7 +28,7 @@ call dlaf_finalize()
 
 ## Grid initialization 
 
-[DLA-Future] needs to know how a matrix is distributed. A [DLA-Future] grid can be created directly on top of a BLACS grid, using the corresponding BLACS context:
+[DLA-Future] needs to know how a matrix is distributed. A [DLA-Future] grid can be created directly on top of a [BLACS] grid, using the corresponding [BLACS] context:
 
 ```Fortran
 ! blacs_context is an existing BLACS context
@@ -49,7 +49,7 @@ call dlaf_free_grid(blacs_context)
 #### Example
 
 
-The following is an example of how a code using [ScaLAPACK]'s hermitian generalised eigensolver can be adapted to use [DLA-Future] instead:
+The following is an example of how a code using [ScaLAPACK]'s hermitian generalized eigensolver can be adapted to use [DLA-Future] instead:
 
 ```diff
 ! There is an existing blacs_context associated to the matrices A and Z
@@ -76,6 +76,7 @@ The development of [DLA-Future-Fortran] is supported by the following organizati
 <img height="50" src="./docs/images/logo-cscs.jpg"><img height="50" src="./docs/images/logo-eth.svg"><img height="50" src="./docs/images/logo-pasc.png">
 
 [AMD]: https://www.amd.com/en.html
+[BLACS]: https://www.netlib.org/blacs/
 [CSCS]: https://www.cscs.ch
 [DLA-Future-Fortran]: https://github.com/eth-cscs/DLA-Future-Fortran
 [DLA-Future]: https://github.com/eth-cscs/DLA-Future
@@ -84,3 +85,4 @@ The development of [DLA-Future-Fortran] is supported by the following organizati
 [Nvidia]: https://www.nvidia.com/en-us/
 [PASC]: https://www.pasc-ch.org/
 [pika]: https://github.com/pika-org/pika
+[ScaLAPACK]: https://www.netlib.org/scalapack/
