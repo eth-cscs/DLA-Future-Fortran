@@ -14,11 +14,12 @@ on:
   push:
     branches:
       - main
-      - '**'
+      - '**' # TODO: Remove when done testing!
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
   pull_request:
-    branches: main
+    branches:
+      - main
 
 jobs:
   docs:
@@ -35,6 +36,7 @@ jobs:
           python -m ford --output_dir ghpages DLA-Future-Fortran.md
       - name: Publish (main)
         #if: "github.repository == 'eth-cscs/DLA-Future-Fortran' && github.ref == 'refs/heads/main'"
+        if: "github.repository == 'RMeli/DLA-Future-Fortran' && github.ref == 'refs/heads/main'"
         run: |
           COMMIT_MSG=`git log -n 1 --pretty=format:%s`
           mv ghpages main
