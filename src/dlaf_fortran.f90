@@ -568,7 +568,7 @@ contains
       !! @endnote
       !!
       !! @note
-      !! The matrix \[\mathbf{B}\] is assumed to be factorized; it is the result of a Cholesky factorization
+      !! The matrix \(\mathbf{B}\) is assumed to be factorized; it is the result of a Cholesky factorization
       !! (`dlaf_pspotrf`).
       !! @endnote
       character, intent(in) :: uplo
@@ -599,7 +599,7 @@ contains
       real(kind=sp), dimension(:, :), target, intent(inout) :: b
         !! Local part of the Cholesky factorization of global matrix \(\mathbf{B}\)
         !! @note
-        !! The matrix \[\mathbf{B}\] is assumed to be factorized; it is the result of a Cholesky factorization
+        !! The matrix \(\mathbf{B}\) is assumed to be factorized; it is the result of a Cholesky factorization
         !! (`dlaf_pspotrf`).
         !! @endnote
       integer, intent(in) :: ib
