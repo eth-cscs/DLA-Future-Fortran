@@ -38,7 +38,8 @@ jobs:
     needs: build 
     steps:
       - name: Publish (main)
-        if: "github.repository == 'eth-cscs/DLA-Future-Fortran' && github.ref == 'refs/heads/main'"
+        #if: "github.repository == 'eth-cscs/DLA-Future-Fortran' && github.ref == 'refs/heads/main'"
+        if: "github.repository == 'RMeli/DLA-Future-Fortran' && github.ref == 'refs/heads/main'"
         run: |
           COMMIT_MSG=`git log -n 1 --pretty=format:%s`
           mv ghpages main
