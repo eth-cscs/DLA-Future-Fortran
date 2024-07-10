@@ -75,15 +75,47 @@ The following is an example of how a code using [ScaLAPACK]'s hermitian generali
  call mpi_finalize(...)
 ```
 
+## Citation
+
+### DLA-Future Conference Paper
+
+If you are using [DLA-Future-Fortran], please cite the following conference paper in addition to the [DLA-Future-Fortran] and the [DLA-Future] repositories:
+
+```
+@InProceedings{10.1007/978-3-031-61763-8_13,
+    author="Solc{\`a}, Raffaele
+        and Simberg, Mikael
+        and Meli, Rocco
+        and Invernizzi, Alberto
+        and Reverdell, Auriane
+        and Biddiscombe, John",
+    editor="Diehl, Patrick
+        and Schuchart, Joseph
+        and Valero-Lara, Pedro
+        and Bosilca, George",
+    title="DLA-Future: A Task-Based Linear Algebra Library Which Provides a GPU-Enabled Distributed Eigensolver",
+    booktitle="Asynchronous Many-Task Systems and Applications",
+    year="2024",
+    publisher="Springer Nature Switzerland",
+    address="Cham",
+    pages="135--141",
+    isbn="978-3-031-61763-8"
+}
+```
+
 ## Acknowledgements
 
 The development of [DLA-Future-Fortran] is supported by the following organizations:
 
 * [CSCS]: Swiss National Supercomputing Center
 * [ETH Zurich]: Swiss Federal Institute of Technology Zurich
-0* [PASC]: Platform for Advanced Scientific Computing
+* [PASC]: Platform for Advanced Scientific Computing
 
 <img height="50" src="|media|/images/logo-cscs.jpg"><img height="50" src="|media|/images/logo-eth.svg"><img height="50" src="|media|/images/logo-pasc.png">
+
+![CSCS](|media|/images/logo-cscs.png){: style="text-align: center" }
+![ETHZ](|media|/images/logo-eth.svg){: style="text-align: center" }
+![PASC](|media|/images/logo-pasc.png){: style="text-align: center" }
 
 [AMD]: https://www.amd.com/en.html
 [BLACS]: https://www.netlib.org/blacs/
