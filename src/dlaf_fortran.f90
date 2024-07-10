@@ -75,7 +75,9 @@ contains
    end subroutine dlaf_finalize
 
    subroutine dlaf_create_grid_from_blacs(blacs_context)
+    !! Create DLA-Future grid from existing BLACS context
       integer, intent(in) :: blacs_context
+      !! BLACS context
 
       interface
          subroutine dlaf_create_grid_from_blacs_c(blacs_contxt) bind(C, name='dlaf_create_grid_from_blacs')
@@ -89,7 +91,10 @@ contains
    end subroutine dlaf_create_grid_from_blacs
 
    subroutine dlaf_free_grid(blacs_context)
+    !! Free DLA-Future grid corresponding to given BLACS context
+
       integer, intent(in) :: blacs_context
+      !! BLACS context
 
       interface
          subroutine dlaf_free_grid_c(blacs_contxt) bind(C, name='dlaf_free_grid')
