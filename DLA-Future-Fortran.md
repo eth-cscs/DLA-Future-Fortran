@@ -111,11 +111,9 @@ The development of [DLA-Future-Fortran] is supported by the following organizati
 * [ETH Zurich]: Swiss Federal Institute of Technology Zurich
 * [PASC]: Platform for Advanced Scientific Computing
 
-<img height="50" src="|media|/images/logo-cscs.jpg"><img height="50" src="|media|/images/logo-eth.svg"><img height="50" src="|media|/images/logo-pasc.png">
-
-![CSCS](|media|/images/logo-cscs.png){: style="text-align: center" }
-![ETHZ](|media|/images/logo-eth.svg){: style="text-align: center" }
-![PASC](|media|/images/logo-pasc.png){: style="text-align: center" }
+![CSCS](|media|/images/logo-cscs.jpg){: style="text-align: center" height=75}
+![ETHZ](|media|/images/logo-eth.svg){: style="text-align: center" height=75}
+![PASC](|media|/images/logo-pasc.png){: style="text-align: center" height=75}
 
 [AMD]: https://www.amd.com/en.html
 [BLACS]: https://www.netlib.org/blacs/
