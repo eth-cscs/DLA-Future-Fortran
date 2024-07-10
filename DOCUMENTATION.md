@@ -22,7 +22,7 @@ The documentation is pushed by the [GitHub Action] to the `docs-ghpages` branch.
 ```bash
 git checkout --orphan docs-ghpages
 mkdir main && touch main/index.html
-git add main/index.html && git commit -m "empty docs" 
+git rm --cached -r . && git add main/index.html && git commit -m "empty docs" 
 git push --set-upstream origin docs-ghpages
 ```
 
