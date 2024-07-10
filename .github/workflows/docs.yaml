@@ -31,6 +31,7 @@ jobs:
       - name: Build (main)
         run: |
           python -m ford --output_dir ghpages DLA-Future-Fortran.md
+          echo {{ github.repository }}
       - name: Publish (main)
         #if: "github.repository == 'eth-cscs/DLA-Future-Fortran' && github.ref == 'refs/heads/main'"
         if: "github.repository == 'RMeli/DLA-Future-Fortran' && github.ref == 'refs/heads/main'"
