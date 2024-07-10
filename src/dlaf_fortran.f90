@@ -551,6 +551,7 @@ contains
    subroutine dlaf_pssygvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       !! Generalized eigensolver for a distributed symmetric-definite eigenproblem of the form
       !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! where \[\mathbf{B}\] is the result of a Cholesky factorization.
       !!
       !! @note
       !! The input matrix and the matrix of eigenvectors are assumed to be distributed in host memory.
