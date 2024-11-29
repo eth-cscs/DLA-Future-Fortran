@@ -32,7 +32,11 @@ module dlaf_fortran
    public :: dlaf_pssyevd_partial_spectrum, dlaf_pdsyevd_partial_spectrum
    public :: dlaf_pcheevd_partial_spectrum, dlaf_pzheevd_partial_spectrum
    public :: dlaf_pssygvd, dlaf_pdsygvd, dlaf_pchegvd, dlaf_pzhegvd
+   public :: dlaf_pssygvd_partial_spectrum, dlaf_pdsygvd_partial_spectrum
+   public :: dlaf_pchegvd_partial_spectrum, dlaf_pzhegvd_partial_spectrum
    public :: dlaf_pssygvd_factorized, dlaf_pdsygvd_factorized, dlaf_pchegvd_factorized, dlaf_pzhegvd_factorized
+   public :: dlaf_pssygvd_partial_spectrum_factorized, dlaf_pdsygvd_partial_spectrum_factorized
+   public :: dlaf_pchegvd_partial_spectrum_factorized, dlaf_pzhegvd_partial_spectrum_factorized
 
 contains
 
@@ -510,6 +514,41 @@ contains
 
    end subroutine dlaf_pssygvd
 
+   subroutine dlaf_pssygvd_partial_spectrum(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz, il, iu
+      integer, dimension(9), intent(in) :: desca, descb, descz
+      integer, target, intent(out) :: info
+      real(kind=sp), dimension(:, :), target, intent(inout) :: a, b, z
+      real(kind=sp), dimension(:), target, intent(out) :: w
+
+      interface
+    subroutine dlaf_pssygvd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
+            bind(C, name='dlaf_pssygvd_partial_spectrum')
+
+            import :: c_int, c_ptr, c_signed_char
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_, il_, iu_
+            type(c_ptr), value :: a_, b_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pssygvd_ps_c
+      end interface
+
+      info = -1
+
+      call dlaf_pssygvd_ps_c(iachar(uplo, c_signed_char), n, &
+                             c_loc(a(1, 1)), ia, ja, desca, &
+                             c_loc(b(1, 1)), ib, jb, descb, &
+                             c_loc(w(1)), &
+                             c_loc(z(1, 1)), iz, jz, descz, &
+                             il - 1, iu, &
+                             c_loc(info) &
+                             )
+
+   end subroutine dlaf_pssygvd_partial_spectrum
+
    subroutine dlaf_pssygvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
@@ -546,6 +585,43 @@ contains
 
    end subroutine dlaf_pssygvd_factorized
 
+ subroutine dlaf_pssygvd_partial_spectrum_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz, il, iu
+      integer, dimension(9), intent(in) :: desca, descb, descz
+      integer, target, intent(out) :: info
+      real(kind=sp), dimension(:, :), target, intent(inout) :: a, b, z
+      real(kind=sp), dimension(:), target, intent(out) :: w
+
+      interface
+         subroutine dlaf_pssygvd_ps_factorized_c( &
+            uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_ &
+            ) &
+            bind(C, name='dlaf_pssygvd_partial_spectrum_factorized')
+
+            import :: c_int, c_ptr, c_signed_char
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_, il_, iu_
+            type(c_ptr), value :: a_, b_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pssygvd_ps_factorized_c
+      end interface
+
+      info = -1
+
+      call dlaf_pssygvd_ps_factorized_c(iachar(uplo, c_signed_char), n, &
+                                        c_loc(a(1, 1)), ia, ja, desca, &
+                                        c_loc(b(1, 1)), ib, jb, descb, &
+                                        c_loc(w(1)), &
+                                        c_loc(z(1, 1)), iz, jz, descz, &
+                                        il - 1, iu, &
+                                        c_loc(info) &
+                                        )
+
+   end subroutine dlaf_pssygvd_partial_spectrum_factorized
+
    subroutine dlaf_pdsygvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
@@ -579,6 +655,41 @@ contains
                           )
 
    end subroutine dlaf_pdsygvd
+
+   subroutine dlaf_pdsygvd_partial_spectrum(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz, il, iu
+      integer, dimension(9), intent(in) :: desca, descb, descz
+      integer, target, intent(out) :: info
+      real(kind=dp), dimension(:, :), target, intent(inout) :: a, b, z
+      real(kind=dp), dimension(:), target, intent(out) :: w
+
+      interface
+    subroutine dlaf_pdsygvd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
+            bind(C, name='dlaf_pdsygvd_partial_spectrum')
+
+            import :: c_int, c_ptr, c_signed_char
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_, il_, iu_
+            type(c_ptr), value :: a_, b_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pdsygvd_ps_c
+      end interface
+
+      info = -1
+
+      call dlaf_pdsygvd_ps_c(iachar(uplo, c_signed_char), n, &
+                             c_loc(a(1, 1)), ia, ja, desca, &
+                             c_loc(b(1, 1)), ib, jb, descb, &
+                             c_loc(w(1)), &
+                             c_loc(z(1, 1)), iz, jz, descz, &
+                             il - 1, iu, &
+                             c_loc(info) &
+                             )
+
+   end subroutine dlaf_pdsygvd_partial_spectrum
 
    subroutine dlaf_pdsygvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
@@ -616,6 +727,43 @@ contains
 
    end subroutine dlaf_pdsygvd_factorized
 
+ subroutine dlaf_pdsygvd_partial_spectrum_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz, il, iu
+      integer, dimension(9), intent(in) :: desca, descb, descz
+      integer, target, intent(out) :: info
+      real(kind=dp), dimension(:, :), target, intent(inout) :: a, b, z
+      real(kind=dp), dimension(:), target, intent(out) :: w
+
+      interface
+         subroutine dlaf_pdsygvd_ps_factorized_c( &
+            uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_ &
+            ) &
+            bind(C, name='dlaf_pdsygvd_partial_spectrum_factorized')
+
+            import :: c_int, c_ptr, c_signed_char
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_, il_, iu_
+            type(c_ptr), value :: a_, b_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pdsygvd_ps_factorized_c
+      end interface
+
+      info = -1
+
+      call dlaf_pdsygvd_ps_factorized_c(iachar(uplo, c_signed_char), n, &
+                                        c_loc(a(1, 1)), ia, ja, desca, &
+                                        c_loc(b(1, 1)), ib, jb, descb, &
+                                        c_loc(w(1)), &
+                                        c_loc(z(1, 1)), iz, jz, descz, &
+                                        il - 1, iu, &
+                                        c_loc(info) &
+                                        )
+
+   end subroutine dlaf_pdsygvd_partial_spectrum_factorized
+
    subroutine dlaf_pchegvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
@@ -649,6 +797,41 @@ contains
                           )
 
    end subroutine dlaf_pchegvd
+
+   subroutine dlaf_pchegvd_partial_spectrum(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz, il, iu
+      integer, dimension(9), intent(in) :: desca, descb, descz
+      integer, target, intent(out) :: info
+      complex(kind=sp), dimension(:, :), target, intent(inout) :: a, b, z
+      real(kind=sp), dimension(:), target, intent(out) :: w
+
+      interface
+    subroutine dlaf_pchegvd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
+            bind(C, name='dlaf_pchegvd_partial_spectrum')
+
+            import :: c_int, c_ptr, c_signed_char
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_, il_, iu_
+            type(c_ptr), value :: a_, b_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pchegvd_ps_c
+      end interface
+
+      info = -1
+
+      call dlaf_pchegvd_ps_c(iachar(uplo, c_signed_char), n, &
+                             c_loc(a(1, 1)), ia, ja, desca, &
+                             c_loc(b(1, 1)), ib, jb, descb, &
+                             c_loc(w(1)), &
+                             c_loc(z(1, 1)), iz, jz, descz, &
+                             il - 1, iu, &
+                             c_loc(info) &
+                             )
+
+   end subroutine dlaf_pchegvd_partial_spectrum
 
    subroutine dlaf_pchegvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
@@ -686,6 +869,43 @@ contains
 
    end subroutine dlaf_pchegvd_factorized
 
+ subroutine dlaf_pchegvd_partial_spectrum_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz, il, iu
+      integer, dimension(9), intent(in) :: desca, descb, descz
+      integer, target, intent(out) :: info
+      complex(kind=sp), dimension(:, :), target, intent(inout) :: a, b, z
+      real(kind=sp), dimension(:), target, intent(out) :: w
+
+      interface
+         subroutine dlaf_pchegvd_ps_factorized_c( &
+            uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_ &
+            ) &
+            bind(C, name='dlaf_pchegvd_partial_spectrum_factorized')
+
+            import :: c_int, c_ptr, c_signed_char
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_, il_, iu_
+            type(c_ptr), value :: a_, b_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pchegvd_ps_factorized_c
+      end interface
+
+      info = -1
+
+      call dlaf_pchegvd_ps_factorized_c(iachar(uplo, c_signed_char), n, &
+                                        c_loc(a(1, 1)), ia, ja, desca, &
+                                        c_loc(b(1, 1)), ib, jb, descb, &
+                                        c_loc(w(1)), &
+                                        c_loc(z(1, 1)), iz, jz, descz, &
+                                        il - 1, iu, &
+                                        c_loc(info) &
+                                        )
+
+   end subroutine dlaf_pchegvd_partial_spectrum_factorized
+
    subroutine dlaf_pzhegvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
@@ -719,6 +939,43 @@ contains
                           )
 
    end subroutine dlaf_pzhegvd
+
+   subroutine dlaf_pzhegvd_partial_spectrum(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz, il, iu
+      integer, dimension(9), intent(in) :: desca, descb, descz
+      integer, target, intent(out) :: info
+      complex(kind=dp), dimension(:, :), target, intent(inout) :: a, b, z
+      real(kind=dp), dimension(:), target, intent(out) :: w
+
+      interface
+         subroutine dlaf_pzhegvd_ps_c( &
+            uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_ &
+            ) &
+            bind(C, name='dlaf_pzhegvd_partial_spectrum')
+
+            import :: c_int, c_ptr, c_signed_char
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_, il_, iu_
+            type(c_ptr), value :: a_, b_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pzhegvd_ps_c
+      end interface
+
+      info = -1
+
+      call dlaf_pzhegvd_ps_c(iachar(uplo, c_signed_char), n, &
+                             c_loc(a(1, 1)), ia, ja, desca, &
+                             c_loc(b(1, 1)), ib, jb, descb, &
+                             c_loc(w(1)), &
+                             c_loc(z(1, 1)), iz, jz, descz, &
+                             il - 1, iu, &
+                             c_loc(info) &
+                             )
+
+   end subroutine dlaf_pzhegvd_partial_spectrum
 
    subroutine dlaf_pzhegvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
@@ -755,5 +1012,44 @@ contains
                                      )
 
    end subroutine dlaf_pzhegvd_factorized
+
+   subroutine dlaf_pzhegvd_partial_spectrum_factorized( &
+      uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info &
+      )
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz, il, iu
+      integer, dimension(9), intent(in) :: desca, descb, descz
+      integer, target, intent(out) :: info
+      complex(kind=dp), dimension(:, :), target, intent(inout) :: a, b, z
+      real(kind=dp), dimension(:), target, intent(out) :: w
+
+      interface
+         subroutine dlaf_pzhegvd_ps_factorized_c( &
+            uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_ &
+            ) &
+            bind(C, name='dlaf_pzhegvd_partial_spectrum_factorized')
+
+            import :: c_int, c_ptr, c_signed_char
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_, il_, iu_
+            type(c_ptr), value :: a_, b_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pzhegvd_ps_factorized_c
+      end interface
+
+      info = -1
+
+      call dlaf_pzhegvd_ps_factorized_c(iachar(uplo, c_signed_char), n, &
+                                        c_loc(a(1, 1)), ia, ja, desca, &
+                                        c_loc(b(1, 1)), ib, jb, descb, &
+                                        c_loc(w(1)), &
+                                        c_loc(z(1, 1)), iz, jz, descz, &
+                                        il - 1, iu, &
+                                        c_loc(info) &
+                                        )
+
+   end subroutine dlaf_pzhegvd_partial_spectrum_factorized
 
 end module dlaf_fortran
