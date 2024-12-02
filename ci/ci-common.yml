@@ -29,8 +29,8 @@ stages:
     reports:
       dotenv: build.env
   variables:
-    SPACK_SHA: 05c7ff4595a4e574cbcf45475c626b9b94c22af1
-    SPACK_BUILDCACHE: develop-2024-06-02
+    SPACK_SHA: develop-2024-12-01
+    SPACK_BUILDCACHE: develop-2024-12-01
     SPACK_DLAF_FORTRAN_REPO: ./spack
     DOCKER_BUILD_ARGS: '[
         "BASE_IMAGE",
