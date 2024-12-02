@@ -32,7 +32,7 @@ jobs:
       - name: Configure
         run: |
           python -m pip install --upgrade pip
-          python -m pip install ford
+          python -m pip install ford>=7.0.9 # Notes in included markdown do not work in 7.0.8 
       - name: Build (main)
         run: |
           python -m ford --output_dir ghpages DLA-Future-Fortran.md

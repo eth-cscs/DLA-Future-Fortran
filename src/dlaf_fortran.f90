@@ -139,26 +139,19 @@ contains
       !! @endnote
 
       character, intent(in) :: uplo
+      !! {!docs/snippets/uplo.md!}
       integer, intent(in) :: n
-        !! Order of the matrix sub-matrix \(\mathbf{A}\) used in the computation
+      !! {!docs/snippets/n.md!}
       real(kind=sp), dimension(:, :), target, intent(inout) :: a
-        !! Local part of the global matrix \(\mathbf{A}\)
+      !! {!docs/snippets/a.md!}
       integer, intent(in) :: ia
-        !! Row index of the global matrix identifying the first row of the sub-matrix \(\mathbf{A}\)
-        !! @note
-        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
-        !! version you are using.
-        !! @endnote
+      !! {!docs/snippets/ia.md!}
       integer, intent(in) :: ja
-        !! Column index of the global matrix identifying the first column of the sub-matrix \(\mathbf{A}\)
-        !! @note
-        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
-        !! version you are using.
-        !! @endnote
+      !! {!docs/snippets/ja.md!}
       integer, dimension(9), intent(in) :: desca
-        !! ScaLAPACK descriptor of the global matrix \(\mathbf{A}\)
+      !! {!docs/snippets/desca.md!}
       integer, target, intent(out) :: info
-        !! `0` if the Cholesky decomposition completed normally
+      !! {!docs/snippets/info.md!}
 
       interface
          subroutine dlaf_pspotrf_c(uplo_, n_, a_, ia_, ja_, desca_, info_) &
@@ -179,10 +172,31 @@ contains
    end subroutine dlaf_pspotrf
 
    subroutine dlaf_pdpotrf(uplo, n, a, ia, ja, desca, info)
+      !! Cholesky decomposition for a distributed double-precision real symmetric positive definite matrix \(\mathbf{A}\)
+      !!
+      !! @note
+      !! The input matrix is assumed to be distributed in host memory. Moving to and from GPU memory is
+      !! handled internally.
+      !! @endnote
+
       character, intent(in) :: uplo
+        !! {!docs/snippets/uplo.md!}
       integer, intent(in) :: n
+        !! Order of the matrix sub-matrix \(\mathbf{A}\) used in the computation
       real(kind=dp), dimension(:, :), target, intent(inout) :: a
-      integer, intent(in) :: ia, ja
+        !! Local part of the global matrix \(\mathbf{A}\)
+      integer, intent(in) :: ia
+        !! Row index of the global matrix identifying the first row of the sub-matrix \(\mathbf{A}\)
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
+      integer, intent(in) :: ja
+        !! Column index of the global matrix identifying the first column of the sub-matrix \(\mathbf{A}\)
+        !! @note
+        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
+        !! version you are using.
+        !! @endnote
       integer, dimension(9), intent(in) :: desca
       integer, target, intent(out) :: info
 
@@ -206,11 +220,19 @@ contains
 
    subroutine dlaf_pcpotrf(uplo, n, a, ia, ja, desca, info)
       character, intent(in) :: uplo
+      !! {!docs/snippets/uplo.md!}
       integer, intent(in) :: n
+      !! {!docs/snippets/n.md!}
       complex(kind=sp), dimension(:, :), target, intent(inout) :: a
-      integer, intent(in) :: ia, ja
+      !! {!docs/snippets/a.md!}
+      integer, intent(in) :: ia
+      !! {!docs/snippets/ia.md!}
+      integer, intent(in) :: ja
+      !! {!docs/snippets/ja.md!}
       integer, dimension(9), intent(in) :: desca
+      !! {!docs/snippets/desca.md!}
       integer, target, intent(out) :: info
+      !! {!docs/snippets/info.md!}
 
       interface
          subroutine dlaf_pcpotrf_c(uplo_, n_, a_, ia_, ja_, desca_, info_) &
@@ -232,11 +254,19 @@ contains
 
    subroutine dlaf_pzpotrf(uplo, n, a, ia, ja, desca, info)
       character, intent(in) :: uplo
+      !! {!docs/snippets/uplo.md!}
       integer, intent(in) :: n
+      !! {!docs/snippets/n.md!}
       complex(kind=dp), dimension(:, :), target, intent(inout) :: a
-      integer, intent(in) :: ia, ja
+      !! {!docs/snippets/a.md!}
+      integer, intent(in) :: ia
+      !! {!docs/snippets/ia.md!}
+      integer, intent(in) :: ja
+      !! {!docs/snippets/ja.md!}
       integer, dimension(9), intent(in) :: desca
+      !! {!docs/snippets/desca.md!}
       integer, target, intent(out) :: info
+      !! {!docs/snippets/info.md!}
 
       interface
          subroutine dlaf_pzpotrf_c(uplo_, n_, a_, ia_, ja_, desca_, info_) &
@@ -274,12 +304,7 @@ contains
       !! @endnote
 
       character, intent(in) :: uplo
-        !! Indicates whether the upper (`"U"`) or lower (`"L"`) triangular part of the global sub-matrix
-        !! \(\mathbf{A}\) is referenced
-        !! @note
-        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
-        !! version you are using.
-        !! @endnote
+        !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n
         !! Order of the sub-matrix \(\mathbf{A}\) used in the computation
       real(kind=sp), dimension(:, :), target, intent(inout) :: a
@@ -346,6 +371,7 @@ contains
 
    subroutine dlaf_pdsyevd(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
+        !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n, ia, ja, iz, jz
       integer, dimension(9), intent(in) :: desca, descz
       integer, target, intent(out) :: info
@@ -379,6 +405,7 @@ contains
 
    subroutine dlaf_pcheevd(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
+        !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n, ia, ja, iz, jz
       integer, dimension(9), intent(in) :: desca, descz
       integer, target, intent(out) :: info
@@ -412,6 +439,7 @@ contains
 
    subroutine dlaf_pzheevd(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
+        !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n, ia, ja, iz, jz
       integer, dimension(9), intent(in) :: desca, descz
       integer, target, intent(out) :: info
@@ -477,12 +505,7 @@ contains
       !! The pika runtime is resumed when this function is called and suspended when the call terminates.
       !! @endnote
       character, intent(in) :: uplo
-        !! Indicates whether the upper (`"U"`) or lower (`"L"`) triangular part of the global sub-matrix
-        !! \(\mathbf{A}\) is referenced
-        !! @note
-        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
-        !! version you are using.
-        !! @endnote
+        !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n
         !! Order of the sub-matrix \(\mathbf{A}\) used in the computation
       real(kind=sp), dimension(:, :), target, intent(inout) :: a
@@ -588,12 +611,7 @@ contains
       !! (`dlaf_pspotrf`).
       !! @endnote
       character, intent(in) :: uplo
-        !! Indicates whether the upper (`"U"`) or lower (`"L"`) triangular part of the global sub-matrix
-        !! \(\mathbf{A}\) is referenced
-        !! @note
-        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
-        !! version you are using.
-        !! @endnote
+        !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n
         !! Order of the sub-matrix \(\mathbf{A}\) used in the computation
       real(kind=sp), dimension(:, :), target, intent(inout) :: a
@@ -683,6 +701,7 @@ contains
 
    subroutine dlaf_pdsygvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
+        !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
       integer, dimension(9), intent(in) :: desca, descb, descz
       integer, target, intent(out) :: info
@@ -717,6 +736,7 @@ contains
 
    subroutine dlaf_pdsygvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
+        !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
       integer, dimension(9), intent(in) :: desca, descb, descz
       integer, target, intent(out) :: info
@@ -753,6 +773,7 @@ contains
 
    subroutine dlaf_pchegvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
+        !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
       integer, dimension(9), intent(in) :: desca, descb, descz
       integer, target, intent(out) :: info
@@ -787,6 +808,7 @@ contains
 
    subroutine dlaf_pchegvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
+        !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
       integer, dimension(9), intent(in) :: desca, descb, descz
       integer, target, intent(out) :: info
@@ -823,6 +845,7 @@ contains
 
    subroutine dlaf_pzhegvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
+        !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
       integer, dimension(9), intent(in) :: desca, descb, descz
       integer, target, intent(out) :: info
@@ -857,6 +880,7 @@ contains
 
    subroutine dlaf_pzhegvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       character, intent(in) :: uplo
+        !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
       integer, dimension(9), intent(in) :: desca, descb, descz
       integer, target, intent(out) :: info
