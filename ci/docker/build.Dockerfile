@@ -14,11 +14,11 @@ RUN apt-get -yqq update && \
     apt-get -yqq install --no-install-recommends \
     software-properties-common \
     build-essential gfortran \
-    autoconf automake ninja-build pkg-config \
+    autoconf automake libssl-dev ninja-build pkg-config \
     ${EXTRA_APTGET} \
     gawk \
     python3 python3-distutils \
-    git tar wget curl libcurl4-openssl-dev ca-certificates gpg-agent jq tzdata \
+    git tar wget curl ca-certificates gpg-agent jq tzdata \
     patchelf unzip file gnupg2 libncurses-dev && \
     rm -rf /var/lib/apt/lists/*
 
@@ -45,7 +45,6 @@ RUN spack external find \
     automake \
     bzip2 \
     cuda \
-    curl \
     diffutils \
     findutils \
     git \
@@ -59,8 +58,8 @@ RUN spack external find \
 
 # Enable Spack build cache
 ARG SPACK_BUILDCACHE
-RUN spack mirror add develop-2024-03-24 https://binaries.spack.io/${SPACK_BUILDCACHE}
-RUN spack buildcache keys --install --trust
+RUN spack mirror add ${SPACK_BUILDCACHE} https://binaries.spack.io/${SPACK_BUILDCACHE}
+RUN spack buildcache keys --install --trust --force
 
 # Add custom Spack repo
 ARG SPACK_DLAF_FORTRAN_REPO

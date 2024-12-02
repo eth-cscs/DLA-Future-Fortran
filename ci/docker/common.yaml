@@ -11,6 +11,9 @@
 packages:
   all:
     target: [x86_64]
+    require:
+      - "platform=linux"
+      - "os=ubuntu22.04"
   blas:
     require: 'intel-oneapi-mkl'
   lapack:
@@ -23,6 +26,7 @@ packages:
     require:
       - 'threads=openmp'
       - '+cluster'
+      - '+gfortran'
   openblas:
     variants:
       - 'threads=openmp'

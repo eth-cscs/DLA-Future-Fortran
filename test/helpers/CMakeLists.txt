@@ -8,7 +8,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
-set(fyppFiles pxpotrf.fypp pxheevd.fypp pxhegvx.fypp)
+set(fyppFiles pxpotrf.fypp pxheevd.fypp pxhegvd.fypp)
 
 foreach(infileName IN LISTS fyppFiles)
 

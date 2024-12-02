@@ -16,3 +16,11 @@ build-*
 
 # Documentation
 doc-ford
+
+# MacOS
+.DS_Store
+
+# temp
+*~
+*.swp
+*.orig

@@ -8,11 +8,11 @@
 ! SPDX-License-Identifier: BSD-3-Clause
 !
 
-program test_pssygvx
-   use pxhegvx_tests, only: pssygvx_test
+program test_pchegvd
+   use pxhegvd_tests, only: pchegvd_test
 
    implicit none
 
-   call pssygvx_test()
+   call pchegvd_test()
 
-end program test_pssygvx
+end program test_pchegvd
