@@ -13,8 +13,7 @@
 #:set names = {('sp', 'real'): 'ssy', ('sp', 'complex'): 'che', ('dp', 'real'): 'dsy', ('dp', 'complex'): 'zhe'}
 #:set symbols = {('sp', 'real'): 's', ('sp', 'complex'): 'c', ('dp', 'real'): 'd', ('dp', 'complex'): 'z'}
 module pxheevd_tests
-   use iso_fortran_env, only: error_unit, sp => real32, dp => real64
-   use iso_c_binding, only: c_ptrdiff_t
+   use iso_fortran_env, only: error_unit, sp => real32, dp => real64, i8 => int64
    use dlaf_fortran, only: dlaf_initialize, dlaf_finalize, dlaf_create_grid_from_blacs, dlaf_free_grid
    #:for dtype in precision
       #:for type in types
@@ -51,8 +50,8 @@ contains
          subroutine p${name}$evd_test
 
             integer, parameter :: n = 4
-            integer(kind=c_ptrdiff_t), parameter :: eval_idx_begin = 1
-            integer(kind=c_ptrdiff_t), parameter :: eval_idx_end = 2
+            integer(kind=i8), parameter :: eval_idx_begin = 1
+            integer(kind=i8), parameter :: eval_idx_end = 2
 
             integer:: nprow, npcol
             integer:: i, j
@@ -239,12 +238,12 @@ contains
                 ! Something is off if the lastt eigenvectors are the same as ScaLAPACK
                 if ( &
                     allclose( &
-                        abs(Z_dlaf_partial_spectrum(:,eval_idx_end:n)), &
-                        abs(Z_scalapack(:,eval_idx_end:n)), &
+                        abs(Z_dlaf_partial_spectrum(:,eval_idx_end+1:n)), &
+                        abs(Z_scalapack(:,eval_idx_end+1:n)), &
                         atol=abstol) &
                     ) then
                     failed = .true.
-                    write (error_unit, *) "ERROR: DLAF_PS == ScaLAPACK (eigenvectors [end:N])"
+                    write (error_unit, *) "ERROR: DLAF_PS == ScaLAPACK (eigenvectors [end+1:N])"
                 end if
             end if
 
