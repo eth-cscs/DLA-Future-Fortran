@@ -11,13 +11,20 @@
 name: Docs
 
 on:
-  - push
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
+      - '**' # TODO: Remove when done testing!
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  # Pull requests to main trigger this workflow
+  # However, the deployment is skipped (see check on github.ref)
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  publish:
+  docs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,15 +33,26 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install ford
-      - name: Build
+      - name: Build (main)
         run: |
-          python -m ford --output_dir doc-ford DLA-Future-Fortran.md
-      - name: Deploy
-        if: success()
-        uses: crazy-max/ghaction-github-pages@v4
-        with:
-          build_dir: doc-ford
-          committer: Rocco Meli <rocco.meli@cscs.ch>
-          author: Rocco Meli <rocco.meli@cscs.ch>
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          python -m ford --output_dir ghpages DLA-Future-Fortran.md
+          echo {{ github.repository }}
+      - name: Publish (main)
+        #if: "github.repository == 'eth-cscs/DLA-Future-Fortran' && github.ref == 'refs/heads/main'"
+        if: "github.repository == 'RMeli/DLA-Future-Fortran'"
+        run: |
+          COMMIT_MSG=`git log -n 1 --pretty=format:%s`
+          mv ghpages main
+          git config user.name "Documentation CI Action" && git config user.email "rmeli@users.noreply.github.com"
+          git fetch --no-tags --depth=1 origin +refs/heads/docs-ghpages:refs/heads/docs-ghpages
+          git symbolic-ref HEAD refs/heads/docs-ghpages && git reset
+          git add main && git commit --allow-empty -m "Documentation: $COMMIT_MSG" && git push --set-upstream origin docs-ghpages
+      - name: Publish (tag)
+        if: "github.repository == 'eth-cscs/DLA-Future-Fortran' && startsWith(github.ref, 'refs/tags/v')"
+        run: |
+          TAG=${{ github.ref_name }}
+          mv ghpages $TAG
+          git config user.name "Documentation CI Action" && git config user.email "rmeli@users.noreply.github.com"
+          git fetch --no-tags --depth=1 origin +refs/heads/docs-ghpages:refs/heads/docs-ghpages
+          git symbolic-ref HEAD refs/heads/docs-ghpages && git reset
+          git add $TAG && git commit --allow-empty -m "Documentation: add doccumentation for $TAG" && git push --set-upstream origin docs-ghpages

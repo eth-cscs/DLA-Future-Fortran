@@ -24,3 +24,6 @@ doc-ford
 *~
 *.swp
 *.orig
+
+# Documentation
+documentation

@@ -2,9 +2,12 @@
 project: DLA-Future-Fortran
 summary: Fortan interface for DLA-Future
 project_github: https://github.com/eth-cscs/DLA-Future-Fortran
-author: Rocco Meli
 print_creation_date: true
 output_dir: doc-ford
+project_download: https://github.com/eth-cscs/DLA-Future-Fortran/releases
+print_creation_date: true
+output_dir: documentation
+media_dir: docs
 doc_license: bsd
 ---
 
@@ -74,18 +77,33 @@ The following is an example of how a code using [ScaLAPACK]'s hermitian generali
  call mpi_finalize(...)
 ```
 
-## Optimal parameters
+## Citation
 
-### Block size
+### DLA-Future Conference Paper
 
-| Device | Block size |
-| :----: | :--------: |
-| CPU    | 512        |
-| GPU    | 1024       |
+If you are using [DLA-Future-Fortran], please cite the following conference paper in addition to the [DLA-Future-Fortran] and the [DLA-Future] repositories:
 
-### Ranks per node
-
-For CPU-only calculations it is recommended to use one rank per NUMA domain. For GPU calculations it is recommended to use one rank per GPU.
+```
+@InProceedings{10.1007/978-3-031-61763-8_13,
+    author="Solc{\`a}, Raffaele
+        and Simberg, Mikael
+        and Meli, Rocco
+        and Invernizzi, Alberto
+        and Reverdell, Auriane
+        and Biddiscombe, John",
+    editor="Diehl, Patrick
+        and Schuchart, Joseph
+        and Valero-Lara, Pedro
+        and Bosilca, George",
+    title="DLA-Future: A Task-Based Linear Algebra Library Which Provides a GPU-Enabled Distributed Eigensolver",
+    booktitle="Asynchronous Many-Task Systems and Applications",
+    year="2024",
+    publisher="Springer Nature Switzerland",
+    address="Cham",
+    pages="135--141",
+    isbn="978-3-031-61763-8"
+}
+```
 
 ## Acknowledgements
 
@@ -95,7 +113,9 @@ The development of [DLA-Future-Fortran] is supported by the following organizati
 * [ETH Zurich]: Swiss Federal Institute of Technology Zurich
 * [PASC]: Platform for Advanced Scientific Computing
 
-<img height="50" src="./docs/images/logo-cscs.jpg"><img height="50" src="./docs/images/logo-eth.svg"><img height="50" src="./docs/images/logo-pasc.png">
+![CSCS](|media|/images/logo-cscs.jpg){: style="text-align: center" height=75}
+![ETHZ](|media|/images/logo-eth.svg){: style="text-align: center" height=75}
+![PASC](|media|/images/logo-pasc.png){: style="text-align: center" height=75}
 
 [AMD]: https://www.amd.com/en.html
 [BLACS]: https://www.netlib.org/blacs/
