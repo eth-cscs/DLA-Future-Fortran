@@ -2,11 +2,9 @@
 project: DLA-Future-Fortran
 summary: Fortan interface for DLA-Future
 project_github: https://github.com/eth-cscs/DLA-Future-Fortran
-print_creation_date: true
-output_dir: doc-ford
 project_download: https://github.com/eth-cscs/DLA-Future-Fortran/releases
 print_creation_date: true
-output_dir: documentation
+output_dir: doc-ford
 media_dir: docs
 doc_license: bsd
 ---
