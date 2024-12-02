@@ -18,6 +18,7 @@ module dlaf_fortran
       c_int, &
       c_loc, &
       c_ptr, &
+      c_ptrdiff_t, &
       c_signed_char, &
       c_null_char
 
@@ -245,9 +246,10 @@ contains
 
    end subroutine dlaf_pssyevd
 
-   subroutine dlaf_pssyevd_partial_spectrum(uplo, n, a, ia, ja, desca, w, z, iz, jz, il, iu, descz, info)
+   subroutine dlaf_pssyevd_partial_spectrum(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, il, iu, info)
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, iz, jz, il, iu
+      integer, intent(in) :: n, ia, ja, iz, jz
+      integer(kind=c_ptrdiff_t), intent(in) :: il, iu
       integer, dimension(9), intent(in) :: desca, descz
       integer, target, intent(out) :: info
       real(kind=sp), dimension(:, :), target, intent(inout) :: a, z
@@ -257,10 +259,11 @@ contains
          subroutine dlaf_pssyevd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
             bind(C, name='dlaf_pssyevd_partial_spectrum')
 
-            import :: c_int, c_ptr, c_signed_char
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
 
             integer(kind=c_signed_char), value :: uplo_
-            integer(kind=c_int), value :: n_, ia_, ja_, iz_, jz_, il_, iu_
+            integer(kind=c_int), value :: n_, ia_, ja_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
             type(c_ptr), value :: a_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descz_
             type(c_ptr), value :: info_
@@ -314,7 +317,8 @@ contains
 
    subroutine dlaf_pdsyevd_partial_spectrum(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, il, iu, info)
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, iz, jz, il, iu
+      integer, intent(in) :: n, ia, ja, iz, jz
+      integer(kind=c_ptrdiff_t), intent(in) :: il, iu
       integer, dimension(9), intent(in) :: desca, descz
       integer, target, intent(out) :: info
       real(kind=dp), dimension(:, :), target, intent(inout) :: a, z
@@ -324,10 +328,11 @@ contains
          subroutine dlaf_pdsyevd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
             bind(C, name='dlaf_pdsyevd_partial_spectrum')
 
-            import :: c_int, c_ptr, c_signed_char
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
 
             integer(kind=c_signed_char), value :: uplo_
-            integer(kind=c_int), value :: n_, ia_, ja_, iz_, jz_, il_, iu_
+            integer(kind=c_int), value :: n_, ia_, ja_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
             type(c_ptr), value :: a_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descz_
             type(c_ptr), value :: info_
@@ -381,7 +386,8 @@ contains
 
    subroutine dlaf_pcheevd_partial_spectrum(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, il, iu, info)
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, iz, jz, il, iu
+      integer, intent(in) :: n, ia, ja, iz, jz
+      integer(kind=c_ptrdiff_t), intent(in) :: il, iu
       integer, dimension(9), intent(in) :: desca, descz
       integer, target, intent(out) :: info
       complex(kind=sp), dimension(:, :), target, intent(inout) :: a, z
@@ -391,10 +397,11 @@ contains
          subroutine dlaf_pcheevd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
             bind(C, name='dlaf_pcheevd_partial_spectrum')
 
-            import :: c_int, c_ptr, c_signed_char
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
 
             integer(kind=c_signed_char), value :: uplo_
-            integer(kind=c_int), value :: n_, ia_, ja_, iz_, jz_, il_, iu_
+            integer(kind=c_int), value :: n_, ia_, ja_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
             type(c_ptr), value :: a_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descz_
             type(c_ptr), value :: info_
@@ -448,7 +455,8 @@ contains
 
    subroutine dlaf_pzheevd_partial_spectrum(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, il, iu, info)
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, iz, jz, il, iu
+      integer, intent(in) :: n, ia, ja, iz, jz
+      integer(kind=c_ptrdiff_t), intent(in) :: il, iu
       integer, dimension(9), intent(in) :: desca, descz
       integer, target, intent(out) :: info
       complex(kind=dp), dimension(:, :), target, intent(inout) :: a, z
@@ -458,10 +466,11 @@ contains
          subroutine dlaf_pzheevd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
             bind(C, name='dlaf_pzheevd_partial_spectrum')
 
-            import :: c_int, c_ptr, c_signed_char
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
 
             integer(kind=c_signed_char), value :: uplo_
-            integer(kind=c_int), value :: n_, ia_, ja_, iz_, jz_, il_, iu_
+            integer(kind=c_int), value :: n_, ia_, ja_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
             type(c_ptr), value :: a_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descz_
             type(c_ptr), value :: info_

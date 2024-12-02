@@ -14,11 +14,12 @@
 #:set symbols = {('sp', 'real'): 's', ('sp', 'complex'): 'c', ('dp', 'real'): 'd', ('dp', 'complex'): 'z'}
 module pxheevd_tests
    use iso_fortran_env, only: error_unit, sp => real32, dp => real64
+   use iso_c_binding, only: c_ptrdiff_t
    use dlaf_fortran, only: dlaf_initialize, dlaf_finalize, dlaf_create_grid_from_blacs, dlaf_free_grid
    #:for dtype in precision
       #:for type in types
          #:set name = names[(dtype, type)]
-         use dlaf_fortran, only: dlaf_p${name}$evd
+         use dlaf_fortran, only: dlaf_p${name}$evd, dlaf_p${name}$evd_partial_spectrum
       #:endfor
    #:endfor
 
@@ -50,6 +51,8 @@ contains
          subroutine p${name}$evd_test
 
             integer, parameter :: n = 4
+            integer(kind=c_ptrdiff_t), parameter :: eval_idx_begin = 1
+            integer(kind=c_ptrdiff_t), parameter :: eval_idx_end = 2
 
             integer:: nprow, npcol
             integer:: i, j
@@ -59,12 +62,15 @@ contains
             integer :: ictxt, ictxt_0
             integer :: info, lld, nb, ma, na
             integer :: desca(9), desca_local_dlaf(9), desca_local_scalapack(9)
-            integer :: descz_local_dlaf(9), descz_local_scalapack(9)
-            integer :: descz_dlaf(9), descz_scalapack(9)
+            integer :: descz_local_dlaf(9), descz_local_scalapack(9), descz_local_dlaf_partial_spectrum(9)
+            integer :: descz_dlaf(9), descz_scalapack(9), descz_dlaf_partial_spectrum(9)
             ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: A, A_local_dlaf, A_local_scalapack
+            ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: A_local_dlaf_partial_spectrum
             ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: Z_local_dlaf, Z_local_scalapack
+            ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: Z_local_dlaf_partial_spectrum
             ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: Z_dlaf, Z_scalapack
-            real(kind=${dtype}$), dimension(:), allocatable :: W_dlaf, W_scalapack
+            ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: Z_dlaf_partial_spectrum
+            real(kind=${dtype}$), dimension(:), allocatable :: W_dlaf, W_scalapack, W_dlaf_partial_spectrum
             real(kind=${dtype}$), parameter :: abstol = #{if dtype == 'sp'}# 1e-5_${dtype}$ #{else}# 1e-8_${dtype}$ #{endif}#
 
             integer, parameter :: lwork = 100, liwork = 100
@@ -93,14 +99,17 @@ contains
             call init_desc(desca)
             call init_desc(descz_scalapack)
             call init_desc(descz_dlaf)
+            call init_desc(descz_dlaf_partial_spectrum)
             if (rank == 0) then
                allocate (A(n, n))
                allocate (Z_dlaf(n, n))
                allocate (Z_scalapack(n, n))
+               allocate (Z_dlaf_partial_spectrum(n, n))
 
                call descinit(desca, n, n, n, n, 0, 0, ictxt_0, n, info)
                call descinit(descz_dlaf, n, n, n, n, 0, 0, ictxt_0, n, info)
                call descinit(descz_scalapack, n, n, n, n, 0, 0, ictxt_0, n, info)
+               call descinit(descz_dlaf_partial_spectrum, n, n, n, n, 0, 0, ictxt_0, n, info)
 
                call set_random_matrix(A)
             end if
@@ -109,17 +118,20 @@ contains
             ma = numroc(n, nb, myrow, 0, nprow)
             na = numroc(n, nb, mycol, 0, npcol)
             lld = max(1, ma)
-            allocate (A_local_dlaf(ma, na), A_local_scalapack(ma, na))
-            allocate (Z_local_dlaf(ma, na), Z_local_scalapack(ma, na))
-            allocate (W_dlaf(n), W_scalapack(n))
+            allocate (A_local_dlaf(ma, na), A_local_scalapack(ma, na), A_local_dlaf_partial_spectrum(ma, na))
+            allocate (Z_local_dlaf(ma, na), Z_local_scalapack(ma, na), Z_local_dlaf_partial_spectrum(ma, na))
+            allocate (W_dlaf(n), W_scalapack(n), W_dlaf_partial_spectrum(n))
 
             ! + ---- +
             ! | DLAF |
             ! + ---- +
 
             call descinit(desca_local_dlaf, n, n, nb, nb, 0, 0, ictxt, lld, info)
-            call descinit(descz_local_dlaf, n, n, nb, nb, 0, 0, ictxt, lld, info)
             call p${symbol}$gemr2d(n, n, a, 1, 1, desca, A_local_dlaf, 1, 1, desca_local_dlaf, ictxt)
+            call p${symbol}$gemr2d(n, n, a, 1, 1, desca, A_local_dlaf_partial_spectrum, 1, 1, desca_local_dlaf, ictxt)
+
+            call descinit(descz_local_dlaf, n, n, nb, nb, 0, 0, ictxt, lld, info)
+            call descinit(descz_local_dlaf_partial_spectrum, n, n, nb, nb, 0, 0, ictxt, lld, info)
 
             ! Solve with DLAF
             call dlaf_initialize()
@@ -130,6 +142,13 @@ contains
                W_dlaf, Z_local_dlaf, 1, 1, descz_local_dlaf, &
                info &
                )
+            call dlaf_p${name}$evd_partial_spectrum( &
+               'L', &
+               n, A_local_dlaf_partial_spectrum, 1, 1, desca_local_dlaf, &
+               W_dlaf_partial_spectrum, Z_local_dlaf_partial_spectrum, 1, 1, descz_local_dlaf_partial_spectrum, &
+               eval_idx_begin, eval_idx_end, &
+               info &
+               )
             call dlaf_free_grid(ictxt)
             call dlaf_finalize()
             if (info /= 0) then
@@ -138,6 +157,12 @@ contains
             end if
 
             call p${symbol}$gemr2d(n, n, Z_local_dlaf, 1, 1, descz_local_dlaf, Z_dlaf, 1, 1, descz_dlaf, ictxt)
+            call p${symbol}$gemr2d( &
+                n, n, &
+                Z_local_dlaf_partial_spectrum, 1, 1, descz_local_dlaf_partial_spectrum, &
+                Z_dlaf_partial_spectrum, 1, 1, descz_dlaf_partial_spectrum, &
+                ictxt &
+            )
 
             ! + --------- +
             ! | ScaLAPACK |
@@ -170,7 +195,9 @@ contains
 
             call p${symbol}$gemr2d(n, n, Z_local_scalapack, 1, 1, descz_local_scalapack, Z_scalapack, 1, 1, descz_scalapack, ictxt)
 
-            ! Check results
+            ! + ------------- +
+            ! | Check Results |
+            ! + ------------- +
             ! Results are checked only on rank 0
 
             failed = .false.
@@ -178,6 +205,11 @@ contains
                if (.not. allclose(W_dlaf, W_scalapack)) then
                   failed = .true.
                   write (error_unit, *) "ERROR: DLAF != ScaLAPACK (eigenvalues)"
+               end if
+
+               if (.not. allclose(W_dlaf_partial_spectrum, W_scalapack)) then
+                  failed = .true.
+                  write (error_unit, *) "ERROR: DLAF_PS != ScaLAPACK (eigenvalues)"
                end if
             end if
 
@@ -188,10 +220,32 @@ contains
 
             failed = .false.
             if (rank == 0) then
-               if (.not. allclose(abs(Z_dlaf), abs(Z_scalapack), atol=abstol)) then
-                  failed = .true.
-                  write (error_unit, *) "ERROR: DLAF != ScaLAPACK (eigenvectors)"
-               end if
+                if (.not. allclose(abs(Z_dlaf), abs(Z_scalapack), atol=abstol)) then
+                    failed = .true.
+                    write (error_unit, *) "ERROR: DLAF != ScaLAPACK (eigenvectors)"
+                end if
+
+                ! The first "eval_idx_end" eigenvectors are the same as ScaLAPACK
+                if ( &
+                    .not. allclose( &
+                        abs(Z_dlaf_partial_spectrum(:,eval_idx_begin:eval_idx_end)), &
+                        abs(Z_scalapack(:, eval_idx_begin:eval_idx_end)), &
+                        atol=abstol) &
+                    ) then
+                    failed = .true.
+                    write (error_unit, *) "ERROR: DLAF_PS != ScaLAPACK (eigenvectors [begin,end])"
+                end if
+
+                ! Something is off if the lastt eigenvectors are the same as ScaLAPACK
+                if ( &
+                    allclose( &
+                        abs(Z_dlaf_partial_spectrum(:,eval_idx_end:n)), &
+                        abs(Z_scalapack(:,eval_idx_end:n)), &
+                        atol=abstol) &
+                    ) then
+                    failed = .true.
+                    write (error_unit, *) "ERROR: DLAF_PS == ScaLAPACK (eigenvectors [end:N])"
+                end if
             end if
 
             call bcast_check(failed)
