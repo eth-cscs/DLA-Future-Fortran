@@ -10,7 +10,7 @@
 
 module dlaf_fortran
 
-   use iso_fortran_env, only: dp => real64, sp => real32
+   use iso_fortran_env, only: dp => real64, sp => real32, i8 => int64
 
    use iso_c_binding, only: &
       c_char, &
@@ -249,7 +249,7 @@ contains
    subroutine dlaf_pssyevd_partial_spectrum(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, il, iu, info)
       character, intent(in) :: uplo
       integer, intent(in) :: n, ia, ja, iz, jz
-      integer(kind=c_ptrdiff_t), intent(in) :: il, iu
+      integer(kind=i8), intent(in) :: il, iu
       integer, dimension(9), intent(in) :: desca, descz
       integer, target, intent(out) :: info
       real(kind=sp), dimension(:, :), target, intent(inout) :: a, z
@@ -318,7 +318,7 @@ contains
    subroutine dlaf_pdsyevd_partial_spectrum(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, il, iu, info)
       character, intent(in) :: uplo
       integer, intent(in) :: n, ia, ja, iz, jz
-      integer(kind=c_ptrdiff_t), intent(in) :: il, iu
+      integer(kind=i8), intent(in) :: il, iu
       integer, dimension(9), intent(in) :: desca, descz
       integer, target, intent(out) :: info
       real(kind=dp), dimension(:, :), target, intent(inout) :: a, z
@@ -387,7 +387,7 @@ contains
    subroutine dlaf_pcheevd_partial_spectrum(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, il, iu, info)
       character, intent(in) :: uplo
       integer, intent(in) :: n, ia, ja, iz, jz
-      integer(kind=c_ptrdiff_t), intent(in) :: il, iu
+      integer(kind=i8), intent(in) :: il, iu
       integer, dimension(9), intent(in) :: desca, descz
       integer, target, intent(out) :: info
       complex(kind=sp), dimension(:, :), target, intent(inout) :: a, z
@@ -456,7 +456,7 @@ contains
    subroutine dlaf_pzheevd_partial_spectrum(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, il, iu, info)
       character, intent(in) :: uplo
       integer, intent(in) :: n, ia, ja, iz, jz
-      integer(kind=c_ptrdiff_t), intent(in) :: il, iu
+      integer(kind=i8), intent(in) :: il, iu
       integer, dimension(9), intent(in) :: desca, descz
       integer, target, intent(out) :: info
       complex(kind=dp), dimension(:, :), target, intent(inout) :: a, z
@@ -525,7 +525,8 @@ contains
 
    subroutine dlaf_pssygvd_partial_spectrum(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz, il, iu
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
+      integer(kind=i8), intent(in) :: il, iu
       integer, dimension(9), intent(in) :: desca, descb, descz
       integer, target, intent(out) :: info
       real(kind=sp), dimension(:, :), target, intent(inout) :: a, b, z
@@ -535,10 +536,11 @@ contains
     subroutine dlaf_pssygvd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
             bind(C, name='dlaf_pssygvd_partial_spectrum')
 
-            import :: c_int, c_ptr, c_signed_char
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
 
             integer(kind=c_signed_char), value :: uplo_
-            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_, il_, iu_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
             type(c_ptr), value :: a_, b_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
             type(c_ptr), value :: info_
@@ -596,7 +598,8 @@ contains
 
  subroutine dlaf_pssygvd_partial_spectrum_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz, il, iu
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
+      integer(kind=i8), intent(in) :: il, iu
       integer, dimension(9), intent(in) :: desca, descb, descz
       integer, target, intent(out) :: info
       real(kind=sp), dimension(:, :), target, intent(inout) :: a, b, z
@@ -608,10 +611,11 @@ contains
             ) &
             bind(C, name='dlaf_pssygvd_partial_spectrum_factorized')
 
-            import :: c_int, c_ptr, c_signed_char
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
 
             integer(kind=c_signed_char), value :: uplo_
-            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_, il_, iu_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
             type(c_ptr), value :: a_, b_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
             type(c_ptr), value :: info_
@@ -667,7 +671,8 @@ contains
 
    subroutine dlaf_pdsygvd_partial_spectrum(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz, il, iu
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
+      integer(kind=i8), intent(in) :: il, iu
       integer, dimension(9), intent(in) :: desca, descb, descz
       integer, target, intent(out) :: info
       real(kind=dp), dimension(:, :), target, intent(inout) :: a, b, z
@@ -677,10 +682,11 @@ contains
     subroutine dlaf_pdsygvd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
             bind(C, name='dlaf_pdsygvd_partial_spectrum')
 
-            import :: c_int, c_ptr, c_signed_char
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
 
             integer(kind=c_signed_char), value :: uplo_
-            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_, il_, iu_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
             type(c_ptr), value :: a_, b_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
             type(c_ptr), value :: info_
@@ -738,7 +744,8 @@ contains
 
  subroutine dlaf_pdsygvd_partial_spectrum_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz, il, iu
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
+      integer(kind=i8), intent(in) :: il, iu
       integer, dimension(9), intent(in) :: desca, descb, descz
       integer, target, intent(out) :: info
       real(kind=dp), dimension(:, :), target, intent(inout) :: a, b, z
@@ -750,10 +757,11 @@ contains
             ) &
             bind(C, name='dlaf_pdsygvd_partial_spectrum_factorized')
 
-            import :: c_int, c_ptr, c_signed_char
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
 
             integer(kind=c_signed_char), value :: uplo_
-            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_, il_, iu_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
             type(c_ptr), value :: a_, b_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
             type(c_ptr), value :: info_
@@ -809,7 +817,8 @@ contains
 
    subroutine dlaf_pchegvd_partial_spectrum(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz, il, iu
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
+      integer(kind=i8), intent(in) :: il, iu
       integer, dimension(9), intent(in) :: desca, descb, descz
       integer, target, intent(out) :: info
       complex(kind=sp), dimension(:, :), target, intent(inout) :: a, b, z
@@ -819,10 +828,11 @@ contains
     subroutine dlaf_pchegvd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
             bind(C, name='dlaf_pchegvd_partial_spectrum')
 
-            import :: c_int, c_ptr, c_signed_char
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
 
             integer(kind=c_signed_char), value :: uplo_
-            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_, il_, iu_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
             type(c_ptr), value :: a_, b_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
             type(c_ptr), value :: info_
@@ -880,7 +890,8 @@ contains
 
  subroutine dlaf_pchegvd_partial_spectrum_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz, il, iu
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
+      integer(kind=i8), intent(in) :: il, iu
       integer, dimension(9), intent(in) :: desca, descb, descz
       integer, target, intent(out) :: info
       complex(kind=sp), dimension(:, :), target, intent(inout) :: a, b, z
@@ -892,10 +903,11 @@ contains
             ) &
             bind(C, name='dlaf_pchegvd_partial_spectrum_factorized')
 
-            import :: c_int, c_ptr, c_signed_char
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
 
             integer(kind=c_signed_char), value :: uplo_
-            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_, il_, iu_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
             type(c_ptr), value :: a_, b_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
             type(c_ptr), value :: info_
@@ -951,7 +963,8 @@ contains
 
    subroutine dlaf_pzhegvd_partial_spectrum(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz, il, iu
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
+      integer(kind=i8), intent(in) :: il, iu
       integer, dimension(9), intent(in) :: desca, descb, descz
       integer, target, intent(out) :: info
       complex(kind=dp), dimension(:, :), target, intent(inout) :: a, b, z
@@ -963,10 +976,11 @@ contains
             ) &
             bind(C, name='dlaf_pzhegvd_partial_spectrum')
 
-            import :: c_int, c_ptr, c_signed_char
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
 
             integer(kind=c_signed_char), value :: uplo_
-            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_, il_, iu_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
             type(c_ptr), value :: a_, b_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
             type(c_ptr), value :: info_
@@ -1026,7 +1040,8 @@ contains
       uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info &
       )
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz, il, iu
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
+      integer(kind=i8), intent(in) :: il, iu
       integer, dimension(9), intent(in) :: desca, descb, descz
       integer, target, intent(out) :: info
       complex(kind=dp), dimension(:, :), target, intent(inout) :: a, b, z
@@ -1038,10 +1053,11 @@ contains
             ) &
             bind(C, name='dlaf_pzhegvd_partial_spectrum_factorized')
 
-            import :: c_int, c_ptr, c_signed_char
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
 
             integer(kind=c_signed_char), value :: uplo_
-            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_, il_, iu_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
             type(c_ptr), value :: a_, b_, w_, z_
             integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
             type(c_ptr), value :: info_
