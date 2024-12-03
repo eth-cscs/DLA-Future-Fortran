@@ -282,21 +282,9 @@ contains
 
    subroutine dlaf_pssyevd(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, info)
       !! Eigensolver for a distributed single-precision real symmetric matrix \(\mathbf{A}\)
-      !!
-      !! @note
-      !! The input matrix and the matrix of eigenvectors are assumed to be distributed in host memory.
-      !! Moving to and from GPU memory is handled internally.
-      !! @endnote
-      !!
-      !! @note
-      !! The vector of eigenvalues is assumed to be local (non-distributed) and in host memory.
-      !! Moving to and from GPU memory is handled internally.
-      !! @endnote
-      !!
-      !! @note
-      !! The pika runtime is resumed when this function is called and suspended when the call terminates.
-      !! @endnote
-
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
       character, intent(in) :: uplo
       !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n
@@ -503,40 +491,21 @@ contains
    subroutine dlaf_pssygvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       !! Generalized eigensolver for a distributed single-precision symmetric-definite eigenproblem of the form
       !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
-      !!
-      !! @note
-      !! The input matrix and the matrix of eigenvectors are assumed to be distributed in host memory.
-      !! Moving to and from GPU memory is handled internally.
-      !! @endnote
-      !!
-      !! @note
-      !! The vector of eigenvalues is assumed to be local (non-distributed) and in host memory.
-      !! Moving to and from GPU memory is handled internally.
-      !! @endnote
-      !!
-      !! @note
-      !! The pika runtime is resumed when this function is called and suspended when the call terminates.
-      !! @endnote
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
       character, intent(in) :: uplo
-        !! {!docs/snippets/uplo-w-note.md!}
+      !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n
-        !! Order of the sub-matrix \(\mathbf{A}\) used in the computation
+      !! {!docs/snippets/n.md!}
       real(kind=sp), dimension(:, :), target, intent(inout) :: a
-        !! Local part of the global matrix \(\mathbf{A}\)
+      !! {!docs/snippets/a.md!}
       integer, intent(in) :: ia
-        !! Row index in the global matrix identifying the first row of the sub-matrix \(\mathbf{A}\)
-        !! @note
-        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
-        !! version you are using.
-        !! @endnote
+      !! {!docs/snippets/ia.md!}
       integer, intent(in) :: ja
-        !! Column index in the global matrix identifying the first column of the sub-matrix \(\mathbf{A}\)
-        !! @note
-        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
-        !! version you are using.
-        !! @endnote
+      !! {!docs/snippets/ja.md!}
       integer, dimension(9), intent(in) :: desca
-        !! ScaLAPACK descriptor of the global matrix \(\mathbf{A}\)
+      !! {!docs/snippets/desca.md!}
       real(kind=sp), dimension(:, :), target, intent(inout) :: b
         !! Local part of the global matrix \(\mathbf{B}\)
       integer, intent(in) :: ib
@@ -554,25 +523,17 @@ contains
       integer, dimension(9), intent(in) :: descb
         !! ScaLAPACK descriptor of the global matrix \(\mathbf{B}\)
       real(kind=sp), dimension(:), target, intent(out) :: w
-        !! Local (non-distributed) vector of eigenvalues
+      !! {!docs/snippets/w.md!}
       real(kind=sp), dimension(:, :), target, intent(inout) :: z
-        !! Local part of the global matrix \(\mathbf{Z}\)
+      !! {!docs/snippets/z.md!}
       integer, intent(in) :: iz
-        !! Row index in the global matrix identifying the first row of the sub-matrix \(\mathbf{Z}\)
-        !! @note
-        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
-        !! version you are using.
-        !! @endnote
+      !! {!docs/snippets/iz.md!}
       integer, intent(in) :: jz
-        !! Column index in the global matrix identifying the first column of the sub-matrix \(\mathbf{Z}\)
-        !! @note
-        !! Check restrictions on this parameter on the DLA-Future documentation, for the DLA-Future
-        !! version you are using.
-        !! @endnote
+      !! {!docs/snippets/jz.md!}
       integer, dimension(9), intent(in) :: descz
-        !! ScaLAPACK descriptor of the global matrix \(\mathbf{Z}\)
+      !! {!docs/snippets/descz.md!}
       integer, target, intent(out) :: info
-        !! `0` if the eigensolver completed normally
+      !! {!docs/snippets/info.md!}
 
       interface
          subroutine dlaf_pssygvd_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, info_) &
