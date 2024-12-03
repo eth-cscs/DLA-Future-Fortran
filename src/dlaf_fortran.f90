@@ -330,6 +330,10 @@ contains
    end subroutine dlaf_pssyevd
 
    subroutine dlaf_pdsyevd(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, info)
+      !! Eigensolver for a distributed double-precision real symmetric matrix \(\mathbf{A}\)
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
       character, intent(in) :: uplo
       !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n
@@ -381,6 +385,10 @@ contains
    end subroutine dlaf_pdsyevd
 
    subroutine dlaf_pcheevd(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, info)
+      !! Eigensolver for a distributed single-precision complex Hermitian matrix \(\mathbf{A}\)
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
       character, intent(in) :: uplo
       !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n
@@ -432,6 +440,10 @@ contains
    end subroutine dlaf_pcheevd
 
    subroutine dlaf_pzheevd(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, info)
+      !! Eigensolver for a distributed double-precision complex Hermitian matrix \(\mathbf{A}\)
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
       character, intent(in) :: uplo
       !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n
