@@ -562,7 +562,6 @@ contains
    subroutine dlaf_pssygvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       !! Generalized eigensolver for a distributed single-precision symmetric-definite eigenproblem of the form
       !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
-      !! where \(\mathbf{B}\) is the result of a Cholesky factorization.
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -629,6 +628,11 @@ contains
    end subroutine dlaf_pssygvd_factorized
 
    subroutine dlaf_pdsygvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
+      !! Generalized eigensolver for a distributed double-precision symmetric-definite eigenproblem of the form
+      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
       character, intent(in) :: uplo
       !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n
@@ -689,6 +693,12 @@ contains
    end subroutine dlaf_pdsygvd
 
    subroutine dlaf_pdsygvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
+      !! Generalized eigensolver for a distributed double-precision symmetric-definite eigenproblem of the form
+      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
+      !! {!docs/snippets/note-factorized.md!}
       character, intent(in) :: uplo
       !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n
@@ -751,6 +761,11 @@ contains
    end subroutine dlaf_pdsygvd_factorized
 
    subroutine dlaf_pchegvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
+      !! Generalized eigensolver for a distributed single-precision Hermitian eigenproblem of the form
+      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
       character, intent(in) :: uplo
       !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n
@@ -811,6 +826,12 @@ contains
    end subroutine dlaf_pchegvd
 
    subroutine dlaf_pchegvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
+      !! Generalized eigensolver for a distributed single-precision Hermitian eigenproblem of the form
+      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
+      !! {!docs/snippets/note-factorized.md!}
       character, intent(in) :: uplo
       !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n
@@ -873,6 +894,11 @@ contains
    end subroutine dlaf_pchegvd_factorized
 
    subroutine dlaf_pzhegvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
+      !! Generalized eigensolver for a distributed double-precision Hermitian eigenproblem of the form
+      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
       character, intent(in) :: uplo
       !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n
@@ -933,6 +959,12 @@ contains
    end subroutine dlaf_pzhegvd
 
    subroutine dlaf_pzhegvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
+      !! Generalized eigensolver for a distributed double-precision Hermitian eigenproblem of the form
+      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
+      !! {!docs/snippets/note-factorized.md!}
       character, intent(in) :: uplo
       !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n
