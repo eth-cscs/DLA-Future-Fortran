@@ -9,7 +9,7 @@ media_dir: docs
 doc_license: bsd
 ---
 
-[DLA-Future-Fortran] is a [Fortran] interface for [DLA-Future], a task-based linear algebra library providing GPU-enabled distributed eigensolver. [DLA-Future] is based on the [pika] library for concurrency and parallelism, and supports both [Nvidia] and [AMD] GPUs.
+[DLA-Future-Fortran] is a Fortran interface for [DLA-Future], a task-based linear algebra library providing GPU-enabled distributed eigensolver. [DLA-Future] is based on the [pika] library for concurrency and parallelism, and supports both [Nvidia] and [AMD] GPUs.
 
 ## Usage
 
