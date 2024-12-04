@@ -565,7 +565,7 @@ contains
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
-      !! {!docs/snippets/note-factorized.md!}
+      !! {!docs/snippets/note-b-factorized.md!}
       character, intent(in) :: uplo
       !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n
@@ -698,7 +698,7 @@ contains
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
-      !! {!docs/snippets/note-factorized.md!}
+      !! {!docs/snippets/note-b-factorized.md!}
       character, intent(in) :: uplo
       !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n
@@ -831,7 +831,7 @@ contains
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
-      !! {!docs/snippets/note-factorized.md!}
+      !! {!docs/snippets/note-b-factorized.md!}
       character, intent(in) :: uplo
       !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n
@@ -964,7 +964,7 @@ contains
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
-      !! {!docs/snippets/note-factorized.md!}
+      !! {!docs/snippets/note-b-factorized.md!}
       character, intent(in) :: uplo
       !! {!docs/snippets/uplo-w-note.md!}
       integer, intent(in) :: n
