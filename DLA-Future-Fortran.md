@@ -121,7 +121,6 @@ The development of [DLA-Future-Fortran] is supported by the following organizati
 [DLA-Future-Fortran]: https://github.com/eth-cscs/DLA-Future-Fortran
 [DLA-Future]: https://github.com/eth-cscs/DLA-Future
 [ETH Zurich]: https://ethz.ch/en.html
-[Fortran]: https://github.com/eth-cscs/DLA-Future
 [Nvidia]: https://www.nvidia.com/en-us/
 [PASC]: https://www.pasc-ch.org/
 [pika]: https://github.com/pika-org/pika
