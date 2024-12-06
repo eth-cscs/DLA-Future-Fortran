@@ -13,13 +13,15 @@
 #:set names = {('sp', 'real'): 'ssy', ('sp', 'complex'): 'che', ('dp', 'real'): 'dsy', ('dp', 'complex'): 'zhe'}
 #:set symbols = {('sp', 'real'): 's', ('sp', 'complex'): 'c', ('dp', 'real'): 'd', ('dp', 'complex'): 'z'}
 module pxhegvd_tests
-   use iso_fortran_env, only: error_unit, sp => real32, dp => real64
+   use iso_fortran_env, only: error_unit, sp => real32, dp => real64, i8 => int64
    use dlaf_fortran, only: dlaf_initialize, dlaf_finalize, dlaf_create_grid_from_blacs, dlaf_free_grid
    #:for dtype in precision
       #:for type in types
          #:set name = names[(dtype, type)]
          use dlaf_fortran, only: dlaf_p${name}$gvd
+         use dlaf_fortran, only: dlaf_p${name}$gvd_partial_spectrum
          use dlaf_fortran, only: dlaf_p${name}$gvd_factorized
+         use dlaf_fortran, only: dlaf_p${name}$gvd_partial_spectrum_factorized
       #:endfor
    #:endfor
 
@@ -53,6 +55,8 @@ contains
          subroutine p${name}$gvd_test
 
             integer, parameter :: n = 4
+            integer(kind=i8), parameter :: eval_idx_begin = 1
+            integer(kind=i8), parameter :: eval_idx_end = 2
 
             integer:: nprow, npcol
             integer:: i, j
@@ -70,10 +74,13 @@ contains
             integer :: descz_local_dlaf(9), descz_local_scalapack(9)
             integer :: descz_dlaf(9), descz_scalapack(9)
             ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: A, A_local_dlaf, A_local_scalapack, A_local_store
-            ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: B, B_local_dlaf, B_local_scalapack
+            ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: B, B_local_dlaf, B_local_scalapack, B_local_store
             ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: Z_local_dlaf, Z_local_scalapack, Z_local_dlaf_factorized
+            ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: Z_local_dlaf_partial_spectrum, Z_local_dlaf_partial_spectrum_factorized
             ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: Z_dlaf, Z_scalapack, Z_dlaf_factorized
+            ${type}$ (kind=${dtype}$), dimension(:, :), allocatable :: Z_dlaf_partial_spectrum, Z_dlaf_partial_spectrum_factorized
             real(kind=${dtype}$), dimension(:), allocatable :: W_dlaf, W_scalapack, W_dlaf_factorized
+            real(kind=${dtype}$), dimension(:), allocatable :: W_dlaf_partial_spectrum, W_dlaf_partial_spectrum_factorized
             real(kind=${dtype}$), parameter :: abstol = #{if dtype == 'sp'}# 1e-5_${dtype}$ #{else}# 1e-8_${dtype}$ #{endif}#
 
             integer, parameter :: lwork = 100, liwork = 100
@@ -112,6 +119,8 @@ contains
                allocate (Z_dlaf(n, n))
                allocate (Z_scalapack(n, n))
                allocate (Z_dlaf_factorized(n, n))
+               allocate (Z_dlaf_partial_spectrum(n, n))
+               allocate (Z_dlaf_partial_spectrum_factorized(n, n))
 
                call descinit(desca, n, n, n, n, 0, 0, ictxt_0, n, info)
                call descinit(descb, n, n, n, n, 0, 0, ictxt_0, n, info)
@@ -127,9 +136,11 @@ contains
             na = numroc(n, nb, mycol, 0, npcol)
             lld = max(1, ma)
             allocate (A_local_dlaf(ma, na), A_local_scalapack(ma, na), A_local_store(ma, na))
-            allocate (B_local_dlaf(ma, na), B_local_scalapack(ma, na))
+            allocate (B_local_dlaf(ma, na), B_local_scalapack(ma, na), B_local_store(ma, na))
             allocate (Z_local_dlaf(ma, na), Z_local_scalapack(ma, na), Z_local_dlaf_factorized(ma, na))
+            allocate (Z_local_dlaf_partial_spectrum(ma, na), Z_local_dlaf_partial_spectrum_factorized(ma, na))
             allocate (W_dlaf(n), W_scalapack(n), W_dlaf_factorized(n))
+            allocate (W_dlaf_partial_spectrum(n), W_dlaf_partial_spectrum_factorized(n))
 
             ! + ---- +
             ! | DLAF |
@@ -137,12 +148,15 @@ contains
 
             call descinit(desca_local_dlaf, n, n, nb, nb, 0, 0, ictxt, lld, info)
             call descinit(descb_local_dlaf, n, n, nb, nb, 0, 0, ictxt, lld, info)
-            call descinit(descz_local_dlaf, n, n, nb, nb, 0, 0, ictxt, lld, info)
             call p${symbol}$gemr2d(n, n, a, 1, 1, desca, A_local_dlaf, 1, 1, desca_local_dlaf, ictxt)
             call p${symbol}$gemr2d(n, n, b, 1, 1, desca, B_local_dlaf, 1, 1, descb_local_dlaf, ictxt)
+            
+            call descinit(descz_local_dlaf, n, n, nb, nb, 0, 0, ictxt, lld, info)
+            call descinit(descz_local_dlaf, n, n, nb, nb, 0, 0, ictxt, lld, info)
 
             ! Store local copy
             A_local_store(:, :) = A_local_dlaf(:, :)
+            B_local_store(:, :) = B_local_dlaf(:, :)
 
             ! Solve with DLAF
             call dlaf_initialize()
@@ -166,6 +180,28 @@ contains
                W_dlaf_factorized, Z_local_dlaf_factorized, 1, 1, descz_local_dlaf, &
                info &
                )
+            
+            ! Solve with Cholesky factorization
+            A_local_dlaf(:, :) = A_local_store(:, :)
+            B_local_dlaf(:, :) = B_local_store(:, :)
+            call dlaf_p${name}$gvd_partial_spectrum( &
+               'L', &
+               n, A_local_dlaf, 1, 1, desca_local_dlaf, &
+               B_local_dlaf, 1, 1, descb_local_dlaf, &
+               W_dlaf_partial_spectrum, Z_local_dlaf_partial_spectrum, 1, 1, descz_local_dlaf, &
+               eval_idx_begin, eval_idx_end, &
+               info &
+               )
+
+            ! Solve with Cholesky factorisation from the previous call 
+            A_local_dlaf(:, :) = A_local_store(:, :)
+            call dlaf_p${name}$gvd_factorized( &
+               'L', &
+               n, A_local_dlaf, 1, 1, desca_local_dlaf, &
+               B_local_dlaf, 1, 1, descb_local_dlaf, &
+               W_dlaf_partial_spectrum_factorized, Z_local_dlaf_partial_spectrum_factorized, 1, 1, descz_local_dlaf, &
+               info &
+               )
 
             call dlaf_free_grid(ictxt)
             call dlaf_finalize()
@@ -176,6 +212,8 @@ contains
 
             call p${symbol}$gemr2d(n, n, Z_local_dlaf, 1, 1, descz_local_dlaf, Z_dlaf, 1, 1, descz_dlaf, ictxt)
             call p${symbol}$gemr2d(n, n, Z_local_dlaf_factorized, 1, 1, descz_local_dlaf, Z_dlaf_factorized, 1, 1, descz_dlaf, ictxt)
+            call p${symbol}$gemr2d(n, n, Z_local_dlaf_partial_spectrum, 1, 1, descz_local_dlaf, Z_dlaf_partial_spectrum, 1, 1, descz_dlaf, ictxt)
+            call p${symbol}$gemr2d(n, n, Z_local_dlaf_partial_spectrum_factorized, 1, 1, descz_local_dlaf, Z_dlaf_partial_spectrum_factorized, 1, 1, descz_dlaf, ictxt)
 
             ! + --------- +
             ! | ScaLAPACK |
@@ -214,7 +252,9 @@ contains
 
             call p${symbol}$gemr2d(n, n, Z_local_scalapack, 1, 1, descz_local_scalapack, Z_scalapack, 1, 1, descz_scalapack, ictxt)
 
-            ! Check results
+            ! + ------------- +
+            ! | Check Results |
+            ! + ------------- +
             ! Results are checked only on rank 0
 
             failed = .false.
@@ -223,18 +263,20 @@ contains
                   failed = .true.
                   write (error_unit, *) "ERROR: DLAF != ScaLAPACK (eigenvalues)"
                end if
-            end if
-
-            call bcast_check(failed)
-            if (failed) then
-               call terminate(ictxt)
-            end if
-            
-            failed = .false.
-            if (rank == 0) then
-               if (.not. allclose(W_dlaf, W_dlaf_factorized)) then
+               
+               if (.not. allclose(W_dlaf_factorized, W_scalapack)) then
                   failed = .true.
-                  write (error_unit, *) "ERROR: DLAF != DLAF Factorized (eigenvalues)"
+                  write (error_unit, *) "ERROR: DLAF Factorized != ScaLAPACK (eigenvalues)"
+               end if
+               
+               if (.not. allclose(W_dlaf_partial_spectrum, W_scalapack)) then
+                  failed = .true.
+                  write (error_unit, *) "ERROR: DLAF Partial Spectrum != ScaLAPACK (eigenvalues)"
+               end if
+               
+               if (.not. allclose(W_dlaf_partial_spectrum_factorized, W_scalapack)) then
+                  failed = .true.
+                  write (error_unit, *) "ERROR: DLAF Partial Spectrum Factorized != ScaLAPACK (eigenvalues)"
                end if
             end if
 
@@ -249,18 +291,46 @@ contains
                   failed = .true.
                   write (error_unit, *) "ERROR: DLAF != ScaLAPACK (eigenvectors)"
                end if
-            end if
 
-            call bcast_check(failed)
-            if (failed) then
-               call terminate(ictxt)
-            end if
-            
-            failed = .false.
-            if (rank == 0) then
-               if (.not. allclose(abs(Z_dlaf), abs(Z_dlaf_factorized))) then
+               if (.not. allclose(abs(Z_dlaf_factorized), abs(Z_dlaf))) then
                   failed = .true.
-                  write (error_unit, *) "ERROR: DLAF != DLAF Factorized (eigenvectors)"
+                  write (error_unit, *) "ERROR: DLAF Factorized != DLAF (eigenvectors)"
+               end if
+
+               if ( &
+                  .not. allclose( &
+                    abs(Z_dlaf_partial_spectrum(:,eval_idx_begin:eval_idx_end)), &
+                    abs(Z_dlaf(:, eval_idx_begin:eval_idx_end))) &
+                  ) then
+                  failed = .true.
+                  write (error_unit, *) "ERROR: DLAF Partial Spectrum != DLAF (eigenvectors [begin, end])"
+               end if
+
+               if ( &
+                  allclose( &
+                    abs(Z_dlaf_partial_spectrum(:,eval_idx_end+1:n)), &
+                    abs(Z_dlaf(:,eval_idx_end+1:n))) &
+                  ) then
+                  failed = .true.
+                  write (error_unit, *) "ERROR: DLAF Partial Spectrum != DLAF (eigenvectors [end+1, N])"
+               end if
+
+               if ( &
+                  .not. allclose( &
+                    abs(Z_dlaf_partial_spectrum_factorized(:,eval_idx_begin:eval_idx_end)), &
+                    abs(Z_dlaf(:, eval_idx_begin:eval_idx_end))) &
+                  ) then
+                  failed = .true.
+                  write (error_unit, *) "ERROR: DLAF Partial Spectrum Factorized != DLAF (eigenvectors [begin, end])"
+               end if
+
+               if ( &
+                  allclose( &
+                    abs(Z_dlaf_partial_spectrum(:,eval_idx_end+1:n)), &
+                    abs(Z_dlaf(:,eval_idx_end+1:n))) &
+                  ) then
+                  failed = .true.
+                  write (error_unit, *) "ERROR: DLAF Partial Spectrum Factorized != DLAF (eigenvectors [end+1, N])"
                end if
             end if
 

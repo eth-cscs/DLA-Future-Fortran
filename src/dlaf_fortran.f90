@@ -10,7 +10,7 @@
 
 module dlaf_fortran
 
-   use iso_fortran_env, only: dp => real64, sp => real32
+   use iso_fortran_env, only: dp => real64, sp => real32, i8 => int64
 
    use iso_c_binding, only: &
       c_char, &
@@ -18,6 +18,7 @@ module dlaf_fortran
       c_int, &
       c_loc, &
       c_ptr, &
+      c_ptrdiff_t, &
       c_signed_char, &
       c_null_char
 
@@ -29,8 +30,14 @@ module dlaf_fortran
    public :: dlaf_create_grid_from_blacs, dlaf_free_grid
    public :: dlaf_pspotrf, dlaf_pdpotrf, dlaf_pcpotrf, dlaf_pzpotrf
    public :: dlaf_pssyevd, dlaf_pdsyevd, dlaf_pcheevd, dlaf_pzheevd
+   public :: dlaf_pssyevd_partial_spectrum, dlaf_pdsyevd_partial_spectrum
+   public :: dlaf_pcheevd_partial_spectrum, dlaf_pzheevd_partial_spectrum
    public :: dlaf_pssygvd, dlaf_pdsygvd, dlaf_pchegvd, dlaf_pzhegvd
+   public :: dlaf_pssygvd_partial_spectrum, dlaf_pdsygvd_partial_spectrum
+   public :: dlaf_pchegvd_partial_spectrum, dlaf_pzhegvd_partial_spectrum
    public :: dlaf_pssygvd_factorized, dlaf_pdsygvd_factorized, dlaf_pchegvd_factorized, dlaf_pzhegvd_factorized
+   public :: dlaf_pssygvd_partial_spectrum_factorized, dlaf_pdsygvd_partial_spectrum_factorized
+   public :: dlaf_pchegvd_partial_spectrum_factorized, dlaf_pzhegvd_partial_spectrum_factorized
 
 contains
 
@@ -329,6 +336,42 @@ contains
 
    end subroutine dlaf_pssyevd
 
+   subroutine dlaf_pssyevd_partial_spectrum(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, il, iu, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, iz, jz
+      integer(kind=i8), intent(in) :: il, iu
+      integer, dimension(9), intent(in) :: desca, descz
+      integer, target, intent(out) :: info
+      real(kind=sp), dimension(:, :), target, intent(inout) :: a, z
+      real(kind=sp), dimension(:), target, intent(out) :: w
+
+      interface
+         subroutine dlaf_pssyevd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
+            bind(C, name='dlaf_pssyevd_partial_spectrum')
+
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
+            type(c_ptr), value :: a_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pssyevd_ps_c
+      end interface
+
+      info = -1
+
+      call dlaf_pssyevd_ps_c(iachar(uplo, c_signed_char), n, &
+                             c_loc(a(1, 1)), ia, ja, desca, &
+                             c_loc(w(1)), &
+                             c_loc(z(1, 1)), iz, jz, descz, &
+                             il - 1, iu, &
+                             c_loc(info) &
+                             )
+
+   end subroutine dlaf_pssyevd_partial_spectrum
+
    subroutine dlaf_pdsyevd(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, info)
       !! Eigensolver for a distributed double-precision real symmetric matrix \(\mathbf{A}\)
       !! {!docs/snippets/note-host-matrix.md!}
@@ -383,6 +426,42 @@ contains
                           )
 
    end subroutine dlaf_pdsyevd
+
+   subroutine dlaf_pdsyevd_partial_spectrum(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, il, iu, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, iz, jz
+      integer(kind=i8), intent(in) :: il, iu
+      integer, dimension(9), intent(in) :: desca, descz
+      integer, target, intent(out) :: info
+      real(kind=dp), dimension(:, :), target, intent(inout) :: a, z
+      real(kind=dp), dimension(:), target, intent(out) :: w
+
+      interface
+         subroutine dlaf_pdsyevd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
+            bind(C, name='dlaf_pdsyevd_partial_spectrum')
+
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
+            type(c_ptr), value :: a_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pdsyevd_ps_c
+      end interface
+
+      info = -1
+
+      call dlaf_pdsyevd_ps_c(iachar(uplo, c_signed_char), n, &
+                             c_loc(a(1, 1)), ia, ja, desca, &
+                             c_loc(w(1)), &
+                             c_loc(z(1, 1)), iz, jz, descz, &
+                             il - 1, iu, &
+                             c_loc(info) &
+                             )
+
+   end subroutine dlaf_pdsyevd_partial_spectrum
 
    subroutine dlaf_pcheevd(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, info)
       !! Eigensolver for a distributed single-precision complex Hermitian matrix \(\mathbf{A}\)
@@ -439,6 +518,42 @@ contains
 
    end subroutine dlaf_pcheevd
 
+   subroutine dlaf_pcheevd_partial_spectrum(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, il, iu, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, iz, jz
+      integer(kind=i8), intent(in) :: il, iu
+      integer, dimension(9), intent(in) :: desca, descz
+      integer, target, intent(out) :: info
+      complex(kind=sp), dimension(:, :), target, intent(inout) :: a, z
+      real(kind=sp), dimension(:), target, intent(out) :: w
+
+      interface
+         subroutine dlaf_pcheevd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
+            bind(C, name='dlaf_pcheevd_partial_spectrum')
+
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
+            type(c_ptr), value :: a_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pcheevd_ps_c
+      end interface
+
+      info = -1
+
+      call dlaf_pcheevd_ps_c(iachar(uplo, c_signed_char), n, &
+                             c_loc(a(1, 1)), ia, ja, desca, &
+                             c_loc(w(1)), &
+                             c_loc(z(1, 1)), iz, jz, descz, &
+                             il - 1, iu, &
+                             c_loc(info) &
+                             )
+
+   end subroutine dlaf_pcheevd_partial_spectrum
+
    subroutine dlaf_pzheevd(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, info)
       !! Eigensolver for a distributed double-precision complex Hermitian matrix \(\mathbf{A}\)
       !! {!docs/snippets/note-host-matrix.md!}
@@ -493,6 +608,42 @@ contains
                           )
 
    end subroutine dlaf_pzheevd
+
+   subroutine dlaf_pzheevd_partial_spectrum(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, il, iu, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, iz, jz
+      integer(kind=i8), intent(in) :: il, iu
+      integer, dimension(9), intent(in) :: desca, descz
+      integer, target, intent(out) :: info
+      complex(kind=dp), dimension(:, :), target, intent(inout) :: a, z
+      real(kind=dp), dimension(:), target, intent(out) :: w
+
+      interface
+         subroutine dlaf_pzheevd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
+            bind(C, name='dlaf_pzheevd_partial_spectrum')
+
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
+            type(c_ptr), value :: a_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pzheevd_ps_c
+      end interface
+
+      info = -1
+
+      call dlaf_pzheevd_ps_c(iachar(uplo, c_signed_char), n, &
+                             c_loc(a(1, 1)), ia, ja, desca, &
+                             c_loc(w(1)), &
+                             c_loc(z(1, 1)), iz, jz, descz, &
+                             il - 1, iu, &
+                             c_loc(info) &
+                             )
+
+   end subroutine dlaf_pzheevd_partial_spectrum
 
    subroutine dlaf_pssygvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       !! Generalized eigensolver for a distributed single-precision symmetric-definite eigenproblem of the form
@@ -558,6 +709,43 @@ contains
                           )
 
    end subroutine dlaf_pssygvd
+
+   subroutine dlaf_pssygvd_partial_spectrum(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
+      integer(kind=i8), intent(in) :: il, iu
+      integer, dimension(9), intent(in) :: desca, descb, descz
+      integer, target, intent(out) :: info
+      real(kind=sp), dimension(:, :), target, intent(inout) :: a, b, z
+      real(kind=sp), dimension(:), target, intent(out) :: w
+
+      interface
+    subroutine dlaf_pssygvd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
+            bind(C, name='dlaf_pssygvd_partial_spectrum')
+
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
+            type(c_ptr), value :: a_, b_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pssygvd_ps_c
+      end interface
+
+      info = -1
+
+      call dlaf_pssygvd_ps_c(iachar(uplo, c_signed_char), n, &
+                             c_loc(a(1, 1)), ia, ja, desca, &
+                             c_loc(b(1, 1)), ib, jb, descb, &
+                             c_loc(w(1)), &
+                             c_loc(z(1, 1)), iz, jz, descz, &
+                             il - 1, iu, &
+                             c_loc(info) &
+                             )
+
+   end subroutine dlaf_pssygvd_partial_spectrum
 
    subroutine dlaf_pssygvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       !! Generalized eigensolver for a distributed single-precision symmetric-definite eigenproblem of the form
@@ -627,6 +815,45 @@ contains
 
    end subroutine dlaf_pssygvd_factorized
 
+ subroutine dlaf_pssygvd_partial_spectrum_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
+      integer(kind=i8), intent(in) :: il, iu
+      integer, dimension(9), intent(in) :: desca, descb, descz
+      integer, target, intent(out) :: info
+      real(kind=sp), dimension(:, :), target, intent(inout) :: a, b, z
+      real(kind=sp), dimension(:), target, intent(out) :: w
+
+      interface
+         subroutine dlaf_pssygvd_ps_factorized_c( &
+            uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_ &
+            ) &
+            bind(C, name='dlaf_pssygvd_partial_spectrum_factorized')
+
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
+            type(c_ptr), value :: a_, b_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pssygvd_ps_factorized_c
+      end interface
+
+      info = -1
+
+      call dlaf_pssygvd_ps_factorized_c(iachar(uplo, c_signed_char), n, &
+                                        c_loc(a(1, 1)), ia, ja, desca, &
+                                        c_loc(b(1, 1)), ib, jb, descb, &
+                                        c_loc(w(1)), &
+                                        c_loc(z(1, 1)), iz, jz, descz, &
+                                        il - 1, iu, &
+                                        c_loc(info) &
+                                        )
+
+   end subroutine dlaf_pssygvd_partial_spectrum_factorized
+
    subroutine dlaf_pdsygvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       !! Generalized eigensolver for a distributed double-precision symmetric-definite eigenproblem of the form
       !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
@@ -691,6 +918,43 @@ contains
                           )
 
    end subroutine dlaf_pdsygvd
+
+   subroutine dlaf_pdsygvd_partial_spectrum(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
+      integer(kind=i8), intent(in) :: il, iu
+      integer, dimension(9), intent(in) :: desca, descb, descz
+      integer, target, intent(out) :: info
+      real(kind=dp), dimension(:, :), target, intent(inout) :: a, b, z
+      real(kind=dp), dimension(:), target, intent(out) :: w
+
+      interface
+    subroutine dlaf_pdsygvd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
+            bind(C, name='dlaf_pdsygvd_partial_spectrum')
+
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
+            type(c_ptr), value :: a_, b_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pdsygvd_ps_c
+      end interface
+
+      info = -1
+
+      call dlaf_pdsygvd_ps_c(iachar(uplo, c_signed_char), n, &
+                             c_loc(a(1, 1)), ia, ja, desca, &
+                             c_loc(b(1, 1)), ib, jb, descb, &
+                             c_loc(w(1)), &
+                             c_loc(z(1, 1)), iz, jz, descz, &
+                             il - 1, iu, &
+                             c_loc(info) &
+                             )
+
+   end subroutine dlaf_pdsygvd_partial_spectrum
 
    subroutine dlaf_pdsygvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       !! Generalized eigensolver for a distributed double-precision symmetric-definite eigenproblem of the form
@@ -760,6 +1024,45 @@ contains
 
    end subroutine dlaf_pdsygvd_factorized
 
+ subroutine dlaf_pdsygvd_partial_spectrum_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
+      integer(kind=i8), intent(in) :: il, iu
+      integer, dimension(9), intent(in) :: desca, descb, descz
+      integer, target, intent(out) :: info
+      real(kind=dp), dimension(:, :), target, intent(inout) :: a, b, z
+      real(kind=dp), dimension(:), target, intent(out) :: w
+
+      interface
+         subroutine dlaf_pdsygvd_ps_factorized_c( &
+            uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_ &
+            ) &
+            bind(C, name='dlaf_pdsygvd_partial_spectrum_factorized')
+
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
+            type(c_ptr), value :: a_, b_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pdsygvd_ps_factorized_c
+      end interface
+
+      info = -1
+
+      call dlaf_pdsygvd_ps_factorized_c(iachar(uplo, c_signed_char), n, &
+                                        c_loc(a(1, 1)), ia, ja, desca, &
+                                        c_loc(b(1, 1)), ib, jb, descb, &
+                                        c_loc(w(1)), &
+                                        c_loc(z(1, 1)), iz, jz, descz, &
+                                        il - 1, iu, &
+                                        c_loc(info) &
+                                        )
+
+   end subroutine dlaf_pdsygvd_partial_spectrum_factorized
+
    subroutine dlaf_pchegvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       !! Generalized eigensolver for a distributed single-precision Hermitian eigenproblem of the form
       !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
@@ -824,6 +1127,43 @@ contains
                           )
 
    end subroutine dlaf_pchegvd
+
+   subroutine dlaf_pchegvd_partial_spectrum(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
+      integer(kind=i8), intent(in) :: il, iu
+      integer, dimension(9), intent(in) :: desca, descb, descz
+      integer, target, intent(out) :: info
+      complex(kind=sp), dimension(:, :), target, intent(inout) :: a, b, z
+      real(kind=sp), dimension(:), target, intent(out) :: w
+
+      interface
+    subroutine dlaf_pchegvd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
+            bind(C, name='dlaf_pchegvd_partial_spectrum')
+
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
+            type(c_ptr), value :: a_, b_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pchegvd_ps_c
+      end interface
+
+      info = -1
+
+      call dlaf_pchegvd_ps_c(iachar(uplo, c_signed_char), n, &
+                             c_loc(a(1, 1)), ia, ja, desca, &
+                             c_loc(b(1, 1)), ib, jb, descb, &
+                             c_loc(w(1)), &
+                             c_loc(z(1, 1)), iz, jz, descz, &
+                             il - 1, iu, &
+                             c_loc(info) &
+                             )
+
+   end subroutine dlaf_pchegvd_partial_spectrum
 
    subroutine dlaf_pchegvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       !! Generalized eigensolver for a distributed single-precision Hermitian eigenproblem of the form
@@ -893,6 +1233,45 @@ contains
 
    end subroutine dlaf_pchegvd_factorized
 
+ subroutine dlaf_pchegvd_partial_spectrum_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
+      integer(kind=i8), intent(in) :: il, iu
+      integer, dimension(9), intent(in) :: desca, descb, descz
+      integer, target, intent(out) :: info
+      complex(kind=sp), dimension(:, :), target, intent(inout) :: a, b, z
+      real(kind=sp), dimension(:), target, intent(out) :: w
+
+      interface
+         subroutine dlaf_pchegvd_ps_factorized_c( &
+            uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_ &
+            ) &
+            bind(C, name='dlaf_pchegvd_partial_spectrum_factorized')
+
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
+            type(c_ptr), value :: a_, b_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pchegvd_ps_factorized_c
+      end interface
+
+      info = -1
+
+      call dlaf_pchegvd_ps_factorized_c(iachar(uplo, c_signed_char), n, &
+                                        c_loc(a(1, 1)), ia, ja, desca, &
+                                        c_loc(b(1, 1)), ib, jb, descb, &
+                                        c_loc(w(1)), &
+                                        c_loc(z(1, 1)), iz, jz, descz, &
+                                        il - 1, iu, &
+                                        c_loc(info) &
+                                        )
+
+   end subroutine dlaf_pchegvd_partial_spectrum_factorized
+
    subroutine dlaf_pzhegvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       !! Generalized eigensolver for a distributed double-precision Hermitian eigenproblem of the form
       !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
@@ -957,6 +1336,45 @@ contains
                           )
 
    end subroutine dlaf_pzhegvd
+
+   subroutine dlaf_pzhegvd_partial_spectrum(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
+      integer(kind=i8), intent(in) :: il, iu
+      integer, dimension(9), intent(in) :: desca, descb, descz
+      integer, target, intent(out) :: info
+      complex(kind=dp), dimension(:, :), target, intent(inout) :: a, b, z
+      real(kind=dp), dimension(:), target, intent(out) :: w
+
+      interface
+         subroutine dlaf_pzhegvd_ps_c( &
+            uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_ &
+            ) &
+            bind(C, name='dlaf_pzhegvd_partial_spectrum')
+
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
+            type(c_ptr), value :: a_, b_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pzhegvd_ps_c
+      end interface
+
+      info = -1
+
+      call dlaf_pzhegvd_ps_c(iachar(uplo, c_signed_char), n, &
+                             c_loc(a(1, 1)), ia, ja, desca, &
+                             c_loc(b(1, 1)), ib, jb, descb, &
+                             c_loc(w(1)), &
+                             c_loc(z(1, 1)), iz, jz, descz, &
+                             il - 1, iu, &
+                             c_loc(info) &
+                             )
+
+   end subroutine dlaf_pzhegvd_partial_spectrum
 
    subroutine dlaf_pzhegvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
       !! Generalized eigensolver for a distributed double-precision Hermitian eigenproblem of the form
@@ -1025,5 +1443,46 @@ contains
                                      )
 
    end subroutine dlaf_pzhegvd_factorized
+
+   subroutine dlaf_pzhegvd_partial_spectrum_factorized( &
+      uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info &
+      )
+      character, intent(in) :: uplo
+      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
+      integer(kind=i8), intent(in) :: il, iu
+      integer, dimension(9), intent(in) :: desca, descb, descz
+      integer, target, intent(out) :: info
+      complex(kind=dp), dimension(:, :), target, intent(inout) :: a, b, z
+      real(kind=dp), dimension(:), target, intent(out) :: w
+
+      interface
+         subroutine dlaf_pzhegvd_ps_factorized_c( &
+            uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_ &
+            ) &
+            bind(C, name='dlaf_pzhegvd_partial_spectrum_factorized')
+
+            import :: c_int, c_ptr, c_signed_char, c_ptrdiff_t
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: n_, ia_, ja_, ib_, jb_, iz_, jz_
+            integer(kind=c_ptrdiff_t), value :: il_, iu_
+            type(c_ptr), value :: a_, b_, w_, z_
+            integer(kind=c_int), dimension(9) :: desca_, descb_, descz_
+            type(c_ptr), value :: info_
+         end subroutine dlaf_pzhegvd_ps_factorized_c
+      end interface
+
+      info = -1
+
+      call dlaf_pzhegvd_ps_factorized_c(iachar(uplo, c_signed_char), n, &
+                                        c_loc(a(1, 1)), ia, ja, desca, &
+                                        c_loc(b(1, 1)), ib, jb, descb, &
+                                        c_loc(w(1)), &
+                                        c_loc(z(1, 1)), iz, jz, descz, &
+                                        il - 1, iu, &
+                                        c_loc(info) &
+                                        )
+
+   end subroutine dlaf_pzhegvd_partial_spectrum_factorized
 
 end module dlaf_fortran
