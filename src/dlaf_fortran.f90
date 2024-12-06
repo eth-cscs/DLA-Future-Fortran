@@ -9,6 +9,7 @@
 !
 
 module dlaf_fortran
+   !! DLA-Future Fortran interface
 
    use iso_fortran_env, only: dp => real64, sp => real32, i8 => int64
 
@@ -282,7 +283,7 @@ contains
    end subroutine dlaf_pzpotrf
 
    subroutine dlaf_pssyevd(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, info)
-      !! Eigensolver for a distributed single-precision real symmetric matrix \(\mathbf{A}\)
+      !! {!docs/snippets/pssyevd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -337,7 +338,7 @@ contains
    end subroutine dlaf_pssyevd
 
    subroutine dlaf_pssyevd_partial_spectrum(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, il, iu, info)
-      !! Eigensolver for a distributed single-precision real symmetric matrix \(\mathbf{A}\)
+      !! {!docs/snippets/pssyevd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -398,7 +399,7 @@ contains
    end subroutine dlaf_pssyevd_partial_spectrum
 
    subroutine dlaf_pdsyevd(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, info)
-      !! Eigensolver for a distributed double-precision real symmetric matrix \(\mathbf{A}\)
+      !! {!docs/snippets/pdsyevd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -453,7 +454,7 @@ contains
    end subroutine dlaf_pdsyevd
 
    subroutine dlaf_pdsyevd_partial_spectrum(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, il, iu, info)
-      !! Eigensolver for a distributed double-precision real symmetric matrix \(\mathbf{A}\)
+      !! {!docs/snippets/pdsyevd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -514,7 +515,7 @@ contains
    end subroutine dlaf_pdsyevd_partial_spectrum
 
    subroutine dlaf_pcheevd(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, info)
-      !! Eigensolver for a distributed single-precision complex Hermitian matrix \(\mathbf{A}\)
+      !! {!docs/snippets/pcheevd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -569,7 +570,7 @@ contains
    end subroutine dlaf_pcheevd
 
    subroutine dlaf_pcheevd_partial_spectrum(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, il, iu, info)
-      !! Eigensolver for a distributed single-precision complex Hermitian matrix \(\mathbf{A}\)
+      !! {!docs/snippets/pcheevd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -630,7 +631,7 @@ contains
    end subroutine dlaf_pcheevd_partial_spectrum
 
    subroutine dlaf_pzheevd(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, info)
-      !! Eigensolver for a distributed double-precision complex Hermitian matrix \(\mathbf{A}\)
+      !! {!docs/snippets/pzheevd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -685,7 +686,7 @@ contains
    end subroutine dlaf_pzheevd
 
    subroutine dlaf_pzheevd_partial_spectrum(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, il, iu, info)
-      !! Eigensolver for a distributed double-precision complex Hermitian matrix \(\mathbf{A}\)
+      !! {!docs/snippets/pzheevd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -746,8 +747,7 @@ contains
    end subroutine dlaf_pzheevd_partial_spectrum
 
    subroutine dlaf_pssygvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
-      !! Generalized eigensolver for a distributed single-precision symmetric-definite eigenproblem of the form
-      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/pssygvd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -811,8 +811,7 @@ contains
    end subroutine dlaf_pssygvd
 
    subroutine dlaf_pssygvd_partial_spectrum(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
-      !! Generalized eigensolver for a distributed single-precision symmetric-definite eigenproblem of the form
-      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/pssygvd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -882,8 +881,7 @@ contains
    end subroutine dlaf_pssygvd_partial_spectrum
 
    subroutine dlaf_pssygvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
-      !! Generalized eigensolver for a distributed single-precision symmetric-definite eigenproblem of the form
-      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/pssygvd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -950,8 +948,7 @@ contains
    end subroutine dlaf_pssygvd_factorized
 
  subroutine dlaf_pssygvd_partial_spectrum_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
-      !! Generalized eigensolver for a distributed single-precision symmetric-definite eigenproblem of the form
-      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/pssygvd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -1024,8 +1021,7 @@ contains
    end subroutine dlaf_pssygvd_partial_spectrum_factorized
 
    subroutine dlaf_pdsygvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
-      !! Generalized eigensolver for a distributed double-precision symmetric-definite eigenproblem of the form
-      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/pdsygvd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -1089,8 +1085,7 @@ contains
    end subroutine dlaf_pdsygvd
 
    subroutine dlaf_pdsygvd_partial_spectrum(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
-      !! Generalized eigensolver for a distributed double-precision symmetric-definite eigenproblem of the form
-      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/pdsygvd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -1160,8 +1155,7 @@ contains
    end subroutine dlaf_pdsygvd_partial_spectrum
 
    subroutine dlaf_pdsygvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
-      !! Generalized eigensolver for a distributed double-precision symmetric-definite eigenproblem of the form
-      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/pdsygvd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -1228,8 +1222,7 @@ contains
    end subroutine dlaf_pdsygvd_factorized
 
  subroutine dlaf_pdsygvd_partial_spectrum_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
-      !! Generalized eigensolver for a distributed double-precision symmetric-definite eigenproblem of the form
-      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/pdsygvd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -1302,8 +1295,7 @@ contains
    end subroutine dlaf_pdsygvd_partial_spectrum_factorized
 
    subroutine dlaf_pchegvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
-      !! Generalized eigensolver for a distributed single-precision Hermitian eigenproblem of the form
-      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/pchegvd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -1367,8 +1359,7 @@ contains
    end subroutine dlaf_pchegvd
 
    subroutine dlaf_pchegvd_partial_spectrum(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
-      !! Generalized eigensolver for a distributed single-precision Hermitian eigenproblem of the form
-      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/pchegvd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -1438,8 +1429,7 @@ contains
    end subroutine dlaf_pchegvd_partial_spectrum
 
    subroutine dlaf_pchegvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
-      !! Generalized eigensolver for a distributed single-precision Hermitian eigenproblem of the form
-      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/pchegvd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -1506,8 +1496,7 @@ contains
    end subroutine dlaf_pchegvd_factorized
 
  subroutine dlaf_pchegvd_partial_spectrum_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
-      !! Generalized eigensolver for a distributed single-precision Hermitian eigenproblem of the form
-      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/pchegvd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -1580,8 +1569,7 @@ contains
    end subroutine dlaf_pchegvd_partial_spectrum_factorized
 
    subroutine dlaf_pzhegvd(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
-      !! Generalized eigensolver for a distributed double-precision Hermitian eigenproblem of the form
-      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/pzhegvd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -1645,8 +1633,7 @@ contains
    end subroutine dlaf_pzhegvd
 
    subroutine dlaf_pzhegvd_partial_spectrum(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
-      !! Generalized eigensolver for a distributed double-precision Hermitian eigenproblem of the form
-      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/pzhegvd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -1718,8 +1705,7 @@ contains
    end subroutine dlaf_pzhegvd_partial_spectrum
 
    subroutine dlaf_pzhegvd_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, info)
-      !! Generalized eigensolver for a distributed double-precision Hermitian eigenproblem of the form
-      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/pzhegvd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
@@ -1788,8 +1774,7 @@ contains
    subroutine dlaf_pzhegvd_partial_spectrum_factorized( &
       uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info &
       )
-      !! Generalized eigensolver for a distributed double-precision Hermitian eigenproblem of the form
-      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/pzhegvd.md!}
       !! {!docs/snippets/note-host-matrix.md!}
       !! {!docs/snippets/note-local-evals.md!}
       !! {!docs/snippets/note-pika.md!}
