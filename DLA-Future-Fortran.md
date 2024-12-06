@@ -1,6 +1,6 @@
 ---
 project: DLA-Future-Fortran
-summary: Fortan interface for DLA-Future
+summary: Fortran interface for DLA-Future
 project_github: https://github.com/eth-cscs/DLA-Future-Fortran
 project_download: https://github.com/eth-cscs/DLA-Future-Fortran/releases
 print_creation_date: true
