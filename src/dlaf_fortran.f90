@@ -365,7 +365,7 @@ contains
       !! {!docs/snippets/descz.md!}
       integer(kind=i8), intent(in) :: il
       !! {!docs/snippets/il.md!}
-      integer, intent(in) :: iu
+      integer(kind=i8), intent(in) :: iu
       !! {!docs/snippets/iu.md!}
       integer, target, intent(out) :: info
       !! {!docs/snippets/info.md!}
@@ -453,13 +453,38 @@ contains
    end subroutine dlaf_pdsyevd
 
    subroutine dlaf_pdsyevd_partial_spectrum(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, il, iu, info)
+      !! Eigensolver for a distributed double-precision real symmetric matrix \(\mathbf{A}\)
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, iz, jz
-      integer(kind=i8), intent(in) :: il, iu
-      integer, dimension(9), intent(in) :: desca, descz
-      integer, target, intent(out) :: info
-      real(kind=dp), dimension(:, :), target, intent(inout) :: a, z
+      !! {!docs/snippets/uplo-w-note.md!}
+      integer, intent(in) :: n
+      !! {!docs/snippets/n.md!}
+      real(kind=dp), dimension(:, :), target, intent(inout) :: a
+      !! {!docs/snippets/a.md!}
+      integer, intent(in) :: ia
+      !! {!docs/snippets/ia.md!}
+      integer, intent(in) :: ja
+      !! {!docs/snippets/ja.md!}
+      integer, dimension(9), intent(in) :: desca
+      !! {!docs/snippets/desca.md!}
       real(kind=dp), dimension(:), target, intent(out) :: w
+      !! {!docs/snippets/w.md!}
+      real(kind=dp), dimension(:, :), target, intent(inout) :: z
+      !! {!docs/snippets/z.md!}
+      integer, intent(in) :: iz
+      !! {!docs/snippets/iz.md!}
+      integer, intent(in) :: jz
+      !! {!docs/snippets/jz.md!}
+      integer, dimension(9), intent(in) :: descz
+      !! {!docs/snippets/descz.md!}
+      integer(kind=i8), intent(in) :: il
+      !! {!docs/snippets/il.md!}
+      integer(kind=i8), intent(in) :: iu
+      !! {!docs/snippets/iu.md!}
+      integer, target, intent(out) :: info
+      !! {!docs/snippets/info.md!}
 
       interface
          subroutine dlaf_pdsyevd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
@@ -544,13 +569,38 @@ contains
    end subroutine dlaf_pcheevd
 
    subroutine dlaf_pcheevd_partial_spectrum(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, il, iu, info)
+      !! Eigensolver for a distributed single-precision complex Hermitian matrix \(\mathbf{A}\)
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, iz, jz
-      integer(kind=i8), intent(in) :: il, iu
-      integer, dimension(9), intent(in) :: desca, descz
-      integer, target, intent(out) :: info
-      complex(kind=sp), dimension(:, :), target, intent(inout) :: a, z
+      !! {!docs/snippets/uplo-w-note.md!}
+      integer, intent(in) :: n
+      !! {!docs/snippets/n.md!}
+      complex(kind=sp), dimension(:, :), target, intent(inout) :: a
+      !! {!docs/snippets/a.md!}
+      integer, intent(in) :: ia
+      !! {!docs/snippets/ia.md!}
+      integer, intent(in) :: ja
+      !! {!docs/snippets/ja.md!}
+      integer, dimension(9), intent(in) :: desca
+      !! {!docs/snippets/desca.md!}
       real(kind=sp), dimension(:), target, intent(out) :: w
+      !! {!docs/snippets/w.md!}
+      complex(kind=sp), dimension(:, :), target, intent(inout) :: z
+      !! {!docs/snippets/z.md!}
+      integer, intent(in) :: iz
+      !! {!docs/snippets/iz.md!}
+      integer, intent(in) :: jz
+      !! {!docs/snippets/jz.md!}
+      integer, dimension(9), intent(in) :: descz
+      !! {!docs/snippets/descz.md!}
+      integer(kind=i8), intent(in) :: il
+      !! {!docs/snippets/il.md!}
+      integer(kind=i8), intent(in) :: iu
+      !! {!docs/snippets/iu.md!}
+      integer, target, intent(out) :: info
+      !! {!docs/snippets/info.md!}
 
       interface
          subroutine dlaf_pcheevd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
@@ -635,13 +685,38 @@ contains
    end subroutine dlaf_pzheevd
 
    subroutine dlaf_pzheevd_partial_spectrum(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, il, iu, info)
+      !! Eigensolver for a distributed double-precision complex Hermitian matrix \(\mathbf{A}\)
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, iz, jz
-      integer(kind=i8), intent(in) :: il, iu
-      integer, dimension(9), intent(in) :: desca, descz
-      integer, target, intent(out) :: info
-      complex(kind=dp), dimension(:, :), target, intent(inout) :: a, z
+      !! {!docs/snippets/uplo-w-note.md!}
+      integer, intent(in) :: n
+      !! {!docs/snippets/n.md!}
+      complex(kind=dp), dimension(:, :), target, intent(inout) :: a
+      !! {!docs/snippets/a.md!}
+      integer, intent(in) :: ia
+      !! {!docs/snippets/ia.md!}
+      integer, intent(in) :: ja
+      !! {!docs/snippets/ja.md!}
+      integer, dimension(9), intent(in) :: desca
+      !! {!docs/snippets/desca.md!}
       real(kind=dp), dimension(:), target, intent(out) :: w
+      !! {!docs/snippets/w.md!}
+      complex(kind=dp), dimension(:, :), target, intent(inout) :: z
+      !! {!docs/snippets/z.md!}
+      integer, intent(in) :: iz
+      !! {!docs/snippets/iz.md!}
+      integer, intent(in) :: jz
+      !! {!docs/snippets/jz.md!}
+      integer, dimension(9), intent(in) :: descz
+      !! {!docs/snippets/descz.md!}
+      integer(kind=i8), intent(in) :: il
+      !! {!docs/snippets/il.md!}
+      integer(kind=i8), intent(in) :: iu
+      !! {!docs/snippets/iu.md!}
+      integer, target, intent(out) :: info
+      !! {!docs/snippets/info.md!}
 
       interface
          subroutine dlaf_pzheevd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
@@ -736,13 +811,47 @@ contains
    end subroutine dlaf_pssygvd
 
    subroutine dlaf_pssygvd_partial_spectrum(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
+      !! Generalized eigensolver for a distributed single-precision symmetric-definite eigenproblem of the form
+      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
-      integer(kind=i8), intent(in) :: il, iu
-      integer, dimension(9), intent(in) :: desca, descb, descz
-      integer, target, intent(out) :: info
-      real(kind=sp), dimension(:, :), target, intent(inout) :: a, b, z
+      !! {!docs/snippets/uplo-w-note.md!}
+      integer, intent(in) :: n
+      !! {!docs/snippets/n.md!}
+      real(kind=sp), dimension(:, :), target, intent(inout) :: a
+      !! {!docs/snippets/a.md!}
+      integer, intent(in) :: ia
+      !! {!docs/snippets/ia.md!}
+      integer, intent(in) :: ja
+      !! {!docs/snippets/ja.md!}
+      integer, dimension(9), intent(in) :: desca
+      !! {!docs/snippets/desca.md!}
+      real(kind=sp), dimension(:, :), target, intent(inout) :: b
+      !! {!docs/snippets/b.md!}
+      integer, intent(in) :: ib
+      !! {!docs/snippets/ib.md!}
+      integer, intent(in) :: jb
+      !! {!docs/snippets/jb.md!}
+      integer, dimension(9), intent(in) :: descb
+      !! {!docs/snippets/descb.md!}
       real(kind=sp), dimension(:), target, intent(out) :: w
+      !! {!docs/snippets/w.md!}
+      real(kind=sp), dimension(:, :), target, intent(inout) :: z
+      !! {!docs/snippets/z.md!}
+      integer, intent(in) :: iz
+      !! {!docs/snippets/iz.md!}
+      integer, intent(in) :: jz
+      !! {!docs/snippets/jz.md!}
+      integer, dimension(9), intent(in) :: descz
+      !! {!docs/snippets/descz.md!}
+      integer(kind=i8), intent(in) :: il
+      !! {!docs/snippets/il.md!}
+      integer(kind=i8), intent(in) :: iu
+      !! {!docs/snippets/iu.md!}
+      integer, target, intent(out) :: info
+      !! {!docs/snippets/info.md!}
 
       interface
     subroutine dlaf_pssygvd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
@@ -841,13 +950,48 @@ contains
    end subroutine dlaf_pssygvd_factorized
 
  subroutine dlaf_pssygvd_partial_spectrum_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
+      !! Generalized eigensolver for a distributed single-precision symmetric-definite eigenproblem of the form
+      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
+      !! {!docs/snippets/note-b-factorized.md!}
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
-      integer(kind=i8), intent(in) :: il, iu
-      integer, dimension(9), intent(in) :: desca, descb, descz
-      integer, target, intent(out) :: info
-      real(kind=sp), dimension(:, :), target, intent(inout) :: a, b, z
+      !! {!docs/snippets/uplo-w-note.md!}
+      integer, intent(in) :: n
+      !! {!docs/snippets/n.md!}
+      real(kind=sp), dimension(:, :), target, intent(inout) :: a
+      !! {!docs/snippets/a.md!}
+      integer, intent(in) :: ia
+      !! {!docs/snippets/ia.md!}
+      integer, intent(in) :: ja
+      !! {!docs/snippets/ja.md!}
+      integer, dimension(9), intent(in) :: desca
+      !! {!docs/snippets/desca.md!}
+      real(kind=sp), dimension(:, :), target, intent(inout) :: b
+      !! {!docs/snippets/b.md!}
+      integer, intent(in) :: ib
+      !! {!docs/snippets/ib.md!}
+      integer, intent(in) :: jb
+      !! {!docs/snippets/jb.md!}
+      integer, dimension(9), intent(in) :: descb
+      !! {!docs/snippets/descb.md!}
       real(kind=sp), dimension(:), target, intent(out) :: w
+      !! {!docs/snippets/w.md!}
+      real(kind=sp), dimension(:, :), target, intent(inout) :: z
+      !! {!docs/snippets/z.md!}
+      integer, intent(in) :: iz
+      !! {!docs/snippets/iz.md!}
+      integer, intent(in) :: jz
+      !! {!docs/snippets/jz.md!}
+      integer, dimension(9), intent(in) :: descz
+      !! {!docs/snippets/descz.md!}
+      integer(kind=i8), intent(in) :: il
+      !! {!docs/snippets/il.md!}
+      integer(kind=i8), intent(in) :: iu
+      !! {!docs/snippets/iu.md!}
+      integer, target, intent(out) :: info
+      !! {!docs/snippets/info.md!}
 
       interface
          subroutine dlaf_pssygvd_ps_factorized_c( &
@@ -945,13 +1089,47 @@ contains
    end subroutine dlaf_pdsygvd
 
    subroutine dlaf_pdsygvd_partial_spectrum(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
+      !! Generalized eigensolver for a distributed double-precision symmetric-definite eigenproblem of the form
+      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
-      integer(kind=i8), intent(in) :: il, iu
-      integer, dimension(9), intent(in) :: desca, descb, descz
-      integer, target, intent(out) :: info
-      real(kind=dp), dimension(:, :), target, intent(inout) :: a, b, z
+      !! {!docs/snippets/uplo-w-note.md!}
+      integer, intent(in) :: n
+      !! {!docs/snippets/n.md!}
+      real(kind=dp), dimension(:, :), target, intent(inout) :: a
+      !! {!docs/snippets/a.md!}
+      integer, intent(in) :: ia
+      !! {!docs/snippets/ia.md!}
+      integer, intent(in) :: ja
+      !! {!docs/snippets/ja.md!}
+      integer, dimension(9), intent(in) :: desca
+      !! {!docs/snippets/desca.md!}
+      real(kind=dp), dimension(:, :), target, intent(inout) :: b
+      !! {!docs/snippets/b.md!}
+      integer, intent(in) :: ib
+      !! {!docs/snippets/ib.md!}
+      integer, intent(in) :: jb
+      !! {!docs/snippets/jb.md!}
+      integer, dimension(9), intent(in) :: descb
+      !! {!docs/snippets/descb.md!}
       real(kind=dp), dimension(:), target, intent(out) :: w
+      !! {!docs/snippets/w.md!}
+      real(kind=dp), dimension(:, :), target, intent(inout) :: z
+      !! {!docs/snippets/z.md!}
+      integer, intent(in) :: iz
+      !! {!docs/snippets/iz.md!}
+      integer, intent(in) :: jz
+      !! {!docs/snippets/jz.md!}
+      integer, dimension(9), intent(in) :: descz
+      !! {!docs/snippets/descz.md!}
+      integer(kind=i8), intent(in) :: il
+      !! {!docs/snippets/il.md!}
+      integer(kind=i8), intent(in) :: iu
+      !! {!docs/snippets/iu.md!}
+      integer, target, intent(out) :: info
+      !! {!docs/snippets/info.md!}
 
       interface
     subroutine dlaf_pdsygvd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
@@ -1050,13 +1228,48 @@ contains
    end subroutine dlaf_pdsygvd_factorized
 
  subroutine dlaf_pdsygvd_partial_spectrum_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
+      !! Generalized eigensolver for a distributed double-precision symmetric-definite eigenproblem of the form
+      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
+      !! {!docs/snippets/note-b-factorized.md!}
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
-      integer(kind=i8), intent(in) :: il, iu
-      integer, dimension(9), intent(in) :: desca, descb, descz
-      integer, target, intent(out) :: info
-      real(kind=dp), dimension(:, :), target, intent(inout) :: a, b, z
+      !! {!docs/snippets/uplo-w-note.md!}
+      integer, intent(in) :: n
+      !! {!docs/snippets/n.md!}
+      real(kind=dp), dimension(:, :), target, intent(inout) :: a
+      !! {!docs/snippets/a.md!}
+      integer, intent(in) :: ia
+      !! {!docs/snippets/ia.md!}
+      integer, intent(in) :: ja
+      !! {!docs/snippets/ja.md!}
+      integer, dimension(9), intent(in) :: desca
+      !! {!docs/snippets/desca.md!}
+      real(kind=dp), dimension(:, :), target, intent(inout) :: b
+      !! {!docs/snippets/b.md!}
+      integer, intent(in) :: ib
+      !! {!docs/snippets/ib.md!}
+      integer, intent(in) :: jb
+      !! {!docs/snippets/jb.md!}
+      integer, dimension(9), intent(in) :: descb
+      !! {!docs/snippets/descb.md!}
       real(kind=dp), dimension(:), target, intent(out) :: w
+      !! {!docs/snippets/w.md!}
+      real(kind=dp), dimension(:, :), target, intent(inout) :: z
+      !! {!docs/snippets/z.md!}
+      integer, intent(in) :: iz
+      !! {!docs/snippets/iz.md!}
+      integer, intent(in) :: jz
+      !! {!docs/snippets/jz.md!}
+      integer, dimension(9), intent(in) :: descz
+      !! {!docs/snippets/descz.md!}
+      integer(kind=i8), intent(in) :: il
+      !! {!docs/snippets/il.md!}
+      integer(kind=i8), intent(in) :: iu
+      !! {!docs/snippets/iu.md!}
+      integer, target, intent(out) :: info
+      !! {!docs/snippets/info.md!}
 
       interface
          subroutine dlaf_pdsygvd_ps_factorized_c( &
@@ -1154,13 +1367,47 @@ contains
    end subroutine dlaf_pchegvd
 
    subroutine dlaf_pchegvd_partial_spectrum(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
+      !! Generalized eigensolver for a distributed single-precision Hermitian eigenproblem of the form
+      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
-      integer(kind=i8), intent(in) :: il, iu
-      integer, dimension(9), intent(in) :: desca, descb, descz
-      integer, target, intent(out) :: info
-      complex(kind=sp), dimension(:, :), target, intent(inout) :: a, b, z
+      !! {!docs/snippets/uplo-w-note.md!}
+      integer, intent(in) :: n
+      !! {!docs/snippets/n.md!}
+      complex(kind=sp), dimension(:, :), target, intent(inout) :: a
+      !! {!docs/snippets/a.md!}
+      integer, intent(in) :: ia
+      !! {!docs/snippets/ia.md!}
+      integer, intent(in) :: ja
+      !! {!docs/snippets/ja.md!}
+      integer, dimension(9), intent(in) :: desca
+      !! {!docs/snippets/desca.md!}
+      complex(kind=sp), dimension(:, :), target, intent(inout) :: b
+      !! {!docs/snippets/b.md!}
+      integer, intent(in) :: ib
+      !! {!docs/snippets/ib.md!}
+      integer, intent(in) :: jb
+      !! {!docs/snippets/jb.md!}
+      integer, dimension(9), intent(in) :: descb
+      !! {!docs/snippets/descb.md!}
       real(kind=sp), dimension(:), target, intent(out) :: w
+      !! {!docs/snippets/w.md!}
+      complex(kind=sp), dimension(:, :), target, intent(inout) :: z
+      !! {!docs/snippets/z.md!}
+      integer, intent(in) :: iz
+      !! {!docs/snippets/iz.md!}
+      integer, intent(in) :: jz
+      !! {!docs/snippets/jz.md!}
+      integer, dimension(9), intent(in) :: descz
+      !! {!docs/snippets/descz.md!}
+      integer(kind=i8), intent(in) :: il
+      !! {!docs/snippets/il.md!}
+      integer(kind=i8), intent(in) :: iu
+      !! {!docs/snippets/iu.md!}
+      integer, target, intent(out) :: info
+      !! {!docs/snippets/info.md!}
 
       interface
     subroutine dlaf_pchegvd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, b_, ib_, jb_, descb_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
@@ -1259,13 +1506,48 @@ contains
    end subroutine dlaf_pchegvd_factorized
 
  subroutine dlaf_pchegvd_partial_spectrum_factorized(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
+      !! Generalized eigensolver for a distributed single-precision Hermitian eigenproblem of the form
+      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
+      !! {!docs/snippets/note-b-factorized.md!}
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
-      integer(kind=i8), intent(in) :: il, iu
-      integer, dimension(9), intent(in) :: desca, descb, descz
-      integer, target, intent(out) :: info
-      complex(kind=sp), dimension(:, :), target, intent(inout) :: a, b, z
+      !! {!docs/snippets/uplo-w-note.md!}
+      integer, intent(in) :: n
+      !! {!docs/snippets/n.md!}
+      complex(kind=sp), dimension(:, :), target, intent(inout) :: a
+      !! {!docs/snippets/a.md!}
+      integer, intent(in) :: ia
+      !! {!docs/snippets/ia.md!}
+      integer, intent(in) :: ja
+      !! {!docs/snippets/ja.md!}
+      integer, dimension(9), intent(in) :: desca
+      !! {!docs/snippets/desca.md!}
+      complex(kind=sp), dimension(:, :), target, intent(inout) :: b
+      !! {!docs/snippets/b.md!}
+      integer, intent(in) :: ib
+      !! {!docs/snippets/ib.md!}
+      integer, intent(in) :: jb
+      !! {!docs/snippets/jb.md!}
+      integer, dimension(9), intent(in) :: descb
+      !! {!docs/snippets/descb.md!}
       real(kind=sp), dimension(:), target, intent(out) :: w
+      !! {!docs/snippets/w.md!}
+      complex(kind=sp), dimension(:, :), target, intent(inout) :: z
+      !! {!docs/snippets/z.md!}
+      integer, intent(in) :: iz
+      !! {!docs/snippets/iz.md!}
+      integer, intent(in) :: jz
+      !! {!docs/snippets/jz.md!}
+      integer, dimension(9), intent(in) :: descz
+      !! {!docs/snippets/descz.md!}
+      integer(kind=i8), intent(in) :: il
+      !! {!docs/snippets/il.md!}
+      integer(kind=i8), intent(in) :: iu
+      !! {!docs/snippets/iu.md!}
+      integer, target, intent(out) :: info
+      !! {!docs/snippets/info.md!}
 
       interface
          subroutine dlaf_pchegvd_ps_factorized_c( &
@@ -1363,13 +1645,47 @@ contains
    end subroutine dlaf_pzhegvd
 
    subroutine dlaf_pzhegvd_partial_spectrum(uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info)
+      !! Generalized eigensolver for a distributed double-precision Hermitian eigenproblem of the form
+      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
-      integer(kind=i8), intent(in) :: il, iu
-      integer, dimension(9), intent(in) :: desca, descb, descz
-      integer, target, intent(out) :: info
-      complex(kind=dp), dimension(:, :), target, intent(inout) :: a, b, z
+      !! {!docs/snippets/uplo-w-note.md!}
+      integer, intent(in) :: n
+      !! {!docs/snippets/n.md!}
+      complex(kind=dp), dimension(:, :), target, intent(inout) :: a
+      !! {!docs/snippets/a.md!}
+      integer, intent(in) :: ia
+      !! {!docs/snippets/ia.md!}
+      integer, intent(in) :: ja
+      !! {!docs/snippets/ja.md!}
+      integer, dimension(9), intent(in) :: desca
+      !! {!docs/snippets/desca.md!}
+      complex(kind=dp), dimension(:, :), target, intent(inout) :: b
+      !! {!docs/snippets/b.md!}
+      integer, intent(in) :: ib
+      !! {!docs/snippets/ib.md!}
+      integer, intent(in) :: jb
+      !! {!docs/snippets/jb.md!}
+      integer, dimension(9), intent(in) :: descb
+      !! {!docs/snippets/descb.md!}
       real(kind=dp), dimension(:), target, intent(out) :: w
+      !! {!docs/snippets/w.md!}
+      complex(kind=dp), dimension(:, :), target, intent(inout) :: z
+      !! {!docs/snippets/z.md!}
+      integer, intent(in) :: iz
+      !! {!docs/snippets/iz.md!}
+      integer, intent(in) :: jz
+      !! {!docs/snippets/jz.md!}
+      integer, dimension(9), intent(in) :: descz
+      !! {!docs/snippets/descz.md!}
+      integer(kind=i8), intent(in) :: il
+      !! {!docs/snippets/il.md!}
+      integer(kind=i8), intent(in) :: iu
+      !! {!docs/snippets/iu.md!}
+      integer, target, intent(out) :: info
+      !! {!docs/snippets/info.md!}
 
       interface
          subroutine dlaf_pzhegvd_ps_c( &
@@ -1472,13 +1788,48 @@ contains
    subroutine dlaf_pzhegvd_partial_spectrum_factorized( &
       uplo, n, a, ia, ja, desca, b, ib, jb, descb, w, z, iz, jz, descz, il, iu, info &
       )
+      !! Generalized eigensolver for a distributed double-precision Hermitian eigenproblem of the form
+      !! \[\mathbf{A}\mathbf{x} = \lambda\mathbf{B}\mathbf{x}\]
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
+      !! {!docs/snippets/note-b-factorized.md!}
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, ib, jb, iz, jz
-      integer(kind=i8), intent(in) :: il, iu
-      integer, dimension(9), intent(in) :: desca, descb, descz
-      integer, target, intent(out) :: info
-      complex(kind=dp), dimension(:, :), target, intent(inout) :: a, b, z
+      !! {!docs/snippets/uplo-w-note.md!}
+      integer, intent(in) :: n
+      !! {!docs/snippets/n.md!}
+      complex(kind=dp), dimension(:, :), target, intent(inout) :: a
+      !! {!docs/snippets/a.md!}
+      integer, intent(in) :: ia
+      !! {!docs/snippets/ia.md!}
+      integer, intent(in) :: ja
+      !! {!docs/snippets/ja.md!}
+      integer, dimension(9), intent(in) :: desca
+      !! {!docs/snippets/desca.md!}
+      complex(kind=dp), dimension(:, :), target, intent(inout) :: b
+      !! {!docs/snippets/b.md!}
+      integer, intent(in) :: ib
+      !! {!docs/snippets/ib.md!}
+      integer, intent(in) :: jb
+      !! {!docs/snippets/jb.md!}
+      integer, dimension(9), intent(in) :: descb
+      !! {!docs/snippets/descb.md!}
       real(kind=dp), dimension(:), target, intent(out) :: w
+      !! {!docs/snippets/w.md!}
+      complex(kind=dp), dimension(:, :), target, intent(inout) :: z
+      !! {!docs/snippets/z.md!}
+      integer, intent(in) :: iz
+      !! {!docs/snippets/iz.md!}
+      integer, intent(in) :: jz
+      !! {!docs/snippets/jz.md!}
+      integer, dimension(9), intent(in) :: descz
+      !! {!docs/snippets/descz.md!}
+      integer(kind=i8), intent(in) :: il
+      !! {!docs/snippets/il.md!}
+      integer(kind=i8), intent(in) :: iu
+      !! {!docs/snippets/iu.md!}
+      integer, target, intent(out) :: info
+      !! {!docs/snippets/info.md!}
 
       interface
          subroutine dlaf_pzhegvd_ps_factorized_c( &
