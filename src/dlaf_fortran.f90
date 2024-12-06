@@ -337,13 +337,38 @@ contains
    end subroutine dlaf_pssyevd
 
    subroutine dlaf_pssyevd_partial_spectrum(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, il, iu, info)
+      !! Eigensolver for a distributed single-precision real symmetric matrix \(\mathbf{A}\)
+      !! {!docs/snippets/note-host-matrix.md!}
+      !! {!docs/snippets/note-local-evals.md!}
+      !! {!docs/snippets/note-pika.md!}
       character, intent(in) :: uplo
-      integer, intent(in) :: n, ia, ja, iz, jz
-      integer(kind=i8), intent(in) :: il, iu
-      integer, dimension(9), intent(in) :: desca, descz
-      integer, target, intent(out) :: info
-      real(kind=sp), dimension(:, :), target, intent(inout) :: a, z
+      !! {!docs/snippets/uplo-w-note.md!}
+      integer, intent(in) :: n
+      !! {!docs/snippets/n.md!}
+      real(kind=sp), dimension(:, :), target, intent(inout) :: a
+      !! {!docs/snippets/a.md!}
+      integer, intent(in) :: ia
+      !! {!docs/snippets/ia.md!}
+      integer, intent(in) :: ja
+      !! {!docs/snippets/ja.md!}
+      integer, dimension(9), intent(in) :: desca
+      !! {!docs/snippets/desca.md!}
       real(kind=sp), dimension(:), target, intent(out) :: w
+      !! {!docs/snippets/w.md!}
+      real(kind=sp), dimension(:, :), target, intent(inout) :: z
+      !! {!docs/snippets/z.md!}
+      integer, intent(in) :: iz
+      !! {!docs/snippets/iz.md!}
+      integer, intent(in) :: jz
+      !! {!docs/snippets/jz.md!}
+      integer, dimension(9), intent(in) :: descz
+      !! {!docs/snippets/descz.md!}
+      integer(kind=i8), intent(in) :: il
+      !! {!docs/snippets/il.md!}
+      integer, intent(in) :: iu
+      !! {!docs/snippets/iu.md!}
+      integer, target, intent(out) :: info
+      !! {!docs/snippets/info.md!}
 
       interface
          subroutine dlaf_pssyevd_ps_c(uplo_, n_, a_, ia_, ja_, desca_, w_, z_, iz_, jz_, descz_, il_, iu_, info_) &
