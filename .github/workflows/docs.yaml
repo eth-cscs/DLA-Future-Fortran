@@ -14,7 +14,6 @@ on:
   push:
     branches:
       - main
-      - "**" # TODO: Remove
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
   # Pull requests to main trigger this workflow
@@ -38,8 +37,7 @@ jobs:
           python -m ford --output_dir ghpages DLA-Future-Fortran.md
           echo {{ github.repository }}
       - name: Publish (main)
-        # TODO: Uncomment!
-        #if: "github.repository == 'eth-cscs/DLA-Future-Fortran' && github.ref == 'refs/heads/main'"
+        if: "github.repository == 'eth-cscs/DLA-Future-Fortran' && github.ref == 'refs/heads/main'"
         run: |
           COMMIT_MSG=`git log -n 1 --pretty=format:%s`
           mv ghpages main
