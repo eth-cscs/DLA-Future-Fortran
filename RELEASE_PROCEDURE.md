@@ -14,7 +14,7 @@ DLA-Future-Fortran follows [Semantic Versioning](https://semver.org).
 
 1. When making a major release, remove deprecated functionality if appropriate.
 
-1. Update the minimum required versions if necessary.
+1. Update the minimum required versions, if necessary. Remove usage of `@master` for DLA-Future in Spack package, if necessary.
 
 1. Ensure you have [GitHub CLI](https://cli.github.com) installed. Run `gh auth login` to authenticate with
    your GitHub account, or set the `GITHUB_TOKEN` to a token with `public_repo` access.
