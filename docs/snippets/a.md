@@ -1,1 +1,1 @@
-Local part of the global matrix \(\mathbf{A}\)
+Local part of the global matrix \(\mathbf{A}\).

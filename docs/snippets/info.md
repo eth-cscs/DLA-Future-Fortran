@@ -1,1 +1,1 @@
-`0` if the function completed successfully
+`0` if the function completed successfully.

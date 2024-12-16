@@ -1,1 +1,1 @@
-Local (non-distributed) vector of eigenvalues
+Local (non-distributed) vector of eigenvalues.

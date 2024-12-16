@@ -1,1 +1,1 @@
-ScaLAPACK descriptor of the global matrix \(\mathbf{Z}\)
+ScaLAPACK descriptor of the global matrix \(\mathbf{Z}\).

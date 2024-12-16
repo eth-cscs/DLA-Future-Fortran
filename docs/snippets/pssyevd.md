@@ -1,1 +1,1 @@
-Eigensolver for a distributed single-precision real symmetric matrix \(\mathbf{A}\)
+Eigensolver for a distributed single-precision real symmetric matrix \(\mathbf{A}\).
