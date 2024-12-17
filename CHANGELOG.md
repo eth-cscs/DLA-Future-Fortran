@@ -4,7 +4,7 @@
 
 ### Added
 
-* Documentation with [Ford] [PR #X]
+* Documentation with [Ford] [PR #8]
 * Calculation of partial eigenspectrum [PR #26]
 * `libs` property to Spack package [PR #25]
 * `pkgconfig` as build dependency to Spack package [PR #23]
