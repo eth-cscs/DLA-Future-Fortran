@@ -28,4 +28,6 @@ DLA-Future-Fortran follows [Semantic Versioning](https://semver.org).
    with local repository. Exclude blocks delimited by `# !!!` comments. These are only intended for the
    internal Spack package.
 
+1. Add release documentation to `DOCUMENTATION.md`.
+
 1. Delete your `GITHUB_TOKEN` if created only for the release.
