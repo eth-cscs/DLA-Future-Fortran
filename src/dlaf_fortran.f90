@@ -392,7 +392,7 @@ contains
                              c_loc(a(1, 1)), ia, ja, desca, &
                              c_loc(w(1)), &
                              c_loc(z(1, 1)), iz, jz, descz, &
-                             il - 1, iu, &
+                             il, iu, &
                              c_loc(info) &
                              )
 
@@ -508,7 +508,7 @@ contains
                              c_loc(a(1, 1)), ia, ja, desca, &
                              c_loc(w(1)), &
                              c_loc(z(1, 1)), iz, jz, descz, &
-                             il - 1, iu, &
+                             il, iu, &
                              c_loc(info) &
                              )
 
@@ -624,7 +624,7 @@ contains
                              c_loc(a(1, 1)), ia, ja, desca, &
                              c_loc(w(1)), &
                              c_loc(z(1, 1)), iz, jz, descz, &
-                             il - 1, iu, &
+                             il, iu, &
                              c_loc(info) &
                              )
 
@@ -740,7 +740,7 @@ contains
                              c_loc(a(1, 1)), ia, ja, desca, &
                              c_loc(w(1)), &
                              c_loc(z(1, 1)), iz, jz, descz, &
-                             il - 1, iu, &
+                             il, iu, &
                              c_loc(info) &
                              )
 
@@ -874,7 +874,7 @@ contains
                              c_loc(b(1, 1)), ib, jb, descb, &
                              c_loc(w(1)), &
                              c_loc(z(1, 1)), iz, jz, descz, &
-                             il - 1, iu, &
+                             il, iu, &
                              c_loc(info) &
                              )
 
@@ -1014,7 +1014,7 @@ contains
                                         c_loc(b(1, 1)), ib, jb, descb, &
                                         c_loc(w(1)), &
                                         c_loc(z(1, 1)), iz, jz, descz, &
-                                        il - 1, iu, &
+                                        il, iu, &
                                         c_loc(info) &
                                         )
 
@@ -1148,7 +1148,7 @@ contains
                              c_loc(b(1, 1)), ib, jb, descb, &
                              c_loc(w(1)), &
                              c_loc(z(1, 1)), iz, jz, descz, &
-                             il - 1, iu, &
+                             il, iu, &
                              c_loc(info) &
                              )
 
@@ -1288,7 +1288,7 @@ contains
                                         c_loc(b(1, 1)), ib, jb, descb, &
                                         c_loc(w(1)), &
                                         c_loc(z(1, 1)), iz, jz, descz, &
-                                        il - 1, iu, &
+                                        il, iu, &
                                         c_loc(info) &
                                         )
 
@@ -1422,7 +1422,7 @@ contains
                              c_loc(b(1, 1)), ib, jb, descb, &
                              c_loc(w(1)), &
                              c_loc(z(1, 1)), iz, jz, descz, &
-                             il - 1, iu, &
+                             il, iu, &
                              c_loc(info) &
                              )
 
@@ -1562,7 +1562,7 @@ contains
                                         c_loc(b(1, 1)), ib, jb, descb, &
                                         c_loc(w(1)), &
                                         c_loc(z(1, 1)), iz, jz, descz, &
-                                        il - 1, iu, &
+                                        il, iu, &
                                         c_loc(info) &
                                         )
 
@@ -1698,7 +1698,7 @@ contains
                              c_loc(b(1, 1)), ib, jb, descb, &
                              c_loc(w(1)), &
                              c_loc(z(1, 1)), iz, jz, descz, &
-                             il - 1, iu, &
+                             il, iu, &
                              c_loc(info) &
                              )
 
@@ -1840,7 +1840,7 @@ contains
                                         c_loc(b(1, 1)), ib, jb, descb, &
                                         c_loc(w(1)), &
                                         c_loc(z(1, 1)), iz, jz, descz, &
-                                        il - 1, iu, &
+                                        il, iu, &
                                         c_loc(info) &
                                         )
 
