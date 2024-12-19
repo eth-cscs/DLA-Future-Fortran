@@ -41,7 +41,7 @@ packages:
       - '~libxml2'
   dla-future:
     require:
-      - '@master'
+      - '@0.7.0'
   git:
     # Force git as non-buildable to allow deprecated versions in environments
     # https://github.com/spack/spack/pull/30040
