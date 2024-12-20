@@ -7,7 +7,7 @@
 * Documentation with [Ford] [PR #8]
 * Calculation of partial eigenspectrum [PR #26 | PR #28]
 * `libs` property to Spack package [PR #25]
-* `pkgconfig` as build dependency to Spack package [PR #23]
+* `pkgconfig` as `type=build` dependency to Spack package [PR #23]
 
 ## DLA-Future-Fortran 0.2.0
 
