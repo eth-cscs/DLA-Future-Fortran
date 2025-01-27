@@ -76,11 +76,6 @@ stages:
     paths:
       - pipeline.yml
 
-.build_for_daint-mc:
-  variables:
-    SLURM_CONSTRAINT: mc
-    THREADS_PER_NODE: 72
-
 .build_for_eiger:
   variables:
     RUNNER: ".container-runner-eiger"
