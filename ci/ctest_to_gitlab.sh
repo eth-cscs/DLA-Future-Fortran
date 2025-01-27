@@ -70,8 +70,7 @@ if [ $C -gt $THREADS_MAX_PER_TASK ]; then
   C=$THREADS_MAX_PER_TASK
 fi
 
-JOB=`echo "$JOB_TEMPLATE" | sed "s|{{LABEL}}|$label|g" \
-                          | sed "s|{{NTASKS}}|$N|g" \
+JOB=`echo "$JOB_TEMPLATE" | sed "s|{{NTASKS}}|$N|g" \
                           | sed "s|{{CPUS_PER_TASK}}|$C|g"`
 
 JOBS="$JOBS$JOB"
