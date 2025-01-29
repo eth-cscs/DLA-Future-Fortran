@@ -23,7 +23,7 @@ TIMELIMIT="15:00"
 ARTIFACTS="
   artifacts:
     when: always
-    patsh:
+    paths:
       - output/
 "
 
