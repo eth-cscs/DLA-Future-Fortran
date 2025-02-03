@@ -12,7 +12,7 @@ cpu gcc11 openblas deps:
 cpu gcc11 openblas build:
   extends:
     - .build_common
-    - .build_for_daint-mc
+    - .build_for_eiger
   needs:
     - cpu gcc11 openblas deps
   variables:
