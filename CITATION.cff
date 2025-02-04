@@ -3,7 +3,7 @@ title: DLA-Future-Fortran 0.3.0
 repository-code: 'https://github.com/eth-cscs/DLA-Future-Fortran'
 abstract: Fortran interface for DLA-Future (Distributed Linear Algebra from the Future)
 version: 0.3.0
-date-released: '2024-12-17'
+date-released: '2025-02-04'
 type: software
 authors:
   - given-names: Rocco
