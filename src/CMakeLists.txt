@@ -12,10 +12,7 @@ add_library(DLAF_Fortran dlaf_fortran.f90)
 
 target_compile_options(DLAF_Fortran PRIVATE -Wall -Wextra -Wpedantic)
 
-target_link_libraries(
-  DLAF_Fortran
-  PRIVATE DLAF::DLAF
-)
+target_link_libraries(DLAF_Fortran PRIVATE DLAF::DLAF)
 
 set_property(TARGET DLAF_Fortran PROPERTY EXPORT_NAME Fortran) # DLAF::Fortran
 
@@ -23,10 +20,9 @@ install(
   TARGETS DLAF_Fortran
   EXPORT ${CMAKE_PROJECT_NAME}-Targets
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
-install(EXPORT ${CMAKE_PROJECT_NAME}-Targets
-        NAMESPACE DLAF::
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${CMAKE_PROJECT_NAME}
-)
+install(
+  EXPORT ${CMAKE_PROJECT_NAME}-Targets
+  NAMESPACE DLAF::
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${CMAKE_PROJECT_NAME})
