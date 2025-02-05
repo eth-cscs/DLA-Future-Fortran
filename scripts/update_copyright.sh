@@ -1,3 +1,5 @@
+#!/bin/bash!
+
 #
 # Distributed Linear Algebra with Future (DLAF)
 #
@@ -8,5 +10,5 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
 
-repo:
-  namespace: "dla-future-fortran-repo"
+year=$(date +%Y)
+find ${PWD} -type f -exec sed -i "s/2018-2025/2018-${year}/g" {} +
