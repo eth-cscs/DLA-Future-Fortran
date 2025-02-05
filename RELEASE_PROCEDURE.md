@@ -15,7 +15,8 @@ DLA-Future-Fortran follows [Semantic Versioning](https://semver.org).
 
    1. When making a post-1.0.0 major release, remove deprecated functionality if appropriate.
 
-   1. Update the minimum required versions if necessary. Remove usage of `@main` for DLA-Future-Fortran in Spack package, if necessary.
+   1. Update the minimum required versions in `CMakeLists.txt` and the Spack package, if necessary.
+      Remove usage of `@main` for DLA-Future-Fortran in the Spack package, if necessary.
 
    1. Add a link to the documentation for the release in `DOCUMENTATION.md` and update the link in `README.md`.
       The documentation will be generated automatically after the `vMARJOR.MINOR.PATCH` tag has been created and pushed.
