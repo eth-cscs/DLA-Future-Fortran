@@ -16,9 +16,9 @@
 set -o errexit
 
 REPO="eth-cscs/DLA-Future-Fortran"
-VERSION_MAJOR=$(sed -n 's/project(DLAFFortran VERSION \([0-9][0-9]*\)\.\([0-9][0-9]*\)\.\([0-9][0-9]*\).*)/\1/p' CMakeLists.txt)
-VERSION_MINOR=$(sed -n 's/project(DLAFFortran VERSION \([0-9][0-9]*\)\.\([0-9][0-9]*\)\.\([0-9][0-9]*\).*)/\2/p' CMakeLists.txt)
-VERSION_PATCH=$(sed -n 's/project(DLAFFortran VERSION \([0-9][0-9]*\)\.\([0-9][0-9]*\)\.\([0-9][0-9]*\).*)/\3/p' CMakeLists.txt)
+VERSION_MAJOR=$(sed -n 's/^  VERSION \([0-9][0-9]*\)\.\([0-9][0-9]*\)\.\([0-9][0-9]*\).*/\1/p' CMakeLists.txt)
+VERSION_MINOR=$(sed -n 's/^  VERSION \([0-9][0-9]*\)\.\([0-9][0-9]*\)\.\([0-9][0-9]*\).*/\2/p' CMakeLists.txt)
+VERSION_PATCH=$(sed -n 's/^  VERSION \([0-9][0-9]*\)\.\([0-9][0-9]*\)\.\([0-9][0-9]*\).*/\3/p' CMakeLists.txt)
 VERSION_FULL="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
 VERSION_FULL_TAG="v${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
 VERSION_TITLE="DLA-Future-Fortran ${VERSION_FULL}"
