@@ -14,7 +14,7 @@ cmake_minimum_required(VERSION 3.22)
 # NOTE: C needed with HDF5 (dla-future +hdf5)
 project(
   DLAFFortran
-  VERSION 0.2.0
+  VERSION 0.3.0
   LANGUAGES Fortran C CXX)
 
 include(CMakeDependentOption)
@@ -38,7 +38,7 @@ if(NOT CMAKE_Fortran_MODULE_DIRECTORY)
   set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/fortran_mods)
 endif()
 
-find_package(DLAF 0.6.0 REQUIRED)
+find_package(DLAF 0.7.3 REQUIRED)
 
 add_subdirectory(src)
 
