@@ -14,7 +14,7 @@ program hello
    use testutils, only: setup_mpi, teardown_mpi
 
    implicit none
-   
+
    external blacs_get
    external blacs_gridinit
 
@@ -38,7 +38,7 @@ program hello
 
    call dlaf_create_grid_from_blacs(ictxt_0)
    call dlaf_create_grid_from_blacs(ictxt_1)
-   
+
    call dlaf_free_grid(ictxt_0)
 
    ! All grids need to be freed before MPI is finalized
