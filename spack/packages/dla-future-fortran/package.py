@@ -38,7 +38,7 @@ class DlaFutureFortran(CMakePackage):
     depends_on("dla-future@0.4.1:0.5 +scalapack", when="@0.1.0")
     depends_on("dla-future@0.6.0: +scalapack", when="@0.2.0:")
     depends_on("dla-future@0.7.3: +scalapack", when="@0.3:")
-    depends_on("dla-future@0.8.1: +scalapack", when="@0.4:")
+    depends_on("dla-future@0.9: +scalapack", when="@0.4:")
     depends_on("dla-future +shared", when="+shared")
 
     depends_on("mpi", when="+test")
