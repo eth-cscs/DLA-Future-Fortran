@@ -3,7 +3,7 @@
 #
 # Distributed Linear Algebra with Future (DLAF)
 #
-# Copyright (c) 2018-2025, ETH Zurich
+# Copyright (c) ETH Zurich
 # All rights reserved.
 #
 # Please, refer to the LICENSE file in the root directory.
@@ -26,7 +26,6 @@ usage() {
 }
 
 MAX_LINE=1
-MULTILICENSE=false
 
 while getopts "hr:" arg; do
   case $arg in
