@@ -9,7 +9,7 @@
 #
 
 # Define test executables
-set(INIT_TEST_EXECUTABLES init)
+set(INIT_TEST_EXECUTABLES init grid1 grid2)
 set(PXPOTRF_TEST_EXECUTABLES pspotrf pdpotrf pcpotrf pzpotrf)
 set(PXHEEVD_TEST_EXECUTABLES pssyevd pdsyevd pcheevd pzheevd)
 set(PXHEGVX_TEST_EXECUTABLES pssygvd pdsygvd pchegvd pzhegvd)
