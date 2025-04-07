@@ -28,7 +28,7 @@ module dlaf_fortran
    private
 
    public :: dlaf_initialize, dlaf_finalize
-   public :: dlaf_create_grid_from_blacs, dlaf_free_grid
+   public :: dlaf_create_grid_from_blacs, dlaf_free_grid, dlaf_free_all_grids
    public :: dlaf_pspotrf, dlaf_pdpotrf, dlaf_pcpotrf, dlaf_pzpotrf
    public :: dlaf_pssyevd, dlaf_pdsyevd, dlaf_pcheevd, dlaf_pzheevd
    public :: dlaf_pssyevd_partial_spectrum, dlaf_pdsyevd_partial_spectrum
@@ -137,6 +137,22 @@ contains
       call dlaf_free_grid_c(blacs_context)
 
    end subroutine dlaf_free_grid
+
+   subroutine dlaf_free_all_grids()
+      !! Free all DLA-Future grids
+      !!
+      !! @warning
+      !! Only the DLA-Future internal grid is freed. The associated BLACS grid will need to be freed separately
+      !! @endwarning
+
+      interface
+         subroutine dlaf_free_all_grids_c() bind(C, name='dlaf_free_all_grids')
+         end subroutine dlaf_free_all_grids_c
+      end interface
+
+      call dlaf_free_all_grids_c()
+
+   end subroutine dlaf_free_all_grids
 
    subroutine dlaf_pspotrf(uplo, n, a, ia, ja, desca, info)
       !! Cholesky decomposition for a distributed single-precision real symmetric positive definite matrix \(\mathbf{A}\)
