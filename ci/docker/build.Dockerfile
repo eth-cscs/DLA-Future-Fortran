@@ -35,10 +35,12 @@ ENV SPACK_SHA=$SPACK_SHA
 RUN mkdir -p /opt/spack && \
     curl -Ls "https://api.github.com/repos/spack/spack/tarball/$SPACK_SHA" | tar --strip-components=1 -xz -C /opt/spack
 
-# Find compilers and efine which compiler we want to use
+# Find compilers and define which compiler we want to use
 ARG COMPILER
-RUN spack compiler find && \
-    spack config add "packages:all:require:[\"%${COMPILER}\"]"
+RUN spack external find gcc && \
+    spack config add "packages:cxx:require:'${COMPILER}'" && \
+    spack config add "packages:c:require:'${COMPILER}'" && \
+    spack config add "packages:fortran:require:gcc"
 
 RUN spack external find \
     autoconf \
@@ -75,6 +77,8 @@ ARG COMMON_SPACK_ENVIRONMENT
 COPY $SPACK_ENVIRONMENT /spack_environment/spack.yaml
 COPY $COMMON_SPACK_ENVIRONMENT /spack_environment/
 RUN spack env create --without-view ci /spack_environment/spack.yaml
+RUN spack -e ci concretize
+RUN spack -# ci spec -lI --cover edges
 
 # Install dependencies
 ARG NUM_PROCS
