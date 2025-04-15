@@ -1,5 +1,11 @@
 # Changelog
 
+## DLA-Future-Fortran 0.4.0
+
+### Added
+
+* Functionality to free all DLA-Future grids at once [PR #34]
+
 ## DLA-Future-Fortran 0.3.0
 
 ### Added
