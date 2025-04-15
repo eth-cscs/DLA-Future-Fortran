@@ -24,7 +24,7 @@ packages:
     require: 'mpich'
   intel-oneapi-mkl:
     require:
-      - 'threads=openmp'
+      - 'threads=none'
       - '+cluster'
       - '+gfortran'
   openblas:

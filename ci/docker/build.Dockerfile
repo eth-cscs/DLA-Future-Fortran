@@ -70,9 +70,6 @@ ARG SPACK_DLAF_FORTRAN_REPO
 COPY $SPACK_DLAF_FORTRAN_REPO /user_repo
 RUN spack repo add --scope site /user_repo
 
-# Specify compiler explicitly for Intel MKL
-RUN spack config add "packages:intel-oneapi-mkl:require:'%${COMPILER}'" && spack config get
-
 ARG SPACK_ENVIRONMENT
 ARG COMMON_SPACK_ENVIRONMENT
 
