@@ -38,7 +38,7 @@ RUN mkdir -p /opt/spack && \
 # Find compilers and define which compiler we want to use
 ARG COMPILER
 RUN spack external find gcc && \
-    spack config add "packages:intel-oneapi-mkl:require:'${COMPILER}'" && \
+    spack config add "packages:intel-oneapi-mkl:require:'%${COMPILER}'" && \
     spack config add "packages:cxx:require:'${COMPILER}'" && \
     spack config add "packages:c:require:'${COMPILER}'" && \
     spack config add "packages:fortran:require:gcc"
