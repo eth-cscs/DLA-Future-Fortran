@@ -79,7 +79,7 @@ COPY $SPACK_ENVIRONMENT /spack_environment/spack.yaml
 COPY $COMMON_SPACK_ENVIRONMENT /spack_environment/
 RUN spack env create --without-view ci /spack_environment/spack.yaml
 RUN spack -e ci concretize
-RUN spack -# ci spec -lI --cover edges
+RUN spack -e ci spec -lI --cover edges
 
 # Install dependencies
 ARG NUM_PROCS
