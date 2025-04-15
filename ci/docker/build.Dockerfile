@@ -38,7 +38,6 @@ RUN mkdir -p /opt/spack && \
 # Find compilers and define which compiler we want to use
 ARG COMPILER
 RUN spack external find gcc && \
-    spack config add "packages:intel-oneapi-mkl:require:'%${COMPILER}'" && \
     spack config add "packages:cxx:require:'${COMPILER}'" && \
     spack config add "packages:c:require:'${COMPILER}'" && \
     spack config add "packages:fortran:require:gcc"
@@ -70,6 +69,9 @@ RUN spack mirror add develop https://binaries.spack.io/develop && \
 ARG SPACK_DLAF_FORTRAN_REPO
 COPY $SPACK_DLAF_FORTRAN_REPO /user_repo
 RUN spack repo add --scope site /user_repo
+
+# Specify compiler explicitly for Intel MKL
+RUN spack config add "packages:intel-oneapi-mkl:require:'%${COMPILER}'" && spack config get
 
 ARG SPACK_ENVIRONMENT
 ARG COMMON_SPACK_ENVIRONMENT
