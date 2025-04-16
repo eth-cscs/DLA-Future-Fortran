@@ -24,7 +24,7 @@ packages:
     require: 'mpich'
   intel-oneapi-mkl:
     require:
-      - 'threads=openmp'
+      - 'threads=none'
       - '+cluster'
       - '+gfortran'
   openblas:
@@ -41,7 +41,7 @@ packages:
       - '~libxml2'
   dla-future:
     require:
-      - '@master' # TODO: Change to a stable version
+      - '@0.9.0'
   git:
     # Force git as non-buildable to allow deprecated versions in environments
     # https://github.com/spack/spack/pull/30040
