@@ -1,0 +1,236 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Fortran interface for DLA-Future">
+    <meta name="author" content="" >
+    <link rel="icon" href="./favicon.png">
+
+    <title> DLA-Future-Fortran </title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="./css/fontawesome.min.css" rel="stylesheet">
+    <link href="./css/brands.min.css" rel="stylesheet">
+    <link href="./css/regular.min.css" rel="stylesheet">
+    <link href="./css/solid.min.css" rel="stylesheet">
+    <link href="./css/v4-font-face.min.css" rel="stylesheet">
+    <link href="./css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="./css/local.css" rel="stylesheet">
+    <link href="./css/pygments.css" rel="stylesheet">
+    <script src="./js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="./index.html">DLA-Future-Fortran </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="./sourcefile/dlaf_fortran.f90.html">Source File</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./lists/procedures.html">Procedures</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="./search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <!-- Main component for a primary marketing message or call to action -->
+    <div class="p-5 mb-4 bg-light border rounded-3" id="jumbotron">
+      <p>Fortran interface for DLA-Future</p>
+        <p> Find us on&hellip;</p>
+      <p>
+        <a class="btn btn-lg btn-primary" href="https://github.com/eth-cscs/DLA-Future-Fortran" role="button">GitHub</a>
+        
+        
+        
+        
+        <a class="btn btn-lg btn-danger" style="float:right" href="https://github.com/eth-cscs/DLA-Future-Fortran/releases" role="button">Download the Source</a>
+      </p>
+    </div>
+
+      <div class="row" id='text'>
+        <div class=col-md-12>
+          <h1>DLA-Future-Fortran</h1>
+          <p><a href="https://github.com/eth-cscs/DLA-Future-Fortran">DLA-Future-Fortran</a> is a Fortran interface for <a href="https://github.com/eth-cscs/DLA-Future">DLA-Future</a>, a task-based linear algebra library providing GPU-enabled distributed eigensolver. <a href="https://github.com/eth-cscs/DLA-Future">DLA-Future</a> is based on the <a href="https://github.com/pika-org/pika">pika</a> library for concurrency and parallelism, and supports both <a href="https://www.nvidia.com/en-us/">Nvidia</a> and <a href="https://www.amd.com/en.html">AMD</a> GPUs.</p>
+<h2>Usage</h2>
+<h3>Initialization and finalization</h3>
+<p>Before calling any <a href="https://github.com/eth-cscs/DLA-Future">DLA-Future</a> routine, the library (and the underlying <a href="https://github.com/pika-org/pika">pika</a> runtime) need to be initialized:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">call </span><span class="n">dlaf_initialize</span><span class="p">()</span>
+</code></pre></div>
+
+<p><a href="https://github.com/eth-cscs/DLA-Future">DLA-Future</a> should be finalized when it is no longer needed:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">call </span><span class="n">dlaf_finalize</span><span class="p">()</span>
+</code></pre></div>
+
+<h2>Grid initialization</h2>
+<p><a href="https://github.com/eth-cscs/DLA-Future">DLA-Future</a> needs to know how a matrix is distributed. A <a href="https://github.com/eth-cscs/DLA-Future">DLA-Future</a> grid can be created directly on top of a <a href="https://www.netlib.org/blacs/">BLACS</a> grid, using the corresponding <a href="https://www.netlib.org/blacs/">BLACS</a> context:</p>
+<div class="codehilite"><pre><span></span><code><span class="c">! blacs_context is an existing BLACS context</span>
+<span class="k">call </span><span class="n">dlaf_create_grid_from_blacs</span><span class="p">(</span><span class="n">blacs_context</span><span class="p">)</span>
+</code></pre></div>
+
+<p>When a grid is no longer needed, it can be freed:</p>
+<div class="codehilite"><pre><span></span><code><span class="c">! blacs_context is an existing BLACS context</span>
+<span class="k">call </span><span class="n">dlaf_free_grid</span><span class="p">(</span><span class="n">blacs_context</span><span class="p">)</span>
+</code></pre></div>
+
+<h3>ScaLAPACK drop-in</h3>
+<p><a href="https://github.com/eth-cscs/DLA-Future-Fortran">DLA-Future-Fortran</a> can be used as a <a href="https://www.netlib.org/scalapack/">ScaLAPACK</a> drop-in. <a href="https://github.com/eth-cscs/DLA-Future">DLA-Future</a> takes a subset of <a href="https://www.netlib.org/scalapack/">ScaLAPACK</a> arguments. For example, workspaces are managed internally in <a href="https://github.com/eth-cscs/DLA-Future">DLA-Future</a>.</p>
+<h4>Example: Hermitian generalized eigensolver</h4>
+<p>The following is an example of how a code using <a href="https://www.netlib.org/scalapack/">ScaLAPACK</a>'s hermitian generalized eigensolver can be adapted to use <a href="https://github.com/eth-cscs/DLA-Future">DLA-Future</a> instead:</p>
+<div class="codehilite"><pre><span></span><code><span class="w"> </span>call mpi_init_thread(...)
+<span class="gi">+call dlaf_initialize()</span>
+<span class="w"> </span>call blacs_get(0, 0, blacs_context)
+<span class="w"> </span>call blacs_gridinit(blacs_context, ...)
+<span class="gi">+call dlaf_create_grid_from_blacs(blacs_context)</span>
+
+<span class="w"> </span>! ...
+
+<span class="gd">-! Workspaces setup (work, rwork, iwork)</span>
+
+<span class="gd">-call pzheevd(&#39;V&#39;, &#39;L&#39;, n, a, 1, 1, desca, w, z, 1, 1, descz, work, lwork, rwork, lrwork, iwork, liwork, info)</span>
+<span class="gi">+call call dlaf_pzheevd(&#39;L&#39;, n, a, 1, 1, desca, w, z, 1, 1, descz, info)</span>
+
+<span class="gd">-! Workspaces cleanup (work, rwork, iwork)</span>
+
+<span class="w"> </span>! ...
+
+<span class="gi">+call dlaf_free_grid(blacs_context)</span>
+<span class="w"> </span>call blacs_gridexit(blacs_context)
+<span class="gi">+call dlaf_finalize()</span>
+<span class="w"> </span>call mpi_finalize(...)
+</code></pre></div>
+
+<h2>Citation</h2>
+<h3>DLA-Future Conference Paper</h3>
+<p>If you are using <a href="https://github.com/eth-cscs/DLA-Future-Fortran">DLA-Future-Fortran</a>, please cite the following conference paper in addition to the <a href="https://github.com/eth-cscs/DLA-Future-Fortran">DLA-Future-Fortran</a> and the <a href="https://github.com/eth-cscs/DLA-Future">DLA-Future</a> repositories:</p>
+<div class="codehilite"><pre><span></span><code><span class="err">@</span><span class="nx">InProceedings</span><span class="p">{</span><span class="m m-Double">10.1007</span><span class="o">/</span><span class="mi">978</span><span class="o">-</span><span class="mi">3</span><span class="o">-</span><span class="mi">031</span><span class="o">-</span><span class="mi">61763</span><span class="o">-</span><span class="mi">8</span><span class="nx">_13</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">author</span><span class="p">=</span><span class="s">&quot;Solc{\`a}, Raffaele</span>
+<span class="s">        and Simberg, Mikael</span>
+<span class="s">        and Meli, Rocco</span>
+<span class="s">        and Invernizzi, Alberto</span>
+<span class="s">        and Reverdell, Auriane</span>
+<span class="s">        and Biddiscombe, John&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">editor</span><span class="p">=</span><span class="s">&quot;Diehl, Patrick</span>
+<span class="s">        and Schuchart, Joseph</span>
+<span class="s">        and Valero-Lara, Pedro</span>
+<span class="s">        and Bosilca, George&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">title</span><span class="p">=</span><span class="s">&quot;DLA-Future: A Task-Based Linear Algebra Library Which Provides a GPU-Enabled Distributed Eigensolver&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">booktitle</span><span class="p">=</span><span class="s">&quot;Asynchronous Many-Task Systems and Applications&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">year</span><span class="p">=</span><span class="s">&quot;2024&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">publisher</span><span class="p">=</span><span class="s">&quot;Springer Nature Switzerland&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">address</span><span class="p">=</span><span class="s">&quot;Cham&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">pages</span><span class="p">=</span><span class="s">&quot;135--141&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">isbn</span><span class="p">=</span><span class="s">&quot;978-3-031-61763-8&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h2>Acknowledgements</h2>
+<p>The development of <a href="https://github.com/eth-cscs/DLA-Future-Fortran">DLA-Future-Fortran</a> is supported by the following organizations:</p>
+<ul>
+<li><a href="https://www.cscs.ch">CSCS</a>: Swiss National Supercomputing Center</li>
+<li><a href="https://ethz.ch/en.html">ETH Zurich</a>: Swiss Federal Institute of Technology Zurich</li>
+<li><a href="https://www.pasc-ch.org/">PASC</a>: Platform for Advanced Scientific Computing</li>
+</ul>
+<p><img alt="CSCS" height="75" src="media/images/logo-cscs.jpg" style="text-align: center">
+<img alt="ETHZ" height="75" src="media/images/logo-eth.svg" style="text-align: center">
+<img alt="PASC" height="75" src="media/images/logo-pasc.png" style="text-align: center"></p>
+        </div>
+      </div>
+        <div class="row">
+          <hr>
+          <div class="col-xs-6 col-sm-4">
+            <div>
+              <h3>Source Files</h3>
+              <ul><li><a href='sourcefile/dlaf_fortran.f90.html'>dlaf_fortran.f90</a></li></ul>
+            </div>
+            <div>
+              <ul>
+                <li><a href="./lists/files.html"><em>All source files&hellip;</em></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xs-6 col-sm-4">
+            <div>
+              <h3>Modules</h3>
+              <ul><li><a href='module/dlaf_fortran.html'>dlaf_fortran</a></li></ul>
+            </div>
+            <div>
+              <ul>
+                <li><a href="./lists/modules.html"><em>All modules&hellip;</em></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xs-6 col-sm-4">
+            <div>
+              <h3>Procedures</h3>
+              <ul><li><a href='proc/dlaf_create_grid_from_blacs.html'>dlaf_create_grid_from_blacs</a></li><li><a href='proc/dlaf_finalize.html'>dlaf_finalize</a></li><li><a href='proc/dlaf_free_all_grids.html'>dlaf_free_all_grids</a></li><li><a href='proc/dlaf_free_grid.html'>dlaf_free_grid</a></li><li><a href='proc/dlaf_initialize.html'>dlaf_initialize</a></li><li><a href='proc/dlaf_pcheevd.html'>dlaf_pcheevd</a></li><li><a href='proc/dlaf_pcheevd_partial_spectrum.html'>dlaf_pcheevd_partial_spectrum</a></li><li><a href='proc/dlaf_pchegvd.html'>dlaf_pchegvd</a></li><li><a href='proc/dlaf_pchegvd_factorized.html'>dlaf_pchegvd_factorized</a></li><li><a href='proc/dlaf_pchegvd_partial_spectrum.html'>dlaf_pchegvd_partial_spectrum</a></li></ul>
+            </div>
+            <div>
+              <ul>
+                <li><a href="./lists/procedures.html"><em>All procedures&hellip;</em></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              DLA-Future-Fortran
+              &copy; 2025 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2025-04-16T19:42:36.705258+0000 <br>&copy; <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>
