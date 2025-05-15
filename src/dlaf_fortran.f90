@@ -335,7 +335,7 @@ contains
       call dlaf_pspotri_c(iachar(uplo, c_signed_char), n, c_loc(a(1, 1)), ia, ja, desca, c_loc(info))
 
    end subroutine dlaf_pspotri
-   
+
    subroutine dlaf_pdpotri(uplo, n, a, ia, ja, desca, info)
       !! Inverse of distributed double-precision real symmetric positive definite matrix \(\mathbf{A}\) using
       !! Cholesky factorization \(\mathbf{A} = \mathbf{L} \mathbf{L}^T\) or \(\mathbf{A} = \mathbf{U}^T \mathbf{U}\)
@@ -372,7 +372,7 @@ contains
       call dlaf_pdpotri_c(iachar(uplo, c_signed_char), n, c_loc(a(1, 1)), ia, ja, desca, c_loc(info))
 
    end subroutine dlaf_pdpotri
-   
+
    subroutine dlaf_pcpotri(uplo, n, a, ia, ja, desca, info)
       !! Inverse of distributed single-precision complex Hermitian positive definite matrix \(\mathbf{A}\) using
       !! Cholesky factorization \(\mathbf{A} = \mathbf{L} \mathbf{L}^H\) or \(\mathbf{A} = \mathbf{U}^H \mathbf{U}\)
@@ -409,7 +409,7 @@ contains
       call dlaf_pcpotri_c(iachar(uplo, c_signed_char), n, c_loc(a(1, 1)), ia, ja, desca, c_loc(info))
 
    end subroutine dlaf_pcpotri
-   
+
    subroutine dlaf_pzpotri(uplo, n, a, ia, ja, desca, info)
       !! Inverse of distributed double-precision complex Hermitian positive definite matrix \(\mathbf{A}\) using
       !! Cholesky factorization \(\mathbf{A} = \mathbf{L} \mathbf{L}^H\) or \(\mathbf{A} = \mathbf{U}^H \mathbf{U}\)
@@ -446,7 +446,6 @@ contains
       call dlaf_pzpotri_c(iachar(uplo, c_signed_char), n, c_loc(a(1, 1)), ia, ja, desca, c_loc(info))
 
    end subroutine dlaf_pzpotri
-
 
    subroutine dlaf_pssyevd(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, info)
       !! {!docs/snippets/pssyevd.md!}
