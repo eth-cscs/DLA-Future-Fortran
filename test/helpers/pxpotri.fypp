@@ -47,7 +47,7 @@ contains
          #:set name = names[(dtype, type)]
          subroutine p${name}$potri_test
 
-            integer, parameter :: n = 4
+            integer, parameter :: n = 10
 
             integer:: nprow, npcol
             integer:: i, j
@@ -88,6 +88,7 @@ contains
                call descinit(descr_scalapack, n, n, n, n, 0, 0, ictxt_0, n, info)
 
                call set_random_matrix(A)
+	       write(*, *) A
             end if
 
             ! Allocate local matrices
@@ -147,6 +148,8 @@ contains
 
             failed = .false.
             if (rank == 0) then
+	       write(*, *) R_dlaf
+	       write(*, *) R_scalapack
                if (.not. allclose(R_dlaf, R_scalapack, uplo='L')) then
                   failed = .true.
                   write (error_unit, *) "ERROR: DLAF != ScaLAPACK"
