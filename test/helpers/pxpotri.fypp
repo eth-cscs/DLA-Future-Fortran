@@ -47,7 +47,7 @@ contains
          #:set name = names[(dtype, type)]
          subroutine p${name}$potri_test
 
-            integer, parameter :: n = 10
+            integer, parameter :: n = 25
 
             integer:: nprow, npcol
             integer:: i, j
