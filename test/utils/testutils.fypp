@@ -104,7 +104,6 @@ contains
                         if (.not. close (x(i, j), y(i, j), rtol_l, atol_l)) then
                            aclose = .false.
                            write (error_unit, *) i, j, x(i, j), y(i, j)
-                           return
                         end if
                      end do
                   end do
@@ -113,7 +112,7 @@ contains
                      do j = i + 1, n
                         if (.not. close (x(i, j), y(i, j), rtol_l, atol_l)) then
                            aclose = .false.
-                           return
+                           write (error_unit, *) i, j, x(i, j), y(i, j)
                         end if
                      end do
                   end do
@@ -123,7 +122,7 @@ contains
                   do i = 1, m
                      if (.not. close (x(i, j), y(i, j), rtol_l, atol_l)) then
                         aclose = .false.
-                        return
+                        write (error_unit, *) i, j, x(i, j), y(i, j)
                      end if
                   end do
                end do
