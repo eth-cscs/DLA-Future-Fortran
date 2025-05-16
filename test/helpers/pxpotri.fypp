@@ -47,7 +47,7 @@ contains
          #:set name = names[(dtype, type)]
          subroutine p${name}$potri_test
 
-            integer, parameter :: n = 25
+            integer, parameter :: n = 4
 
             integer:: nprow, npcol
             integer:: i, j
@@ -62,7 +62,7 @@ contains
 
             nprow = 2
             npcol = 3
-            nb = 4
+            nb = 2
 
             call setup_mpi(nprow, npcol, rank, numprocs)
 
@@ -88,8 +88,8 @@ contains
                call descinit(descr_scalapack, n, n, n, n, 0, 0, ictxt_0, n, info)
 
                call set_random_matrix(A)
-	       write(*, *) A
             end if
+
 
             ! Allocate local matrices
             ma = numroc(n, nb, myrow, 0, nprow)
@@ -102,7 +102,7 @@ contains
             ! + ---- +
 
             call descinit(desca_local_dlaf, n, n, nb, nb, 0, 0, ictxt, lld, info)
-            call p${name}$gemr2d(n, n, a, 1, 1, desca, A_local_dlaf, 1, 1, desca_local_dlaf, ictxt)
+            call p${name}$gemr2d(n, n, A, 1, 1, desca, A_local_dlaf, 1, 1, desca_local_dlaf, ictxt)
 
             ! Solve with DLAF
             call dlaf_initialize()
@@ -127,7 +127,7 @@ contains
             ! + --------- +
 
             call descinit(desca_local_scalapack, n, n, nb, nb, 0, 0, ictxt, lld, info)
-            call p${name}$gemr2d(n, n, a, 1, 1, desca, A_local_scalapack, 1, 1, desca_local_scalapack, ictxt)
+            call p${name}$gemr2d(n, n, A, 1, 1, desca, A_local_scalapack, 1, 1, desca_local_scalapack, ictxt)
 
             ! ScaLAPACK
             call p${name}$potrf('L', n, A_local_scalapack, 1, 1, desca_local_scalapack, info)
@@ -148,12 +148,25 @@ contains
 
             failed = .false.
             if (rank == 0) then
-	       write(*, *) R_dlaf
-	       write(*, *) R_scalapack
+	       write(*, *) "DLAF=", R_dlaf
+	       write(*, *) "ScaLAPACK=", R_scalapack
                if (.not. allclose(R_dlaf, R_scalapack, uplo='L')) then
                   failed = .true.
                   write (error_unit, *) "ERROR: DLAF != ScaLAPACK"
-                  call terminate(ictxt)
+               end if
+
+	       ! Check against LAPACK too
+	       write(*, *) "A=", A
+	       call ${name}$potrf('L', n, A, n, info)
+	       call ${name}$potri('L', n, A, n, info)
+	       write(*, *) "A=", A
+               if (.not. allclose(R_dlaf, A, uplo='L')) then
+                  failed = .true.
+                  write (error_unit, *) "ERROR: DLAF != LAPACK"
+               end if
+               if (.not. allclose(R_scalapack, A, uplo='L')) then
+                  failed = .true.
+                  write (error_unit, *) "ERROR: ScaLAPACK != LAPACK"
                end if
             end if
 

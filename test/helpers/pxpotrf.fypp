@@ -140,7 +140,6 @@ contains
                if (.not. allclose(R_dlaf, R_scalapack, uplo='L')) then
                   failed = .true.
                   write (error_unit, *) "ERROR: DLAF != ScaLAPACK"
-                  call terminate(ictxt)
                end if
             end if
 
