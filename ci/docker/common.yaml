@@ -30,7 +30,6 @@ packages:
   openblas:
     variants:
       - 'threads=openmp'
-      - '@3.0.28'
   mpich:
     # Requirement for ABI compatibility on the test system
     require:
