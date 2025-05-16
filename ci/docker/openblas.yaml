@@ -23,7 +23,9 @@ spack:
     scalapack:
       require:
         - netlib-scalapack
-        - "@2.2.0"
+    netlib-scalapack:
+      require:
+        - '@2.2.0'
   view: false
   concretizer:
     unify:
