@@ -1,5 +1,11 @@
 # Changelog
 
+## DLA-Future-Fortran 0.5.0
+
+### Added
+
+* Inverse computation using Cholesky factorization (`pspotri`, `pdpotri`, `pcpotri`, and `pzpotri`) [PR #40]
+
 ## DLA-Future-Fortran 0.4.0
 
 ### Added
