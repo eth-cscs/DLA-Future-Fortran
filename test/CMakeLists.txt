@@ -10,7 +10,9 @@
 
 # Define test executables
 set(INIT_TEST_EXECUTABLES init grid1 grid2)
-set(PXPOTRF_TEST_EXECUTABLES pspotrf pdpotrf pcpotrf pzpotrf)
+foreach(UPLO lower upper)
+  list(APPEND PXPOTRF_TEST_EXECUTABLES pspotrf_${UPLO} pdpotrf_${UPLO} pcpotrf_${UPLO} pzpotrf_${UPLO})
+endforeach()
 set(PXHEEVD_TEST_EXECUTABLES pssyevd pdsyevd pcheevd pzheevd)
 set(PXHEGVX_TEST_EXECUTABLES pssygvd pdsygvd pchegvd pzhegvd)
 
