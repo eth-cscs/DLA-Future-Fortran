@@ -1,8 +1,7 @@
 #
 # Distributed Linear Algebra with Future (DLAF)
 #
-# Copyright (c) ETH Zurich
-# All rights reserved.
+# Copyright (c) ETH Zurich All rights reserved.
 #
 # Please, refer to the LICENSE file in the root directory.
 # SPDX-License-Identifier: BSD-3-Clause
@@ -10,8 +9,12 @@
 
 # Define test executables
 set(INIT_TEST_EXECUTABLES init grid1 grid2)
-set(PXPOTRF_TEST_EXECUTABLES pspotrf pdpotrf pcpotrf pzpotrf)
-set(PXPOTRI_TEST_EXECUTABLES pspotri pdpotri pcpotri pzpotri)
+foreach(UPLO lower upper)
+  list(APPEND PXPOTRF_TEST_EXECUTABLES pspotrf_${UPLO} pdpotrf_${UPLO}
+       pcpotrf_${UPLO} pzpotrf_${UPLO})
+  list(APPEND PXPOTRI_TEST_EXECUTABLES pspotri_${UPLO} pdpotri_${UPLO}
+       pcpotri_${UPLO} pzpotri_${UPLO})
+endforeach()
 set(PXHEEVD_TEST_EXECUTABLES pssyevd pdsyevd pcheevd pzheevd)
 set(PXHEGVX_TEST_EXECUTABLES pssygvd pdsygvd pchegvd pzhegvd)
 

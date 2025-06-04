@@ -9,10 +9,10 @@
 !
 
 program test_pdpotrf
-   use pxpotrf_tests, only: pdpotrf_test
+   use pxpotrf_tests, only: pdpotrf_U_test
 
    implicit none
 
-   call pdpotrf_test()
+   call pdpotrf_U_test()
 
 end program test_pdpotrf
