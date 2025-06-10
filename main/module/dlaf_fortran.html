@@ -85,7 +85,7 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title="100.0% of total for modules and submodules.">880 statements</a>
+                 title="100.0% of total for modules and submodules.">961 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -146,6 +146,10 @@
             <a class="list-group-item" href="../module/dlaf_fortran.html#proc-dlaf_pdpotrf">dlaf_pdpotrf</a>
             <a class="list-group-item" href="../module/dlaf_fortran.html#proc-dlaf_pcpotrf">dlaf_pcpotrf</a>
             <a class="list-group-item" href="../module/dlaf_fortran.html#proc-dlaf_pzpotrf">dlaf_pzpotrf</a>
+            <a class="list-group-item" href="../module/dlaf_fortran.html#proc-dlaf_pspotri">dlaf_pspotri</a>
+            <a class="list-group-item" href="../module/dlaf_fortran.html#proc-dlaf_pdpotri">dlaf_pdpotri</a>
+            <a class="list-group-item" href="../module/dlaf_fortran.html#proc-dlaf_pcpotri">dlaf_pcpotri</a>
+            <a class="list-group-item" href="../module/dlaf_fortran.html#proc-dlaf_pzpotri">dlaf_pzpotri</a>
             <a class="list-group-item" href="../module/dlaf_fortran.html#proc-dlaf_pssyevd">dlaf_pssyevd</a>
             <a class="list-group-item" href="../module/dlaf_fortran.html#proc-dlaf_pssyevd_partial_spectrum">dlaf_pssyevd_partial_spectrum</a>
             <a class="list-group-item" href="../module/dlaf_fortran.html#proc-dlaf_pdsyevd">dlaf_pdsyevd</a>
@@ -859,11 +863,13 @@
   </div>
 
               <div class="card">
-    <div class="card-header codesum"><span class="anchor" id="proc-dlaf_pssyevd"></span> <h3>public  subroutine <a href='../proc/dlaf_pssyevd.html'>dlaf_pssyevd</a>(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, info)  
+    <div class="card-header codesum"><span class="anchor" id="proc-dlaf_pspotri"></span> <h3>public  subroutine <a href='../proc/dlaf_pspotri.html'>dlaf_pspotri</a>(uplo, n, a, ia, ja, desca, info)  
 </h3></div>
     <div class="card-body">
           
-  <p>Eigensolver for a distributed single-precision real symmetric matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssyevd.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+  <p>Inverse of distributed single-precision real symmetric positive definite matrix <script type="math/tex">\mathbf{A}</script> using
+Cholesky factorization <script type="math/tex">\mathbf{A} = \mathbf{L} \mathbf{L}^T</script> or <script type="math/tex">\mathbf{A} = \mathbf{U}^T \mathbf{U}</script>
+</p><a href="../proc/dlaf_pspotri.html" class="pull-right"><emph>Read more&hellip;</emph></a>
 
   <h4>Arguments</h4>
       <table class="table table-striped varlist">
@@ -888,7 +894,7 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pssyevd.html#variable-uplo~5" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p>
             </td>
         </tr>
         <tr>
@@ -933,7 +939,7 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssyevd.html#variable-ia~5" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pspotri.html#variable-ia~5" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
@@ -948,12 +954,538 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssyevd.html#variable-ja~5" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pspotri.html#variable-ja~5" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
               <span class="anchor" id="variable-desca~5"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(9)
+            </td>
+            <td>::</td>
+            <td><strong>desca</strong></td>
+            <td>
+<p>ScaLAPACK descriptor of the global matrix <script type="math/tex">\mathbf{A}</script>.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-info~5"></span>
+              integer,
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>info</strong></td>
+            <td>
+<p><code>0</code> if the function completed successfully.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-dlaf_pdpotri"></span> <h3>public  subroutine <a href='../proc/dlaf_pdpotri.html'>dlaf_pdpotri</a>(uplo, n, a, ia, ja, desca, info)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Inverse of distributed double-precision real symmetric positive definite matrix <script type="math/tex">\mathbf{A}</script> using
+Cholesky factorization <script type="math/tex">\mathbf{A} = \mathbf{L} \mathbf{L}^T</script> or <script type="math/tex">\mathbf{A} = \mathbf{U}^T \mathbf{U}</script>
+</p><a href="../proc/dlaf_pdpotri.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-uplo~6"></span>
+              character(len=1),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>uplo</strong></td>
+            <td>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~6"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+<p>Order of the matrix sub-matrix <script type="math/tex">\mathbf{A}</script> used in the computation.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-a~6"></span>
+              real(kind=dp),
+            </td>
+<td>intent(inout),</td>
+              <td></td>            <td>
+              dimension(:, :), target
+            </td>
+            <td>::</td>
+            <td><strong>a</strong></td>
+            <td>
+<p>Local part of the global matrix <script type="math/tex">\mathbf{A}</script>.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ia~6"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ia</strong></td>
+            <td>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdpotri.html#variable-ia~6" class="pull-right"><emph>Read more&hellip;</emph></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ja~6"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ja</strong></td>
+            <td>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdpotri.html#variable-ja~6" class="pull-right"><emph>Read more&hellip;</emph></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-desca~6"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(9)
+            </td>
+            <td>::</td>
+            <td><strong>desca</strong></td>
+            <td>
+<p>ScaLAPACK descriptor of the global matrix <script type="math/tex">\mathbf{A}</script>.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-info~6"></span>
+              integer,
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>info</strong></td>
+            <td>
+<p><code>0</code> if the function completed successfully.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-dlaf_pcpotri"></span> <h3>public  subroutine <a href='../proc/dlaf_pcpotri.html'>dlaf_pcpotri</a>(uplo, n, a, ia, ja, desca, info)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Inverse of distributed single-precision complex Hermitian positive definite matrix <script type="math/tex">\mathbf{A}</script> using
+Cholesky factorization <script type="math/tex">\mathbf{A} = \mathbf{L} \mathbf{L}^H</script> or <script type="math/tex">\mathbf{A} = \mathbf{U}^H \mathbf{U}</script>
+</p><a href="../proc/dlaf_pcpotri.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-uplo~7"></span>
+              character(len=1),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>uplo</strong></td>
+            <td>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~7"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+<p>Order of the matrix sub-matrix <script type="math/tex">\mathbf{A}</script> used in the computation.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-a~7"></span>
+              complex(kind=sp),
+            </td>
+<td>intent(inout),</td>
+              <td></td>            <td>
+              dimension(:, :), target
+            </td>
+            <td>::</td>
+            <td><strong>a</strong></td>
+            <td>
+<p>Local part of the global matrix <script type="math/tex">\mathbf{A}</script>.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ia~7"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ia</strong></td>
+            <td>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pcpotri.html#variable-ia~7" class="pull-right"><emph>Read more&hellip;</emph></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ja~7"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ja</strong></td>
+            <td>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pcpotri.html#variable-ja~7" class="pull-right"><emph>Read more&hellip;</emph></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-desca~7"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(9)
+            </td>
+            <td>::</td>
+            <td><strong>desca</strong></td>
+            <td>
+<p>ScaLAPACK descriptor of the global matrix <script type="math/tex">\mathbf{A}</script>.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-info~7"></span>
+              integer,
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>info</strong></td>
+            <td>
+<p><code>0</code> if the function completed successfully.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-dlaf_pzpotri"></span> <h3>public  subroutine <a href='../proc/dlaf_pzpotri.html'>dlaf_pzpotri</a>(uplo, n, a, ia, ja, desca, info)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Inverse of distributed double-precision complex Hermitian positive definite matrix <script type="math/tex">\mathbf{A}</script> using
+Cholesky factorization <script type="math/tex">\mathbf{A} = \mathbf{L} \mathbf{L}^H</script> or <script type="math/tex">\mathbf{A} = \mathbf{U}^H \mathbf{U}</script>
+</p><a href="../proc/dlaf_pzpotri.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-uplo~8"></span>
+              character(len=1),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>uplo</strong></td>
+            <td>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~8"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+<p>Order of the matrix sub-matrix <script type="math/tex">\mathbf{A}</script> used in the computation.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-a~8"></span>
+              complex(kind=dp),
+            </td>
+<td>intent(inout),</td>
+              <td></td>            <td>
+              dimension(:, :), target
+            </td>
+            <td>::</td>
+            <td><strong>a</strong></td>
+            <td>
+<p>Local part of the global matrix <script type="math/tex">\mathbf{A}</script>.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ia~8"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ia</strong></td>
+            <td>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzpotri.html#variable-ia~8" class="pull-right"><emph>Read more&hellip;</emph></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ja~8"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ja</strong></td>
+            <td>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzpotri.html#variable-ja~8" class="pull-right"><emph>Read more&hellip;</emph></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-desca~8"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td></td>            <td>
+              dimension(9)
+            </td>
+            <td>::</td>
+            <td><strong>desca</strong></td>
+            <td>
+<p>ScaLAPACK descriptor of the global matrix <script type="math/tex">\mathbf{A}</script>.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-info~8"></span>
+              integer,
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              target
+            </td>
+            <td>::</td>
+            <td><strong>info</strong></td>
+            <td>
+<p><code>0</code> if the function completed successfully.</p>
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+              <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-dlaf_pssyevd"></span> <h3>public  subroutine <a href='../proc/dlaf_pssyevd.html'>dlaf_pssyevd</a>(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, info)  
+</h3></div>
+    <div class="card-body">
+          
+  <p>Eigensolver for a distributed single-precision real symmetric matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssyevd.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-uplo~9"></span>
+              character(len=1),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>uplo</strong></td>
+            <td>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pssyevd.html#variable-uplo~9" class="pull-right"><emph>Read more&hellip;</emph></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-n~9"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>n</strong></td>
+            <td>
+<p>Order of the matrix sub-matrix <script type="math/tex">\mathbf{A}</script> used in the computation.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-a~9"></span>
+              real(kind=sp),
+            </td>
+<td>intent(inout),</td>
+              <td></td>            <td>
+              dimension(:, :), target
+            </td>
+            <td>::</td>
+            <td><strong>a</strong></td>
+            <td>
+<p>Local part of the global matrix <script type="math/tex">\mathbf{A}</script>.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ia~9"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ia</strong></td>
+            <td>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssyevd.html#variable-ia~9" class="pull-right"><emph>Read more&hellip;</emph></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ja~9"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ja</strong></td>
+            <td>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssyevd.html#variable-ja~9" class="pull-right"><emph>Read more&hellip;</emph></a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-desca~9"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -1043,7 +1575,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~5"></span>
+              <span class="anchor" id="variable-info~9"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -1083,7 +1615,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~6"></span>
+              <span class="anchor" id="variable-uplo~10"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -1093,12 +1625,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pssyevd_partial_spectrum.html#variable-uplo~6" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pssyevd_partial_spectrum.html#variable-uplo~10" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~6"></span>
+              <span class="anchor" id="variable-n~10"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -1113,7 +1645,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~6"></span>
+              <span class="anchor" id="variable-a~10"></span>
               real(kind=sp),
             </td>
 <td>intent(inout),</td>
@@ -1128,7 +1660,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~6"></span>
+              <span class="anchor" id="variable-ia~10"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -1138,12 +1670,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssyevd_partial_spectrum.html#variable-ia~6" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssyevd_partial_spectrum.html#variable-ia~10" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~6"></span>
+              <span class="anchor" id="variable-ja~10"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -1153,12 +1685,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssyevd_partial_spectrum.html#variable-ja~6" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssyevd_partial_spectrum.html#variable-ja~10" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~6"></span>
+              <span class="anchor" id="variable-desca~10"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -1278,7 +1810,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~6"></span>
+              <span class="anchor" id="variable-info~10"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -1318,7 +1850,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~7"></span>
+              <span class="anchor" id="variable-uplo~11"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -1328,12 +1860,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pdsyevd.html#variable-uplo~7" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pdsyevd.html#variable-uplo~11" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~7"></span>
+              <span class="anchor" id="variable-n~11"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -1348,7 +1880,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~7"></span>
+              <span class="anchor" id="variable-a~11"></span>
               real(kind=dp),
             </td>
 <td>intent(inout),</td>
@@ -1363,7 +1895,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~7"></span>
+              <span class="anchor" id="variable-ia~11"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -1373,12 +1905,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsyevd.html#variable-ia~7" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsyevd.html#variable-ia~11" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~7"></span>
+              <span class="anchor" id="variable-ja~11"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -1388,12 +1920,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsyevd.html#variable-ja~7" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsyevd.html#variable-ja~11" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~7"></span>
+              <span class="anchor" id="variable-desca~11"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -1483,7 +2015,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~7"></span>
+              <span class="anchor" id="variable-info~11"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -1523,7 +2055,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~8"></span>
+              <span class="anchor" id="variable-uplo~12"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -1533,12 +2065,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pdsyevd_partial_spectrum.html#variable-uplo~8" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pdsyevd_partial_spectrum.html#variable-uplo~12" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~8"></span>
+              <span class="anchor" id="variable-n~12"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -1553,7 +2085,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~8"></span>
+              <span class="anchor" id="variable-a~12"></span>
               real(kind=dp),
             </td>
 <td>intent(inout),</td>
@@ -1568,7 +2100,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~8"></span>
+              <span class="anchor" id="variable-ia~12"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -1578,12 +2110,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsyevd_partial_spectrum.html#variable-ia~8" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsyevd_partial_spectrum.html#variable-ia~12" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~8"></span>
+              <span class="anchor" id="variable-ja~12"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -1593,12 +2125,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsyevd_partial_spectrum.html#variable-ja~8" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsyevd_partial_spectrum.html#variable-ja~12" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~8"></span>
+              <span class="anchor" id="variable-desca~12"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -1718,7 +2250,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~8"></span>
+              <span class="anchor" id="variable-info~12"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -1758,7 +2290,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~9"></span>
+              <span class="anchor" id="variable-uplo~13"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -1768,12 +2300,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pcheevd.html#variable-uplo~9" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pcheevd.html#variable-uplo~13" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~9"></span>
+              <span class="anchor" id="variable-n~13"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -1788,7 +2320,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~9"></span>
+              <span class="anchor" id="variable-a~13"></span>
               complex(kind=sp),
             </td>
 <td>intent(inout),</td>
@@ -1803,7 +2335,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~9"></span>
+              <span class="anchor" id="variable-ia~13"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -1813,12 +2345,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pcheevd.html#variable-ia~9" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pcheevd.html#variable-ia~13" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~9"></span>
+              <span class="anchor" id="variable-ja~13"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -1828,12 +2360,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pcheevd.html#variable-ja~9" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pcheevd.html#variable-ja~13" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~9"></span>
+              <span class="anchor" id="variable-desca~13"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -1923,7 +2455,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~9"></span>
+              <span class="anchor" id="variable-info~13"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -1963,7 +2495,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~10"></span>
+              <span class="anchor" id="variable-uplo~14"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -1973,12 +2505,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pcheevd_partial_spectrum.html#variable-uplo~10" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pcheevd_partial_spectrum.html#variable-uplo~14" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~10"></span>
+              <span class="anchor" id="variable-n~14"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -1993,7 +2525,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~10"></span>
+              <span class="anchor" id="variable-a~14"></span>
               complex(kind=sp),
             </td>
 <td>intent(inout),</td>
@@ -2008,7 +2540,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~10"></span>
+              <span class="anchor" id="variable-ia~14"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -2018,12 +2550,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pcheevd_partial_spectrum.html#variable-ia~10" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pcheevd_partial_spectrum.html#variable-ia~14" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~10"></span>
+              <span class="anchor" id="variable-ja~14"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -2033,12 +2565,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pcheevd_partial_spectrum.html#variable-ja~10" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pcheevd_partial_spectrum.html#variable-ja~14" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~10"></span>
+              <span class="anchor" id="variable-desca~14"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -2158,7 +2690,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~10"></span>
+              <span class="anchor" id="variable-info~14"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -2198,7 +2730,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~11"></span>
+              <span class="anchor" id="variable-uplo~15"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -2208,12 +2740,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pzheevd.html#variable-uplo~11" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pzheevd.html#variable-uplo~15" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~11"></span>
+              <span class="anchor" id="variable-n~15"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -2228,7 +2760,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~11"></span>
+              <span class="anchor" id="variable-a~15"></span>
               complex(kind=dp),
             </td>
 <td>intent(inout),</td>
@@ -2243,7 +2775,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~11"></span>
+              <span class="anchor" id="variable-ia~15"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -2253,12 +2785,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzheevd.html#variable-ia~11" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzheevd.html#variable-ia~15" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~11"></span>
+              <span class="anchor" id="variable-ja~15"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -2268,12 +2800,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzheevd.html#variable-ja~11" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzheevd.html#variable-ja~15" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~11"></span>
+              <span class="anchor" id="variable-desca~15"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -2363,7 +2895,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~11"></span>
+              <span class="anchor" id="variable-info~15"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -2403,7 +2935,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~12"></span>
+              <span class="anchor" id="variable-uplo~16"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -2413,12 +2945,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pzheevd_partial_spectrum.html#variable-uplo~12" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pzheevd_partial_spectrum.html#variable-uplo~16" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~12"></span>
+              <span class="anchor" id="variable-n~16"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -2433,7 +2965,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~12"></span>
+              <span class="anchor" id="variable-a~16"></span>
               complex(kind=dp),
             </td>
 <td>intent(inout),</td>
@@ -2448,7 +2980,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~12"></span>
+              <span class="anchor" id="variable-ia~16"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -2458,12 +2990,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzheevd_partial_spectrum.html#variable-ia~12" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzheevd_partial_spectrum.html#variable-ia~16" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~12"></span>
+              <span class="anchor" id="variable-ja~16"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -2473,12 +3005,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzheevd_partial_spectrum.html#variable-ja~12" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzheevd_partial_spectrum.html#variable-ja~16" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~12"></span>
+              <span class="anchor" id="variable-desca~16"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -2598,7 +3130,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~12"></span>
+              <span class="anchor" id="variable-info~16"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -2639,7 +3171,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~13"></span>
+              <span class="anchor" id="variable-uplo~17"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -2649,12 +3181,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pssygvd.html#variable-uplo~13" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pssygvd.html#variable-uplo~17" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~13"></span>
+              <span class="anchor" id="variable-n~17"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -2669,7 +3201,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~13"></span>
+              <span class="anchor" id="variable-a~17"></span>
               real(kind=sp),
             </td>
 <td>intent(inout),</td>
@@ -2684,7 +3216,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~13"></span>
+              <span class="anchor" id="variable-ia~17"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -2694,12 +3226,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssygvd.html#variable-ia~13" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssygvd.html#variable-ia~17" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~13"></span>
+              <span class="anchor" id="variable-ja~17"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -2709,12 +3241,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssygvd.html#variable-ja~13" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssygvd.html#variable-ja~17" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~13"></span>
+              <span class="anchor" id="variable-desca~17"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -2864,7 +3396,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~13"></span>
+              <span class="anchor" id="variable-info~17"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -2905,7 +3437,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~14"></span>
+              <span class="anchor" id="variable-uplo~18"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -2915,12 +3447,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pssygvd_partial_spectrum.html#variable-uplo~14" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pssygvd_partial_spectrum.html#variable-uplo~18" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~14"></span>
+              <span class="anchor" id="variable-n~18"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -2935,7 +3467,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~14"></span>
+              <span class="anchor" id="variable-a~18"></span>
               real(kind=sp),
             </td>
 <td>intent(inout),</td>
@@ -2950,7 +3482,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~14"></span>
+              <span class="anchor" id="variable-ia~18"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -2960,12 +3492,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssygvd_partial_spectrum.html#variable-ia~14" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssygvd_partial_spectrum.html#variable-ia~18" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~14"></span>
+              <span class="anchor" id="variable-ja~18"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -2975,12 +3507,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssygvd_partial_spectrum.html#variable-ja~14" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssygvd_partial_spectrum.html#variable-ja~18" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~14"></span>
+              <span class="anchor" id="variable-desca~18"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -3160,7 +3692,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~14"></span>
+              <span class="anchor" id="variable-info~18"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -3201,7 +3733,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~15"></span>
+              <span class="anchor" id="variable-uplo~19"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -3211,12 +3743,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pssygvd_factorized.html#variable-uplo~15" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pssygvd_factorized.html#variable-uplo~19" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~15"></span>
+              <span class="anchor" id="variable-n~19"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -3231,7 +3763,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~15"></span>
+              <span class="anchor" id="variable-a~19"></span>
               real(kind=sp),
             </td>
 <td>intent(inout),</td>
@@ -3246,7 +3778,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~15"></span>
+              <span class="anchor" id="variable-ia~19"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -3256,12 +3788,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssygvd_factorized.html#variable-ia~15" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssygvd_factorized.html#variable-ia~19" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~15"></span>
+              <span class="anchor" id="variable-ja~19"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -3271,12 +3803,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssygvd_factorized.html#variable-ja~15" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssygvd_factorized.html#variable-ja~19" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~15"></span>
+              <span class="anchor" id="variable-desca~19"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -3426,7 +3958,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~15"></span>
+              <span class="anchor" id="variable-info~19"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -3467,7 +3999,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~16"></span>
+              <span class="anchor" id="variable-uplo~20"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -3477,12 +4009,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pssygvd_partial_spectrum_factorized.html#variable-uplo~16" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pssygvd_partial_spectrum_factorized.html#variable-uplo~20" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~16"></span>
+              <span class="anchor" id="variable-n~20"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -3497,7 +4029,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~16"></span>
+              <span class="anchor" id="variable-a~20"></span>
               real(kind=sp),
             </td>
 <td>intent(inout),</td>
@@ -3512,7 +4044,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~16"></span>
+              <span class="anchor" id="variable-ia~20"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -3522,12 +4054,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssygvd_partial_spectrum_factorized.html#variable-ia~16" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssygvd_partial_spectrum_factorized.html#variable-ia~20" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~16"></span>
+              <span class="anchor" id="variable-ja~20"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -3537,12 +4069,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssygvd_partial_spectrum_factorized.html#variable-ja~16" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pssygvd_partial_spectrum_factorized.html#variable-ja~20" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~16"></span>
+              <span class="anchor" id="variable-desca~20"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -3722,7 +4254,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~16"></span>
+              <span class="anchor" id="variable-info~20"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -3763,7 +4295,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~17"></span>
+              <span class="anchor" id="variable-uplo~21"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -3773,12 +4305,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pdsygvd.html#variable-uplo~17" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pdsygvd.html#variable-uplo~21" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~17"></span>
+              <span class="anchor" id="variable-n~21"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -3793,7 +4325,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~17"></span>
+              <span class="anchor" id="variable-a~21"></span>
               real(kind=dp),
             </td>
 <td>intent(inout),</td>
@@ -3808,7 +4340,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~17"></span>
+              <span class="anchor" id="variable-ia~21"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -3818,12 +4350,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsygvd.html#variable-ia~17" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsygvd.html#variable-ia~21" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~17"></span>
+              <span class="anchor" id="variable-ja~21"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -3833,12 +4365,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsygvd.html#variable-ja~17" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsygvd.html#variable-ja~21" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~17"></span>
+              <span class="anchor" id="variable-desca~21"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -3988,7 +4520,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~17"></span>
+              <span class="anchor" id="variable-info~21"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -4029,7 +4561,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~18"></span>
+              <span class="anchor" id="variable-uplo~22"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -4039,12 +4571,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pdsygvd_partial_spectrum.html#variable-uplo~18" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pdsygvd_partial_spectrum.html#variable-uplo~22" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~18"></span>
+              <span class="anchor" id="variable-n~22"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -4059,7 +4591,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~18"></span>
+              <span class="anchor" id="variable-a~22"></span>
               real(kind=dp),
             </td>
 <td>intent(inout),</td>
@@ -4074,7 +4606,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~18"></span>
+              <span class="anchor" id="variable-ia~22"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -4084,12 +4616,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsygvd_partial_spectrum.html#variable-ia~18" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsygvd_partial_spectrum.html#variable-ia~22" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~18"></span>
+              <span class="anchor" id="variable-ja~22"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -4099,12 +4631,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsygvd_partial_spectrum.html#variable-ja~18" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsygvd_partial_spectrum.html#variable-ja~22" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~18"></span>
+              <span class="anchor" id="variable-desca~22"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -4284,7 +4816,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~18"></span>
+              <span class="anchor" id="variable-info~22"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -4325,7 +4857,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~19"></span>
+              <span class="anchor" id="variable-uplo~23"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -4335,12 +4867,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pdsygvd_factorized.html#variable-uplo~19" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pdsygvd_factorized.html#variable-uplo~23" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~19"></span>
+              <span class="anchor" id="variable-n~23"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -4355,7 +4887,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~19"></span>
+              <span class="anchor" id="variable-a~23"></span>
               real(kind=dp),
             </td>
 <td>intent(inout),</td>
@@ -4370,7 +4902,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~19"></span>
+              <span class="anchor" id="variable-ia~23"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -4380,12 +4912,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsygvd_factorized.html#variable-ia~19" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsygvd_factorized.html#variable-ia~23" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~19"></span>
+              <span class="anchor" id="variable-ja~23"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -4395,12 +4927,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsygvd_factorized.html#variable-ja~19" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsygvd_factorized.html#variable-ja~23" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~19"></span>
+              <span class="anchor" id="variable-desca~23"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -4550,7 +5082,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~19"></span>
+              <span class="anchor" id="variable-info~23"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -4591,7 +5123,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~20"></span>
+              <span class="anchor" id="variable-uplo~24"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -4601,12 +5133,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pdsygvd_partial_spectrum_factorized.html#variable-uplo~20" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pdsygvd_partial_spectrum_factorized.html#variable-uplo~24" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~20"></span>
+              <span class="anchor" id="variable-n~24"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -4621,7 +5153,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~20"></span>
+              <span class="anchor" id="variable-a~24"></span>
               real(kind=dp),
             </td>
 <td>intent(inout),</td>
@@ -4636,7 +5168,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~20"></span>
+              <span class="anchor" id="variable-ia~24"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -4646,12 +5178,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsygvd_partial_spectrum_factorized.html#variable-ia~20" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsygvd_partial_spectrum_factorized.html#variable-ia~24" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~20"></span>
+              <span class="anchor" id="variable-ja~24"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -4661,12 +5193,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsygvd_partial_spectrum_factorized.html#variable-ja~20" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pdsygvd_partial_spectrum_factorized.html#variable-ja~24" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~20"></span>
+              <span class="anchor" id="variable-desca~24"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -4846,7 +5378,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~20"></span>
+              <span class="anchor" id="variable-info~24"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -4887,7 +5419,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~21"></span>
+              <span class="anchor" id="variable-uplo~25"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -4897,12 +5429,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pchegvd.html#variable-uplo~21" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pchegvd.html#variable-uplo~25" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~21"></span>
+              <span class="anchor" id="variable-n~25"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -4917,7 +5449,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~21"></span>
+              <span class="anchor" id="variable-a~25"></span>
               complex(kind=sp),
             </td>
 <td>intent(inout),</td>
@@ -4932,7 +5464,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~21"></span>
+              <span class="anchor" id="variable-ia~25"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -4942,12 +5474,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pchegvd.html#variable-ia~21" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pchegvd.html#variable-ia~25" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~21"></span>
+              <span class="anchor" id="variable-ja~25"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -4957,12 +5489,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pchegvd.html#variable-ja~21" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pchegvd.html#variable-ja~25" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~21"></span>
+              <span class="anchor" id="variable-desca~25"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -5112,7 +5644,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~21"></span>
+              <span class="anchor" id="variable-info~25"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -5153,7 +5685,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~22"></span>
+              <span class="anchor" id="variable-uplo~26"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -5163,12 +5695,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pchegvd_partial_spectrum.html#variable-uplo~22" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pchegvd_partial_spectrum.html#variable-uplo~26" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~22"></span>
+              <span class="anchor" id="variable-n~26"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -5183,7 +5715,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~22"></span>
+              <span class="anchor" id="variable-a~26"></span>
               complex(kind=sp),
             </td>
 <td>intent(inout),</td>
@@ -5198,7 +5730,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~22"></span>
+              <span class="anchor" id="variable-ia~26"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -5208,12 +5740,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pchegvd_partial_spectrum.html#variable-ia~22" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pchegvd_partial_spectrum.html#variable-ia~26" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~22"></span>
+              <span class="anchor" id="variable-ja~26"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -5223,12 +5755,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pchegvd_partial_spectrum.html#variable-ja~22" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pchegvd_partial_spectrum.html#variable-ja~26" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~22"></span>
+              <span class="anchor" id="variable-desca~26"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -5408,7 +5940,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~22"></span>
+              <span class="anchor" id="variable-info~26"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -5449,7 +5981,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~23"></span>
+              <span class="anchor" id="variable-uplo~27"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -5459,12 +5991,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pchegvd_factorized.html#variable-uplo~23" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pchegvd_factorized.html#variable-uplo~27" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~23"></span>
+              <span class="anchor" id="variable-n~27"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -5479,7 +6011,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~23"></span>
+              <span class="anchor" id="variable-a~27"></span>
               complex(kind=sp),
             </td>
 <td>intent(inout),</td>
@@ -5494,7 +6026,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~23"></span>
+              <span class="anchor" id="variable-ia~27"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -5504,12 +6036,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pchegvd_factorized.html#variable-ia~23" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pchegvd_factorized.html#variable-ia~27" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~23"></span>
+              <span class="anchor" id="variable-ja~27"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -5519,12 +6051,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pchegvd_factorized.html#variable-ja~23" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pchegvd_factorized.html#variable-ja~27" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~23"></span>
+              <span class="anchor" id="variable-desca~27"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -5674,7 +6206,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~23"></span>
+              <span class="anchor" id="variable-info~27"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -5715,7 +6247,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~24"></span>
+              <span class="anchor" id="variable-uplo~28"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -5725,12 +6257,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pchegvd_partial_spectrum_factorized.html#variable-uplo~24" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pchegvd_partial_spectrum_factorized.html#variable-uplo~28" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~24"></span>
+              <span class="anchor" id="variable-n~28"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -5745,7 +6277,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~24"></span>
+              <span class="anchor" id="variable-a~28"></span>
               complex(kind=sp),
             </td>
 <td>intent(inout),</td>
@@ -5760,7 +6292,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~24"></span>
+              <span class="anchor" id="variable-ia~28"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -5770,12 +6302,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pchegvd_partial_spectrum_factorized.html#variable-ia~24" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pchegvd_partial_spectrum_factorized.html#variable-ia~28" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~24"></span>
+              <span class="anchor" id="variable-ja~28"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -5785,12 +6317,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pchegvd_partial_spectrum_factorized.html#variable-ja~24" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pchegvd_partial_spectrum_factorized.html#variable-ja~28" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~24"></span>
+              <span class="anchor" id="variable-desca~28"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -5970,7 +6502,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~24"></span>
+              <span class="anchor" id="variable-info~28"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -6011,7 +6543,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~25"></span>
+              <span class="anchor" id="variable-uplo~29"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -6021,12 +6553,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pzhegvd.html#variable-uplo~25" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pzhegvd.html#variable-uplo~29" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~25"></span>
+              <span class="anchor" id="variable-n~29"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -6041,7 +6573,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~25"></span>
+              <span class="anchor" id="variable-a~29"></span>
               complex(kind=dp),
             </td>
 <td>intent(inout),</td>
@@ -6056,7 +6588,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~25"></span>
+              <span class="anchor" id="variable-ia~29"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -6066,12 +6598,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzhegvd.html#variable-ia~25" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzhegvd.html#variable-ia~29" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~25"></span>
+              <span class="anchor" id="variable-ja~29"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -6081,12 +6613,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzhegvd.html#variable-ja~25" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzhegvd.html#variable-ja~29" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~25"></span>
+              <span class="anchor" id="variable-desca~29"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -6236,7 +6768,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~25"></span>
+              <span class="anchor" id="variable-info~29"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -6277,7 +6809,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~26"></span>
+              <span class="anchor" id="variable-uplo~30"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -6287,12 +6819,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pzhegvd_partial_spectrum.html#variable-uplo~26" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pzhegvd_partial_spectrum.html#variable-uplo~30" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~26"></span>
+              <span class="anchor" id="variable-n~30"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -6307,7 +6839,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~26"></span>
+              <span class="anchor" id="variable-a~30"></span>
               complex(kind=dp),
             </td>
 <td>intent(inout),</td>
@@ -6322,7 +6854,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~26"></span>
+              <span class="anchor" id="variable-ia~30"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -6332,12 +6864,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzhegvd_partial_spectrum.html#variable-ia~26" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzhegvd_partial_spectrum.html#variable-ia~30" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~26"></span>
+              <span class="anchor" id="variable-ja~30"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -6347,12 +6879,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzhegvd_partial_spectrum.html#variable-ja~26" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzhegvd_partial_spectrum.html#variable-ja~30" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~26"></span>
+              <span class="anchor" id="variable-desca~30"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -6532,7 +7064,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~26"></span>
+              <span class="anchor" id="variable-info~30"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -6573,7 +7105,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~27"></span>
+              <span class="anchor" id="variable-uplo~31"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -6583,12 +7115,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pzhegvd_factorized.html#variable-uplo~27" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pzhegvd_factorized.html#variable-uplo~31" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~27"></span>
+              <span class="anchor" id="variable-n~31"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -6603,7 +7135,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~27"></span>
+              <span class="anchor" id="variable-a~31"></span>
               complex(kind=dp),
             </td>
 <td>intent(inout),</td>
@@ -6618,7 +7150,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~27"></span>
+              <span class="anchor" id="variable-ia~31"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -6628,12 +7160,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzhegvd_factorized.html#variable-ia~27" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzhegvd_factorized.html#variable-ia~31" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~27"></span>
+              <span class="anchor" id="variable-ja~31"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -6643,12 +7175,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzhegvd_factorized.html#variable-ja~27" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzhegvd_factorized.html#variable-ja~31" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~27"></span>
+              <span class="anchor" id="variable-desca~31"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -6798,7 +7330,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~27"></span>
+              <span class="anchor" id="variable-info~31"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -6839,7 +7371,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-uplo~28"></span>
+              <span class="anchor" id="variable-uplo~32"></span>
               character(len=1),
             </td>
 <td>intent(in)</td>
@@ -6849,12 +7381,12 @@
             <td>::</td>
             <td><strong>uplo</strong></td>
             <td>
-<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pzhegvd_partial_spectrum_factorized.html#variable-uplo~28" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Indicates whether the upper (<code>"U"</code>) or lower (<code>"L"</code>) triangular part of the global sub-matrix <script type="math/tex">\mathbf{A}</script> is referenced.</p><a href="../proc/dlaf_pzhegvd_partial_spectrum_factorized.html#variable-uplo~32" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-n~28"></span>
+              <span class="anchor" id="variable-n~32"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -6869,7 +7401,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-a~28"></span>
+              <span class="anchor" id="variable-a~32"></span>
               complex(kind=dp),
             </td>
 <td>intent(inout),</td>
@@ -6884,7 +7416,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ia~28"></span>
+              <span class="anchor" id="variable-ia~32"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -6894,12 +7426,12 @@
             <td>::</td>
             <td><strong>ia</strong></td>
             <td>
-<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzhegvd_partial_spectrum_factorized.html#variable-ia~28" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Row index of the global matrix identifying the first row of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzhegvd_partial_spectrum_factorized.html#variable-ia~32" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ja~28"></span>
+              <span class="anchor" id="variable-ja~32"></span>
               integer,
             </td>
 <td>intent(in)</td>
@@ -6909,12 +7441,12 @@
             <td>::</td>
             <td><strong>ja</strong></td>
             <td>
-<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzhegvd_partial_spectrum_factorized.html#variable-ja~28" class="pull-right"><emph>Read more&hellip;</emph></a>
+<p>Column index of the global matrix identifying the first column of the sub-matrix <script type="math/tex">\mathbf{A}</script>.</p><a href="../proc/dlaf_pzhegvd_partial_spectrum_factorized.html#variable-ja~32" class="pull-right"><emph>Read more&hellip;</emph></a>
             </td>
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-desca~28"></span>
+              <span class="anchor" id="variable-desca~32"></span>
               integer,
             </td>
 <td>intent(in),</td>
@@ -7094,7 +7626,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-info~28"></span>
+              <span class="anchor" id="variable-info~32"></span>
               integer,
             </td>
 <td>intent(out),</td>
@@ -7137,7 +7669,7 @@
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-04-17T07:52:56.909725+0000 <br>&copy; <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>             </p>
+ on 2025-06-10T15:43:50.143440+0000 <br>&copy; <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>             </p>
           </div>
         </div>
         <br>
