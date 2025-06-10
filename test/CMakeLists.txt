@@ -11,6 +11,7 @@
 # Define test executables
 set(INIT_TEST_EXECUTABLES init grid1 grid2)
 set(PXPOTRF_TEST_EXECUTABLES pspotrf pdpotrf pcpotrf pzpotrf)
+set(PXPOTRI_TEST_EXECUTABLES pspotri pdpotri pcpotri pzpotri)
 set(PXHEEVD_TEST_EXECUTABLES pssyevd pdsyevd pcheevd pzheevd)
 set(PXHEGVX_TEST_EXECUTABLES pssygvd pdsygvd pchegvd pzhegvd)
 
@@ -59,5 +60,6 @@ endfunction()
 
 add_tests("${INIT_TEST_EXECUTABLES}" "")
 add_tests("${PXPOTRF_TEST_EXECUTABLES}" pxpotrf)
+add_tests("${PXPOTRI_TEST_EXECUTABLES}" pxpotri)
 add_tests("${PXHEEVD_TEST_EXECUTABLES}" pxheevd)
 add_tests("${PXHEGVX_TEST_EXECUTABLES}" pxhegvd)
