@@ -7,7 +7,7 @@ Fortran interface for [DLA-Future], a task-based linear algebra library providin
 ## Documentation
 
 * [DLA-Future-Fortran `main` Documentation](https://eth-cscs.github.io/DLA-Future-Fortran/main/)
-* [DLA-Future-Fortran `v0.4.0` Documentation](https://eth-cscs.github.io/DLA-Future-Fortran/v0.4.0/)
+* [DLA-Future-Fortran `v0.5.0` Documentation](https://eth-cscs.github.io/DLA-Future-Fortran/v0.5.0/)
 
 ## Citation
 

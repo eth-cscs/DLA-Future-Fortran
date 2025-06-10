@@ -1,8 +1,7 @@
 #
 # Distributed Linear Algebra with Future (DLAF)
 #
-# Copyright (c) ETH Zurich
-# All rights reserved.
+# Copyright (c) ETH Zurich All rights reserved.
 #
 # Please, refer to the LICENSE file in the root directory.
 # SPDX-License-Identifier: BSD-3-Clause
@@ -10,11 +9,10 @@
 
 cmake_minimum_required(VERSION 3.22)
 
-# NOTE: CXX needed with DLA-Future
-# NOTE: C needed with HDF5 (dla-future +hdf5)
+# NOTE: CXX needed with DLA-Future NOTE: C needed with HDF5 (dla-future +hdf5)
 project(
   DLAFFortran
-  VERSION 0.4.0
+  VERSION 0.5.0
   LANGUAGES Fortran C CXX)
 
 include(CMakeDependentOption)
@@ -38,7 +36,7 @@ if(NOT CMAKE_Fortran_MODULE_DIRECTORY)
   set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/fortran_mods)
 endif()
 
-find_package(DLAF 0.9.0 REQUIRED)
+find_package(DLAF 0.10.0 REQUIRED)
 
 add_subdirectory(src)
 
