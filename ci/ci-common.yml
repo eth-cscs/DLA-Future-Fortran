@@ -30,7 +30,7 @@ stages:
     reports:
       dotenv: build.env
   variables:
-    SPACK_SHA: develop-2025-05-18
+    SPACK_SHA: cd3da0e6b7f4bc805777f5fb334e991e45a12262
     SPACK_BUILDCACHE: develop-2025-05-18
     SPACK_DLAF_FORTRAN_REPO: ./spack
     DOCKER_BUILD_ARGS: '[
