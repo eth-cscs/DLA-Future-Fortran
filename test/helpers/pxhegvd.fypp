@@ -55,7 +55,7 @@ contains
          subroutine p${name}$gvd_test
 
             integer, parameter :: n = 4
-            character, parameter :: uplo = 'L' ! NOTE: pxheevd limited to uplo='L'
+            character, parameter :: uplo = 'L' ! NOTE: pxhegvd limited to uplo='L'
             integer(kind=i8), parameter :: eval_idx_begin = 1
             integer(kind=i8), parameter :: eval_idx_end = 2
 
