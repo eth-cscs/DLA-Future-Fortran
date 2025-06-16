@@ -50,6 +50,7 @@ contains
          subroutine p${name}$evd_test
 
             integer, parameter :: n = 4
+            character, parameter :: uplo = 'L' ! NOTE: pxheevd limited to uplo='L'
             integer(kind=i8), parameter :: eval_idx_begin = 1
             integer(kind=i8), parameter :: eval_idx_end = 2
 
@@ -136,13 +137,13 @@ contains
             call dlaf_initialize()
             call dlaf_create_grid_from_blacs(ictxt)
             call dlaf_p${name}$evd( &
-               'L', &
+               uplo, &
                n, A_local_dlaf, 1, 1, desca_local_dlaf, &
                W_dlaf, Z_local_dlaf, 1, 1, descz_local_dlaf, &
                info &
                )
             call dlaf_p${name}$evd_partial_spectrum( &
-               'L', &
+               uplo, &
                n, A_local_dlaf_partial_spectrum, 1, 1, desca_local_dlaf, &
                W_dlaf_partial_spectrum, Z_local_dlaf_partial_spectrum, 1, 1, descz_local_dlaf_partial_spectrum, &
                eval_idx_begin, eval_idx_end, &
@@ -174,14 +175,14 @@ contains
             ! ScaLAPACK
             #:if type == 'real'
                call p${name}$evd( &
-                  'V', 'L', &
+                  'V', uplo, &
                   n, A_local_scalapack, 1, 1, desca_local_scalapack, &
                   W_scalapack, Z_local_scalapack, 1, 1, descz_local_scalapack, &
                   work, lwork, iwork, liwork, info &
                   )
             #:else
                call p${name}$evd( &
-                  'V', 'L', &
+                  'V', uplo, &
                   n, A_local_scalapack, 1, 1, desca_local_scalapack, &
                   W_scalapack, Z_local_scalapack, 1, 1, descz_local_scalapack, &
                   work, lwork, rwork, lrwork, iwork, liwork, info &
