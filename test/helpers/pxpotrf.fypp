@@ -52,7 +52,7 @@ contains
          subroutine p${name}$potrf_${uplo}$_test
 
             integer, parameter :: n = 4
-	    character, parameter :: uplo = '${uplo}$'
+            character, parameter :: uplo = '${uplo}$'
 
             integer:: nprow, npcol
             integer:: i, j
