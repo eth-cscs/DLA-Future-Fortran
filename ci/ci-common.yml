@@ -31,7 +31,7 @@ stages:
     reports:
       dotenv: build.env
   variables:
-    SPACK_COMMIT: develop-2025-06-15
+    SPACK_COMMIT: 2e7168b4cfe9222a94becf0c2c5b401f513181ec
     SPACK_PACKAGES_COMMIT: 629e6f0ba34621177de7bc7f8e35dca8e780e7cc
     SPACK_BUILDCACHE: develop-2025-06-01
     SPACK_DLAF_FORTRAN_REPO: ./spack
