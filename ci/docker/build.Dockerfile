@@ -43,7 +43,7 @@ RUN mkdir -p $SPACK_ROOT \
 
 ENV PATH $SPACK_ROOT/bin:/root/.local/bin:$PATH
 
-RUN spack repo add $SPACK_PACKAGES_ROOT
+RUN spack repo add $SPACK_PACKAGES_ROOT/repos/spack_repo/builtin
 
 # Find compilers and define which compiler we want to use
 ARG COMPILER
