@@ -11,6 +11,7 @@
 #:set precision = ['sp', 'dp']
 #:set types = ['real', 'complex']
 #:set names = {('sp', 'real'): 's', ('sp', 'complex'): 'c', ('dp', 'real'): 'd', ('dp', 'complex'): 'z'}
+#:set uplos = ['L', 'U']
 module pxpotri_tests
    use iso_fortran_env, only: error_unit, sp => real32, dp => real64
    use dlaf_fortran, only: dlaf_initialize, dlaf_finalize, dlaf_create_grid_from_blacs, dlaf_free_grid
@@ -33,21 +34,25 @@ module pxpotri_tests
    external blacs_exit
    integer, external :: numroc
 
+   #:for uplo in uplos
    #:for dtype in precision
       #:for type in types
          #:set name = names[(dtype, type)]
-         public :: p${name}$potri_test
+         public :: p${name}$potri_${uplo}$_test
       #:endfor
+   #:endfor
    #:endfor
 
 contains
 
+   #:for uplo in uplos
    #:for dtype in precision
       #:for type in types
          #:set name = names[(dtype, type)]
-         subroutine p${name}$potri_test
+         subroutine p${name}$potri_${uplo}$_test
 
             integer, parameter :: n = 4
+            character, parameter :: uplo = '${uplo}$'
 
             integer:: nprow, npcol
             integer:: i, j
@@ -107,12 +112,12 @@ contains
             ! Solve with DLAF
             call dlaf_initialize()
             call dlaf_create_grid_from_blacs(ictxt)
-            call dlaf_p${name}$potrf('L', n, A_local_dlaf, 1, 1, desca_local_dlaf, info)
+            call dlaf_p${name}$potrf(uplo, n, A_local_dlaf, 1, 1, desca_local_dlaf, info)
             if (info /= 0) then
                write (error_unit, *) 'ERROR: dlaf_p${name}$potrf returned info = ', info
                call terminate(ictxt)
             end if
-            call dlaf_p${name}$potri('L', n, A_local_dlaf, 1, 1, desca_local_dlaf, info)
+            call dlaf_p${name}$potri(uplo, n, A_local_dlaf, 1, 1, desca_local_dlaf, info)
             if (info /= 0) then
                write (error_unit, *) 'ERROR: dlaf_p${name}$potri returned info = ', info
                call terminate(ictxt)
@@ -130,12 +135,12 @@ contains
             call p${name}$gemr2d(n, n, A, 1, 1, desca, A_local_scalapack, 1, 1, desca_local_scalapack, ictxt)
 
             ! ScaLAPACK
-            call p${name}$potrf('L', n, A_local_scalapack, 1, 1, desca_local_scalapack, info)
+            call p${name}$potrf(uplo, n, A_local_scalapack, 1, 1, desca_local_scalapack, info)
             if (info /= 0) then
                write (error_unit, *) 'ERROR: p${name}$potrf returned info = ', info
                call terminate(ictxt)
             end if
-            call p${name}$potri('L', n, A_local_scalapack, 1, 1, desca_local_scalapack, info)
+            call p${name}$potri(uplo, n, A_local_scalapack, 1, 1, desca_local_scalapack, info)
             if (info /= 0) then
                write (error_unit, *) 'ERROR: p${name}$potri returned info = ', info
                call terminate(ictxt)
@@ -150,21 +155,21 @@ contains
             if (rank == 0) then
                write(*, *) "DLAF=", R_dlaf
                write(*, *) "ScaLAPACK=", R_scalapack
-               if (.not. allclose(R_dlaf, R_scalapack, uplo='L')) then
+               if (.not. allclose(R_dlaf, R_scalapack, uplo=uplo)) then
                   failed = .true.
                   write (error_unit, *) "ERROR: DLAF != ScaLAPACK"
                end if
 
                ! Check against LAPACK too
                write(*, *) "A=", A
-               call ${name}$potrf('L', n, A, n, info)
-               call ${name}$potri('L', n, A, n, info)
+               call ${name}$potrf(uplo, n, A, n, info)
+               call ${name}$potri(uplo, n, A, n, info)
                write(*, *) "A=", A
-               if (.not. allclose(R_dlaf, A, uplo='L')) then
+               if (.not. allclose(R_dlaf, A, uplo=uplo)) then
                   failed = .true.
                   write (error_unit, *) "ERROR: DLAF != LAPACK"
                end if
-               if (.not. allclose(R_scalapack, A, uplo='L')) then
+               if (.not. allclose(R_scalapack, A, uplo=uplo)) then
                   failed = .true.
                   write (error_unit, *) "ERROR: ScaLAPACK != LAPACK"
                end if
@@ -188,8 +193,9 @@ contains
             call blacs_gridexit(ictxt)
             call blacs_exit(1)
             call teardown_mpi()
-         end subroutine p${name}$potri_test
+         end subroutine p${name}$potri_${uplo}$_test
 
       #:endfor
+   #:endfor
    #:endfor
 end module pxpotri_tests

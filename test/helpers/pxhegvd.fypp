@@ -55,6 +55,7 @@ contains
          subroutine p${name}$gvd_test
 
             integer, parameter :: n = 4
+            character, parameter :: uplo = 'L' ! NOTE: pxhegvd limited to uplo='L'
             integer(kind=i8), parameter :: eval_idx_begin = 1
             integer(kind=i8), parameter :: eval_idx_end = 2
 
@@ -164,7 +165,7 @@ contains
 
             ! Solve with Cholesky factorization
             call dlaf_p${name}$gvd( &
-               'L', &
+               uplo, &
                n, A_local_dlaf, 1, 1, desca_local_dlaf, &
                B_local_dlaf, 1, 1, descb_local_dlaf, &
                W_dlaf, Z_local_dlaf, 1, 1, descz_local_dlaf, &
@@ -174,7 +175,7 @@ contains
             ! Solve with Cholesky factorisation from the previous call 
             A_local_dlaf(:, :) = A_local_store(:, :)
             call dlaf_p${name}$gvd_factorized( &
-               'L', &
+               uplo, &
                n, A_local_dlaf, 1, 1, desca_local_dlaf, &
                B_local_dlaf, 1, 1, descb_local_dlaf, &
                W_dlaf_factorized, Z_local_dlaf_factorized, 1, 1, descz_local_dlaf, &
@@ -185,7 +186,7 @@ contains
             A_local_dlaf(:, :) = A_local_store(:, :)
             B_local_dlaf(:, :) = B_local_store(:, :)
             call dlaf_p${name}$gvd_partial_spectrum( &
-               'L', &
+               uplo, &
                n, A_local_dlaf, 1, 1, desca_local_dlaf, &
                B_local_dlaf, 1, 1, descb_local_dlaf, &
                W_dlaf_partial_spectrum, Z_local_dlaf_partial_spectrum, 1, 1, descz_local_dlaf, &
@@ -196,7 +197,7 @@ contains
             ! Solve with Cholesky factorisation from the previous call 
             A_local_dlaf(:, :) = A_local_store(:, :)
             call dlaf_p${name}$gvd_factorized( &
-               'L', &
+               uplo, &
                n, A_local_dlaf, 1, 1, desca_local_dlaf, &
                B_local_dlaf, 1, 1, descb_local_dlaf, &
                W_dlaf_partial_spectrum_factorized, Z_local_dlaf_partial_spectrum_factorized, 1, 1, descz_local_dlaf, &
@@ -228,7 +229,7 @@ contains
             ! ScaLAPACK
             #:if type == 'real'
                call p${name}$gvx( &
-                  1, 'V', 'A', 'L', &
+                  1, 'V', 'A', uplo, &
                   n, A_local_scalapack, 1, 1, desca_local_scalapack, &
                   B_local_scalapack, 1, 1, descb_local_scalapack, &
                   0.0_${dtype}$, 0.0_${dtype}$, 0, 0, pdlamch(ictxt, 'U'), neig, neval, &
@@ -237,7 +238,7 @@ contains
                   )
             #:else
                call p${name}$gvx( &
-                  1, 'V', 'A', 'L', &
+                  1, 'V', 'A', uplo, &
                   n, A_local_scalapack, 1, 1, desca_local_scalapack, &
                   B_local_scalapack, 1, 1, descb_local_scalapack, &
                   0.0_${dtype}$, 0.0_${dtype}$, 0, 0, pdlamch(ictxt, 'U'), neig, neval, &
