@@ -27,13 +27,23 @@ RUN mkdir -p /opt/libtree && \
     curl -Lfso /opt/libtree/libtree https://github.com/haampie/libtree/releases/download/v2.0.0/libtree_x86_64 && \
     chmod +x /opt/libtree/libtree
 
-# This is the spack version we want to have
-ARG SPACK_SHA
-ENV SPACK_SHA=$SPACK_SHA
-
 # Install Spack
-RUN mkdir -p /opt/spack && \
-    curl -Ls "https://api.github.com/repos/spack/spack/tarball/$SPACK_SHA" | tar --strip-components=1 -xz -C /opt/spack
+ARG SPACK_REPO=https://github.com/spack/spack
+ARG SPACK_COMMIT
+ENV SPACK_ROOT=/opt/spack-$SPACK_COMMIT
+ARG SPACK_PACKAGES_REPO=https://github.com/spack/spack-packages
+ARG SPACK_PACKAGES_COMMIT
+ENV SPACK_PACKAGES_ROOT=/opt/spack-packages-$SPACK_PACKAGES_COMMIT
+RUN mkdir -p $SPACK_ROOT \
+    && curl -OL $SPACK_REPO/archive/$SPACK_COMMIT.tar.gz \
+    && tar -xzvf $SPACK_COMMIT.tar.gz -C /opt && rm -f $SPACK_COMMIT.tar.gz \
+    && mkdir -p $SPACK_PACKAGES_ROOT \
+    && curl -OL $SPACK_PACKAGES_REPO/archive/$SPACK_PACKAGES_COMMIT.tar.gz \
+    && tar -xzvf $SPACK_PACKAGES_COMMIT.tar.gz -C /opt && rm -f $SPACK_PACKAGES_COMMIT.tar.gz
+
+ENV PATH $SPACK_ROOT/bin:/root/.local/bin:$PATH
+
+RUN spack repo add --scope site $SPACK_PACKAGES_ROOT/repos/spack_repo/builtin
 
 # Find compilers and define which compiler we want to use
 ARG COMPILER
