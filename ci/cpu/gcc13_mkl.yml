@@ -1,0 +1,29 @@
+include:
+  - local: 'ci/ci-common.yml'
+
+cpu gcc13 mkl deps:
+  extends: .deps_common
+  variables:
+    COMPILER: gcc@13
+    SPACK_ENVIRONMENT: ci/containers/mkl.yaml
+    USE_MKL: "ON"
+    DEPS_IMAGE: $CSCS_REGISTRY_PATH/cpu-gcc13-mkl/deps
+
+cpu gcc13 mkl build:
+  extends:
+    - .build_common
+    - .build_for_eiger
+  needs:
+    - cpu gcc13 mkl deps
+  variables:
+    DLAFF_IMAGE: $CSCS_REGISTRY_PATH/cpu-gcc13-mkl/dlaff:$CI_COMMIT_SHA
+
+cpu gcc13 mkl test:
+  extends: .run_common
+  needs:
+    - cpu gcc13 mkl build
+  trigger:
+    include:
+      - artifact: pipeline.yml
+        job: cpu gcc13 mkl build
+

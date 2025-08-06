@@ -15,29 +15,27 @@ stages:
     - TAG_IMAGE=`echo ${BASE_IMAGE##*/} | sed 's/[:]//g'`
     - TAG_APTGET=`echo ${EXTRA_APTGET} | sha256sum - | head -c 6`
     - TAG_COMPILER=`echo ${COMPILER}_CXX${CXXSTD} | sed 's/[@]//g'`
-    - TAG_DOCKERFILE=`sha256sum $DOCKERFILE | head -c 16`
+    - TAG_DOCKERFILE=`sha256sum $DOCKERFILE | head -c 12`
     - TAG_SPACK=`echo $SPACK_COMMIT | tail -c 11`
     - TAG_SPACK_PACKAGES=`echo $SPACK_PACKAGES_COMMIT | tail -c 11`
     - TAG_SPACK_BUILDCACHE=`echo $SPACK_BUILDCACHE | tail -c 11`
-    - TAG_REPO=`find $SPACK_DLAF_FORTRAN_REPO -type f -exec sha256sum {} \; | sha256sum - | head -c 16`
-    - TAG_ENVIRONMENT=`cat $SPACK_ENVIRONMENT $COMMON_SPACK_ENVIRONMENT | sha256sum | head -c 16`
+    - TAG_REPO=`find $SPACK_DLAF_FORTRAN_REPO -type f -exec sha256sum {} \; | sha256sum - | head -c 12`
+    - TAG_ENVIRONMENT=`cat $SPACK_ENVIRONMENT $COMMON_SPACK_ENVIRONMENT | sha256sum | head -c 12`
     - TAG=${TAG_IMAGE}-${TAG_APTGET}-${TAG_COMPILER}-MKL${USE_MKL}-${TAG_DOCKERFILE}-${TAG_SPACK}-${TAG_SPACK_PACKAGES}-${TAG_SPACK_BUILDCACHE}-${TAG_REPO}-${TAG_ENVIRONMENT}
-    - export PERSIST_IMAGE_NAME=$BUILD_IMAGE:$TAG
-    - echo "BUILD_IMAGE=$PERSIST_IMAGE_NAME" > build.env
-    - echo "USE_MKL=$USE_MKL" >> build.env
+    - export PERSIST_IMAGE_NAME=$DEPS_IMAGE:$TAG
+    - echo "DEPS_IMAGE=$PERSIST_IMAGE_NAME" > build.env
     - 'echo "INFO: Building image $PERSIST_IMAGE_NAME"'
     - 'echo "INFO: Using NUM_CORES_BUILD_DEPS=$NUM_CORES_BUILD_DEPS"'
   artifacts:
     reports:
       dotenv: build.env
   variables:
-    SPACK_COMMIT: 2e7168b4cfe9222a94becf0c2c5b401f513181ec
-    SPACK_PACKAGES_COMMIT: 629e6f0ba34621177de7bc7f8e35dca8e780e7cc
+    SPACK_COMMIT: fbadf557433ae3d8cb8a2b63a81303de42a9fd6f
+    SPACK_PACKAGES_COMMIT: bf71e784ba28818a05468ce4ffef405fa7c3d151
     SPACK_BUILDCACHE: develop-2025-06-01
     SPACK_DLAF_FORTRAN_REPO: ./spack
     DOCKER_BUILD_ARGS: '[
         "BASE_IMAGE",
-        "BUILDKIT_INLINE_CACHE=1",
         "SPACK_COMMIT",
         "SPACK_PACKAGES_COMMIT",
         "SPACK_BUILDCACHE",
@@ -48,11 +46,12 @@ stages:
         "SPACK_DLAF_FORTRAN_REPO",
         "NUM_PROCS=$NUM_CORES_BUILD_DEPS"
       ]'
-    DOCKERFILE: ci/docker/build.Dockerfile
-    BASE_IMAGE: docker.io/ubuntu:22.04
+    DOCKERFILE: ci/containers/build.Containerfile
+    # FIXME: The base image has been build manually, see instructions in the base-images folder
+    BASE_IMAGE: $CSCS_REGISTRY_PATH/base-images/zen2-devel-ubuntu24.04:v1.0
     EXTRA_APTGET: ""
     USE_MKL: "OFF"
-    COMMON_SPACK_ENVIRONMENT: ci/docker/common.yaml
+    COMMON_SPACK_ENVIRONMENT: ci/containers/common.yaml
 
 .build_common:
   extends: .container-builder
@@ -62,19 +61,14 @@ stages:
     - 'echo $DOCKERHUB_TOKEN | podman login docker.io -u $DOCKERHUB_USERNAME --password-stdin'
     - 'echo "INFO: Using NUM_CORES_BUILD_DLAF_FORTRAN=$NUM_CORES_BUILD_DLAF_FORTRAN"'
   after_script:
-    - podman run -v $PWD/ci/ctest_to_gitlab.sh:/ctest_to_gitlab.sh $DEPLOY_IMAGE /ctest_to_gitlab.sh "$DEPLOY_IMAGE" "$THREADS_MAX_PER_TASK" "$THREADS_PER_NODE" "$SLURM_CONSTRAINT" "$RUNNER" > pipeline.yml
+    - podman run -v $PWD/ci/ctest_to_gitlab.sh:/ctest_to_gitlab.sh $DLAFF_IMAGE /ctest_to_gitlab.sh "$DLAFF_IMAGE" "$THREADS_MAX_PER_TASK" "$THREADS_PER_NODE" "$SLURM_CONSTRAINT" "$RUNNER" > pipeline.yml
   variables:
-    PERSIST_IMAGE_NAME: $DEPLOY_IMAGE
+    PERSIST_IMAGE_NAME: $DLAFF_IMAGE
     DOCKER_BUILD_ARGS: '[
-        "BUILD_IMAGE",
-        "DEPLOY_BASE_IMAGE",
-        "EXTRA_APTGET_DEPLOY",
-        "USE_MKL",
+        "DEPS_IMAGE",
         "NUM_PROCS=$NUM_CORES_BUILD_DLAF_FORTRAN"
       ]'
-    DOCKERFILE: ci/docker/deploy.Dockerfile
-    DEPLOY_BASE_IMAGE: docker.io/ubuntu:22.04
-    EXTRA_APTGET_DEPLOY: ""
+    DOCKERFILE: ci/containers/deploy.Containerfile
   artifacts:
     paths:
       - pipeline.yml
@@ -92,3 +86,7 @@ stages:
     strategy: depend
     forward:
       pipeline_variables: true
+  # FIXME: Workaround until CE provides a full MPI replacement
+  # Default is PMI2, but we use Cray-MPICH from the base image
+  variables:
+    SLURM_MPI_TYPE: cray_shasta

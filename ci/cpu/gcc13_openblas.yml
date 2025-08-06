@@ -1,0 +1,29 @@
+include:
+  - local: 'ci/ci-common.yml'
+
+cpu gcc13 openblas deps:
+  extends: .deps_common
+  variables:
+    COMPILER: gcc@13
+    SPACK_ENVIRONMENT: ci/containers/openblas.yaml
+    USE_MKL: "OFF"
+    DEPS_IMAGE: $CSCS_REGISTRY_PATH/cpu-gcc13-openblas/deps
+
+cpu gcc13 openblas build:
+  extends:
+    - .build_common
+    - .build_for_eiger
+  needs:
+    - cpu gcc13 openblas deps
+  variables:
+    DLAFF_IMAGE: $CSCS_REGISTRY_PATH/cpu-gcc13-openblas/dlaff:$CI_COMMIT_SHA
+
+cpu gcc13 openblas test:
+  extends: .run_common
+  needs:
+    - cpu gcc13 openblas build
+  trigger:
+    include:
+      - artifact: pipeline.yml
+        job: cpu gcc13 openblas build
+

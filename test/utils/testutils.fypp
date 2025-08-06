@@ -64,7 +64,7 @@ contains
    #:for dtype in precision
       #:for type in types
          #:set symbol = symbols[(dtype, type)]
-         function allclose_${symbol}$_mat(x, y, rtol, atol, uplo) result(aclose)
+         pure function allclose_${symbol}$_mat(x, y, rtol, atol, uplo) result(aclose)
             ${type}$ (kind=${dtype}$), intent(in), dimension(:, :) :: x, y
             real(kind=${dtype}$), intent(in), optional :: rtol, atol
             character, intent(in), optional :: uplo
@@ -103,7 +103,6 @@ contains
                      do j = 1, i
                         if (.not. close (x(i, j), y(i, j), rtol_l, atol_l)) then
                            aclose = .false.
-                           write (error_unit, *) i, j, x(i, j), y(i, j)
                         end if
                      end do
                   end do
@@ -112,7 +111,6 @@ contains
                      do j = i + 1, n
                         if (.not. close (x(i, j), y(i, j), rtol_l, atol_l)) then
                            aclose = .false.
-                           write (error_unit, *) i, j, x(i, j), y(i, j)
                         end if
                      end do
                   end do
@@ -122,7 +120,6 @@ contains
                   do i = 1, m
                      if (.not. close (x(i, j), y(i, j), rtol_l, atol_l)) then
                         aclose = .false.
-                        write (error_unit, *) i, j, x(i, j), y(i, j)
                      end if
                   end do
                end do
@@ -199,7 +196,7 @@ contains
 
       if (present(ictxt)) call blacs_gridexit(ictxt)
       call mpi_finalize(ierr)
-      stop - 1
+      stop -1
    end subroutine terminate
 
    subroutine setup_mpi(nprow, npcol, rank, nprocs)

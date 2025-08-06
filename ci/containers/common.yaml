@@ -13,7 +13,7 @@ packages:
     target: [x86_64]
     require:
       - "platform=linux"
-      - "os=ubuntu22.04"
+      - "os=ubuntu24.04"
   blas:
     require: 'intel-oneapi-mkl'
   lapack:
@@ -21,7 +21,11 @@ packages:
   scalapack:
     require: 'intel-oneapi-mkl'
   mpi:
-    require: 'mpich'
+    # FIXME: Workaround until CE provides a full MPI replacement (as SARUS did)
+    require: 'cray-mpich'
+  libfabric:
+    # Specify libfabric version to match the system version
+    require: '@1.15.2'
   intel-oneapi-mkl:
     require:
       - 'threads=none'
@@ -30,12 +34,6 @@ packages:
   openblas:
     variants:
       - 'threads=openmp'
-  mpich:
-    # Requirement for ABI compatibility on the test system
-    require:
-      - '@3.4.2'
-    variants:
-      - '~libxml2'
   hwloc:
     variants:
       - '~libxml2'

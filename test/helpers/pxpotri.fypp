@@ -153,18 +153,14 @@ contains
 
             failed = .false.
             if (rank == 0) then
-               write(*, *) "DLAF=", R_dlaf
-               write(*, *) "ScaLAPACK=", R_scalapack
                if (.not. allclose(R_dlaf, R_scalapack, uplo=uplo)) then
                   failed = .true.
                   write (error_unit, *) "ERROR: DLAF != ScaLAPACK"
                end if
 
                ! Check against LAPACK too
-               write(*, *) "A=", A
                call ${name}$potrf(uplo, n, A, n, info)
                call ${name}$potri(uplo, n, A, n, info)
-               write(*, *) "A=", A
                if (.not. allclose(R_dlaf, A, uplo=uplo)) then
                   failed = .true.
                   write (error_unit, *) "ERROR: DLAF != LAPACK"

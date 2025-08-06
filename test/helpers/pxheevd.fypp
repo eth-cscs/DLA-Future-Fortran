@@ -236,7 +236,7 @@ contains
                     write (error_unit, *) "ERROR: DLAF_PS != ScaLAPACK (eigenvectors [begin,end])"
                 end if
 
-                ! Something is off if the lastt eigenvectors are the same as ScaLAPACK
+                ! Something is off if the last eigenvectors are the same as ScaLAPACK
                 if ( &
                     allclose( &
                         abs(Z_dlaf_partial_spectrum(:,eval_idx_end+1:n)), &
