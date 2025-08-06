@@ -19,9 +19,10 @@ stages:
     - TAG_SPACK=`echo $SPACK_COMMIT | tail -c 11`
     - TAG_SPACK_PACKAGES=`echo $SPACK_PACKAGES_COMMIT | tail -c 11`
     - TAG_SPACK_BUILDCACHE=`echo $SPACK_BUILDCACHE | tail -c 11`
+    - TAG_ALPS_CLUSTER_CONFIG=`echo $ALPS_CLUSTER_CONFIG_COMMIT | head -c 8`
     - TAG_REPO=`find $SPACK_DLAF_FORTRAN_REPO -type f -exec sha256sum {} \; | sha256sum - | head -c 12`
     - TAG_ENVIRONMENT=`cat $SPACK_ENVIRONMENT $COMMON_SPACK_ENVIRONMENT | sha256sum | head -c 12`
-    - TAG=${TAG_IMAGE}-${TAG_APTGET}-${TAG_COMPILER}-MKL${USE_MKL}-${TAG_DOCKERFILE}-${TAG_SPACK}-${TAG_SPACK_PACKAGES}-${TAG_SPACK_BUILDCACHE}-${TAG_REPO}-${TAG_ENVIRONMENT}
+    - TAG=${TAG_IMAGE}-${TAG_APTGET}-${TAG_COMPILER}-MKL${USE_MKL}-${TAG_DOCKERFILE}-${TAG_SPACK}-${TAG_SPACK_PACKAGES}-${TAG_SPACK_BUILDCACHE}-${TAG_ALPS_CLUSTER_CONFIG}-${TAG_REPO}-${TAG_ENVIRONMENT}
     - export PERSIST_IMAGE_NAME=$DEPS_IMAGE:$TAG
     - echo "DEPS_IMAGE=$PERSIST_IMAGE_NAME" > build.env
     - 'echo "INFO: Building image $PERSIST_IMAGE_NAME"'
@@ -33,12 +34,14 @@ stages:
     SPACK_COMMIT: fbadf557433ae3d8cb8a2b63a81303de42a9fd6f
     SPACK_PACKAGES_COMMIT: bf71e784ba28818a05468ce4ffef405fa7c3d151
     SPACK_BUILDCACHE: develop-2025-06-01
+    ALPS_CLUSTER_CONFIG_COMMIT: 3c26eb25bdfa3151b637c040154a55bb9da31ba1
     SPACK_DLAF_FORTRAN_REPO: ./spack
     DOCKER_BUILD_ARGS: '[
         "BASE_IMAGE",
         "SPACK_COMMIT",
         "SPACK_PACKAGES_COMMIT",
         "SPACK_BUILDCACHE",
+        "ALPS_CLUSTER_CONFIG_COMMIT",
         "EXTRA_APTGET",
         "COMPILER",
         "SPACK_ENVIRONMENT",
@@ -47,8 +50,7 @@ stages:
         "NUM_PROCS=$NUM_CORES_BUILD_DEPS"
       ]'
     DOCKERFILE: ci/containers/build.Containerfile
-    # FIXME: The base image has been build manually, see instructions in the base-images folder
-    BASE_IMAGE: $CSCS_REGISTRY_PATH/base-images/zen2-devel-ubuntu24.04:v1.0
+    BASE_IMAGE: docker.io/ubuntu:24.04
     EXTRA_APTGET: ""
     USE_MKL: "OFF"
     COMMON_SPACK_ENVIRONMENT: ci/containers/common.yaml

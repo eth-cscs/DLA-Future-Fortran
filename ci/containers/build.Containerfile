@@ -45,10 +45,12 @@ ENV PATH $SPACK_ROOT/bin:/root/.local/bin:$PATH
 RUN spack repo add --scope site $SPACK_PACKAGES_ROOT/repos/spack_repo/builtin
 
 # FIXME: Workaround until CE provides full MPI replacement
-# Add custom repo, if it exists in the base image
-RUN if [ -d /root/site/spack_repo/alps/ ]; then \
-      spack repo add --scope site /root/site/spack_repo/alps/; \
-    fi
+ARG ALPS_CLUSTER_CONFIG_COMMIT
+ENV ALPS_CLUSTER_CONFIG_SHA=$ALPS_CLUSTER_CONFIG_COMMIT
+RUN mkdir -p /opt/alps-cluster-config && \
+    curl -Ls "https://api.github.com/repos/eth-cscs/alps-cluster-config/tarball/$ALPS_CLUSTER_CONFIG_COMMIT" | \
+    tar --strip-components=1 -xz -C /opt/alps-cluster-config && \
+    spack repo add --scope site /opt/alps-cluster-config/site/spack_repo/alps
 
 # Find compilers and define which compiler we want to use
 ARG COMPILER

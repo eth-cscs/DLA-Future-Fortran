@@ -20,12 +20,6 @@ packages:
     require: 'intel-oneapi-mkl'
   scalapack:
     require: 'intel-oneapi-mkl'
-  mpi:
-    # FIXME: Workaround until CE provides a full MPI replacement (as SARUS did)
-    require: 'cray-mpich'
-  libfabric:
-    # Specify libfabric version to match the system version
-    require: '@1.22.0'
   intel-oneapi-mkl:
     require:
       - 'threads=none'
@@ -44,3 +38,21 @@ packages:
     # Force git as non-buildable to allow deprecated versions in environments
     # https://github.com/spack/spack/pull/30040
     buildable: false
+  # FIXME: Workaround until CE provides a full MPI replacement (as SARUS did)
+  mpi:
+    require: 'cray-mpich'
+  # FIXME: Workaround until CE provides a full MPI replacement (as SARUS did)
+  libfabric:
+    # Specify libfabric version to match the system version
+    require: '@1.22.0'
+  xpmem:
+    require:
+      - '~kernel-module'
+  cray-gtl:
+    buildable: True
+  cray-mpich:
+    buildable: True
+  cray-pals:
+    buildable: True
+  cray-pmi:
+    buildable: True
