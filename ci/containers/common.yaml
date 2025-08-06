@@ -25,7 +25,7 @@ packages:
     require: 'cray-mpich'
   libfabric:
     # Specify libfabric version to match the system version
-    require: '@1.15.2'
+    require: '@1.22.0'
   intel-oneapi-mkl:
     require:
       - 'threads=none'
