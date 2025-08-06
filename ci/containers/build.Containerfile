@@ -46,7 +46,7 @@ RUN spack repo add --scope site $SPACK_PACKAGES_ROOT/repos/spack_repo/builtin
 
 # FIXME: Workaround until CE provides full MPI replacement
 ARG ALPS_CLUSTER_CONFIG_COMMIT
-ENV ALPS_CLUSTER_CONFIG_SHA=$ALPS_CLUSTER_CONFIG_COMMIT
+ENV ALPS_CLUSTER_CONFIG_COMMIT=$ALPS_CLUSTER_CONFIG_COMMIT
 RUN mkdir -p /opt/alps-cluster-config && \
     curl -Ls "https://api.github.com/repos/eth-cscs/alps-cluster-config/tarball/$ALPS_CLUSTER_CONFIG_COMMIT" | \
     tar --strip-components=1 -xz -C /opt/alps-cluster-config && \
