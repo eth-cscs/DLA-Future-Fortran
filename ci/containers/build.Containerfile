@@ -33,12 +33,10 @@ ENV SPACK_ROOT=/opt/spack-$SPACK_COMMIT
 ARG SPACK_PACKAGES_REPO=https://github.com/spack/spack-packages
 ARG SPACK_PACKAGES_COMMIT
 ENV SPACK_PACKAGES_ROOT=/opt/spack-packages-$SPACK_PACKAGES_COMMIT
-RUN mkdir -p $SPACK_ROOT \
-    && curl -OL $SPACK_REPO/archive/$SPACK_COMMIT.tar.gz \
-    && tar -xzvf $SPACK_COMMIT.tar.gz -C /opt && rm -f $SPACK_COMMIT.tar.gz \
-    && mkdir -p $SPACK_PACKAGES_ROOT \
-    && curl -OL $SPACK_PACKAGES_REPO/archive/$SPACK_PACKAGES_COMMIT.tar.gz \
-    && tar -xzvf $SPACK_PACKAGES_COMMIT.tar.gz -C /opt && rm -f $SPACK_PACKAGES_COMMIT.tar.gz
+RUN mkdir -p $SPACK_ROOT && \
+    curl -Ls "https://api.github.com/repos/spack/spack/tarball/$SPACK_COMMIT" | tar --strip-components=1 -xz -C ${SPACK_ROOT} && \
+    mkdir -p $SPACK_PACKAGES_ROOT && \
+    curl -Ls "https://api.github.com/repos/spack/spack-packages/tarball/$SPACK_PACKAGES_COMMIT" | tar --strip-components=1 -xz -C ${SPACK_PACKAGES_ROOT}
 
 ENV PATH $SPACK_ROOT/bin:/root/.local/bin:$PATH
 
@@ -74,13 +72,6 @@ RUN spack external find \
     perl \
     pkg-config \
     xz
-
-# Enable Spack build cache
-ARG SPACK_BUILDCACHE
-RUN spack mirror add ${SPACK_BUILDCACHE} https://binaries.spack.io/${SPACK_BUILDCACHE}
-RUN spack mirror add develop https://binaries.spack.io/develop && \
-    spack buildcache keys --install --trust --force && \
-    spack mirror rm develop
 
 # Add custom Spack repo
 ARG SPACK_DLAF_FORTRAN_REPO
