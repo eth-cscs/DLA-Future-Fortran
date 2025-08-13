@@ -3,6 +3,7 @@
 ## Documentation
 
 * [main](https://eth-cscs.github.io/DLA-Future-Fortran/main/)
+* [`v0.5.0`](https://eth-cscs.github.io/DLA-Future-Fortran/v0.5.0/)
 * [`v0.4.0`](https://eth-cscs.github.io/DLA-Future-Fortran/v0.4.0/)
 * [`v0.3.0`](https://eth-cscs.github.io/DLA-Future-Fortran/v0.3.0/)
 

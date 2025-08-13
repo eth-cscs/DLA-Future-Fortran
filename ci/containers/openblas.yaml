@@ -23,6 +23,9 @@ spack:
     scalapack:
       require:
         - netlib-scalapack
+    netlib-scalapack:
+      require:
+        - '@2.2.0' # TODO: Remove pin once issue with netlib-scalapack@2.2.2 is resolved
   view: false
   concretizer:
     unify:

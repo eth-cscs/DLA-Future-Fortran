@@ -12,13 +12,13 @@
 #:set types = ['real', 'complex']
 #:set names = {('sp', 'real'): 's', ('sp', 'complex'): 'c', ('dp', 'real'): 'd', ('dp', 'complex'): 'z'}
 #:set uplos = ['L', 'U']
-module pxpotrf_tests
+module pxpotri_tests
    use iso_fortran_env, only: error_unit, sp => real32, dp => real64
    use dlaf_fortran, only: dlaf_initialize, dlaf_finalize, dlaf_create_grid_from_blacs, dlaf_free_grid
    #:for dtype in precision
       #:for type in types
          #:set name = names[(dtype, type)]
-         use dlaf_fortran, only: dlaf_p${name}$potrf
+         use dlaf_fortran, only: dlaf_p${name}$potrf, dlaf_p${name}$potri
       #:endfor
    #:endfor
 
@@ -38,7 +38,7 @@ module pxpotrf_tests
    #:for dtype in precision
       #:for type in types
          #:set name = names[(dtype, type)]
-         public :: p${name}$potrf_${uplo}$_test
+         public :: p${name}$potri_${uplo}$_test
       #:endfor
    #:endfor
    #:endfor
@@ -49,7 +49,7 @@ contains
    #:for dtype in precision
       #:for type in types
          #:set name = names[(dtype, type)]
-         subroutine p${name}$potrf_${uplo}$_test
+         subroutine p${name}$potri_${uplo}$_test
 
             integer, parameter :: n = 4
             character, parameter :: uplo = '${uplo}$'
@@ -95,6 +95,7 @@ contains
                call set_random_matrix(A)
             end if
 
+
             ! Allocate local matrices
             ma = numroc(n, nb, myrow, 0, nprow)
             na = numroc(n, nb, mycol, 0, npcol)
@@ -106,18 +107,23 @@ contains
             ! + ---- +
 
             call descinit(desca_local_dlaf, n, n, nb, nb, 0, 0, ictxt, lld, info)
-            call p${name}$gemr2d(n, n, a, 1, 1, desca, A_local_dlaf, 1, 1, desca_local_dlaf, ictxt)
+            call p${name}$gemr2d(n, n, A, 1, 1, desca, A_local_dlaf, 1, 1, desca_local_dlaf, ictxt)
 
             ! Solve with DLAF
             call dlaf_initialize()
             call dlaf_create_grid_from_blacs(ictxt)
             call dlaf_p${name}$potrf(uplo, n, A_local_dlaf, 1, 1, desca_local_dlaf, info)
-            call dlaf_free_grid(ictxt)
-            call dlaf_finalize()
             if (info /= 0) then
                write (error_unit, *) 'ERROR: dlaf_p${name}$potrf returned info = ', info
                call terminate(ictxt)
             end if
+            call dlaf_p${name}$potri(uplo, n, A_local_dlaf, 1, 1, desca_local_dlaf, info)
+            if (info /= 0) then
+               write (error_unit, *) 'ERROR: dlaf_p${name}$potri returned info = ', info
+               call terminate(ictxt)
+            end if
+            call dlaf_free_grid(ictxt)
+            call dlaf_finalize()
 
             call p${name}$gemr2d(n, n, A_local_dlaf, 1, 1, desca_local_dlaf, R_dlaf, 1, 1, descr_dlaf, ictxt)
 
@@ -126,12 +132,17 @@ contains
             ! + --------- +
 
             call descinit(desca_local_scalapack, n, n, nb, nb, 0, 0, ictxt, lld, info)
-            call p${name}$gemr2d(n, n, a, 1, 1, desca, A_local_scalapack, 1, 1, desca_local_scalapack, ictxt)
+            call p${name}$gemr2d(n, n, A, 1, 1, desca, A_local_scalapack, 1, 1, desca_local_scalapack, ictxt)
 
             ! ScaLAPACK
             call p${name}$potrf(uplo, n, A_local_scalapack, 1, 1, desca_local_scalapack, info)
             if (info /= 0) then
                write (error_unit, *) 'ERROR: p${name}$potrf returned info = ', info
+               call terminate(ictxt)
+            end if
+            call p${name}$potri(uplo, n, A_local_scalapack, 1, 1, desca_local_scalapack, info)
+            if (info /= 0) then
+               write (error_unit, *) 'ERROR: p${name}$potri returned info = ', info
                call terminate(ictxt)
             end if
 
@@ -144,24 +155,20 @@ contains
             if (rank == 0) then
                if (.not. allclose(R_dlaf, R_scalapack, uplo=uplo)) then
                   failed = .true.
-                  write (error_unit, *) "ERROR: DLAF != ScaLAPACK (uplo='${uplo}$')"
+                  write (error_unit, *) "ERROR: DLAF != ScaLAPACK"
                end if
 
-               ! Solve with LAPACK
+               ! Check against LAPACK too
                call ${name}$potrf(uplo, n, A, n, info)
-               if (info /= 0) then
-                  write (error_unit, *) 'ERROR: ${name}$potrf returned info = ', info
-               end if
-
+               call ${name}$potri(uplo, n, A, n, info)
                if (.not. allclose(R_dlaf, A, uplo=uplo)) then
                   failed = .true.
-                  write (error_unit, *) "ERROR: DLAF != LAPACK (uplo='${uplo}$')"
+                  write (error_unit, *) "ERROR: DLAF != LAPACK"
                end if
                if (.not. allclose(R_scalapack, A, uplo=uplo)) then
                   failed = .true.
-                  write (error_unit, *) "ERROR: ScaLAPACK != LAPACK (uplo='${uplo}$')"
+                  write (error_unit, *) "ERROR: ScaLAPACK != LAPACK"
                end if
-
             end if
 
             call bcast_check(failed)
@@ -182,9 +189,9 @@ contains
             call blacs_gridexit(ictxt)
             call blacs_exit(1)
             call teardown_mpi()
-         end subroutine p${name}$potrf_${uplo}$_test
+         end subroutine p${name}$potri_${uplo}$_test
 
       #:endfor
    #:endfor
    #:endfor
-end module pxpotrf_tests
+end module pxpotri_tests

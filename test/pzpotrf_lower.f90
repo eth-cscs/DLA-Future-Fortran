@@ -8,11 +8,11 @@
 ! SPDX-License-Identifier: BSD-3-Clause
 !
 
-program test_pzpotrf
+program test_pzpotrf_L
    use pxpotrf_tests, only: pzpotrf_L_test
 
    implicit none
 
    call pzpotrf_L_test()
 
-end program test_pzpotrf
+end program test_pzpotrf_L

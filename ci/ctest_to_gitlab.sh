@@ -58,8 +58,9 @@ tests:
     PULL_IMAGE: 'YES'
     USE_MPI: 'YES'
     DISABLE_AFTER_SCRIPT: 'YES'
-  script: mpi-ctest"
+  script: mpi-ctest
   $ARTIFACTS
+"
 
 JOBS=""
 

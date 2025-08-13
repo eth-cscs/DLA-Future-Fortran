@@ -1,14 +1,25 @@
 #!/bin/bash -e
 
+set -o pipefail
+CTEST_OUTPUT="$CI_PROJECT_DIR/output/ctest.$SLURM_PROCID.txt"
+
 pushd /DLAF-Fortran-build > /dev/null
+
+# Solves container squashfs hang problems 
+# See https://github.com/eth-cscs/DLA-Future/issues/1305
+if [[ $SLURM_LOCALID == "0" ]]; then
+    rm -rf Testing
+    ln -s /dev/shm Testing
+fi
+sleep 1
 
 # Run the tests, only output on the first rank
 if [[ $SLURM_PROCID == "0" ]]; then
     TZ=CET date +"Run started at: %H:%M:%S %z"
-    ctest -V $@
+    ctest --output-log "$CTEST_OUTPUT" -V $@
     TZ=CET date +"Run finished at: %H:%M:%S %z"
 else
-    ctest -Q $@
+    ctest --output-log "$CTEST_OUTPUT" -Q $@
 fi
 
 popd > /dev/null

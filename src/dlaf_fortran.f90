@@ -30,6 +30,7 @@ module dlaf_fortran
    public :: dlaf_initialize, dlaf_finalize
    public :: dlaf_create_grid_from_blacs, dlaf_free_grid, dlaf_free_all_grids
    public :: dlaf_pspotrf, dlaf_pdpotrf, dlaf_pcpotrf, dlaf_pzpotrf
+   public :: dlaf_pspotri, dlaf_pdpotri, dlaf_pcpotri, dlaf_pzpotri
    public :: dlaf_pssyevd, dlaf_pdsyevd, dlaf_pcheevd, dlaf_pzheevd
    public :: dlaf_pssyevd_partial_spectrum, dlaf_pdsyevd_partial_spectrum
    public :: dlaf_pcheevd_partial_spectrum, dlaf_pzheevd_partial_spectrum
@@ -297,6 +298,154 @@ contains
       call dlaf_pzpotrf_c(iachar(uplo, c_signed_char), n, c_loc(a(1, 1)), ia, ja, desca, c_loc(info))
 
    end subroutine dlaf_pzpotrf
+
+   subroutine dlaf_pspotri(uplo, n, a, ia, ja, desca, info)
+      !! Inverse of distributed single-precision real symmetric positive definite matrix \(\mathbf{A}\) using
+      !! Cholesky factorization \(\mathbf{A} = \mathbf{L} \mathbf{L}^T\) or \(\mathbf{A} = \mathbf{U}^T \mathbf{U}\)
+      !! {!docs/snippets/note-host-matrix.md!}
+      character, intent(in) :: uplo
+      !! {!docs/snippets/uplo.md!}
+      integer, intent(in) :: n
+      !! {!docs/snippets/n.md!}
+      real(kind=sp), dimension(:, :), target, intent(inout) :: a
+      !! {!docs/snippets/a.md!}
+      integer, intent(in) :: ia
+      !! {!docs/snippets/ia.md!}
+      integer, intent(in) :: ja
+      !! {!docs/snippets/ja.md!}
+      integer, dimension(9), intent(in) :: desca
+      !! {!docs/snippets/desca.md!}
+      integer, target, intent(out) :: info
+      !! {!docs/snippets/info.md!}
+
+      interface
+         subroutine dlaf_pspotri_c(uplo_, n_, a_, ia_, ja_, desca_, info_) &
+            bind(C, name='dlaf_pspotri')
+
+            import :: c_ptr, c_int, c_signed_char
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: ia_, ja_, n_
+            type(c_ptr), value :: info_
+            integer(kind=c_int), dimension(*) :: desca_
+            type(c_ptr), value :: a_
+         end subroutine dlaf_pspotri_c
+      end interface
+
+      call dlaf_pspotri_c(iachar(uplo, c_signed_char), n, c_loc(a(1, 1)), ia, ja, desca, c_loc(info))
+
+   end subroutine dlaf_pspotri
+
+   subroutine dlaf_pdpotri(uplo, n, a, ia, ja, desca, info)
+      !! Inverse of distributed double-precision real symmetric positive definite matrix \(\mathbf{A}\) using
+      !! Cholesky factorization \(\mathbf{A} = \mathbf{L} \mathbf{L}^T\) or \(\mathbf{A} = \mathbf{U}^T \mathbf{U}\)
+      !! {!docs/snippets/note-host-matrix.md!}
+      character, intent(in) :: uplo
+      !! {!docs/snippets/uplo.md!}
+      integer, intent(in) :: n
+      !! {!docs/snippets/n.md!}
+      real(kind=dp), dimension(:, :), target, intent(inout) :: a
+      !! {!docs/snippets/a.md!}
+      integer, intent(in) :: ia
+      !! {!docs/snippets/ia.md!}
+      integer, intent(in) :: ja
+      !! {!docs/snippets/ja.md!}
+      integer, dimension(9), intent(in) :: desca
+      !! {!docs/snippets/desca.md!}
+      integer, target, intent(out) :: info
+      !! {!docs/snippets/info.md!}
+
+      interface
+         subroutine dlaf_pdpotri_c(uplo_, n_, a_, ia_, ja_, desca_, info_) &
+            bind(C, name='dlaf_pdpotri')
+
+            import :: c_ptr, c_int, c_signed_char
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: ia_, ja_, n_
+            type(c_ptr), value :: info_
+            integer(kind=c_int), dimension(*) :: desca_
+            type(c_ptr), value :: a_
+         end subroutine dlaf_pdpotri_c
+      end interface
+
+      call dlaf_pdpotri_c(iachar(uplo, c_signed_char), n, c_loc(a(1, 1)), ia, ja, desca, c_loc(info))
+
+   end subroutine dlaf_pdpotri
+
+   subroutine dlaf_pcpotri(uplo, n, a, ia, ja, desca, info)
+      !! Inverse of distributed single-precision complex Hermitian positive definite matrix \(\mathbf{A}\) using
+      !! Cholesky factorization \(\mathbf{A} = \mathbf{L} \mathbf{L}^H\) or \(\mathbf{A} = \mathbf{U}^H \mathbf{U}\)
+      !! {!docs/snippets/note-host-matrix.md!}
+      character, intent(in) :: uplo
+      !! {!docs/snippets/uplo.md!}
+      integer, intent(in) :: n
+      !! {!docs/snippets/n.md!}
+      complex(kind=sp), dimension(:, :), target, intent(inout) :: a
+      !! {!docs/snippets/a.md!}
+      integer, intent(in) :: ia
+      !! {!docs/snippets/ia.md!}
+      integer, intent(in) :: ja
+      !! {!docs/snippets/ja.md!}
+      integer, dimension(9), intent(in) :: desca
+      !! {!docs/snippets/desca.md!}
+      integer, target, intent(out) :: info
+      !! {!docs/snippets/info.md!}
+
+      interface
+         subroutine dlaf_pcpotri_c(uplo_, n_, a_, ia_, ja_, desca_, info_) &
+            bind(C, name='dlaf_pcpotri')
+
+            import :: c_ptr, c_int, c_signed_char
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: ia_, ja_, n_
+            type(c_ptr), value :: info_
+            integer(kind=c_int), dimension(*) :: desca_
+            type(c_ptr), value :: a_
+         end subroutine dlaf_pcpotri_c
+      end interface
+
+      call dlaf_pcpotri_c(iachar(uplo, c_signed_char), n, c_loc(a(1, 1)), ia, ja, desca, c_loc(info))
+
+   end subroutine dlaf_pcpotri
+
+   subroutine dlaf_pzpotri(uplo, n, a, ia, ja, desca, info)
+      !! Inverse of distributed double-precision complex Hermitian positive definite matrix \(\mathbf{A}\) using
+      !! Cholesky factorization \(\mathbf{A} = \mathbf{L} \mathbf{L}^H\) or \(\mathbf{A} = \mathbf{U}^H \mathbf{U}\)
+      !! {!docs/snippets/note-host-matrix.md!}
+      character, intent(in) :: uplo
+      !! {!docs/snippets/uplo.md!}
+      integer, intent(in) :: n
+      !! {!docs/snippets/n.md!}
+      complex(kind=dp), dimension(:, :), target, intent(inout) :: a
+      !! {!docs/snippets/a.md!}
+      integer, intent(in) :: ia
+      !! {!docs/snippets/ia.md!}
+      integer, intent(in) :: ja
+      !! {!docs/snippets/ja.md!}
+      integer, dimension(9), intent(in) :: desca
+      !! {!docs/snippets/desca.md!}
+      integer, target, intent(out) :: info
+      !! {!docs/snippets/info.md!}
+
+      interface
+         subroutine dlaf_pzpotri_c(uplo_, n_, a_, ia_, ja_, desca_, info_) &
+            bind(C, name='dlaf_pzpotri')
+
+            import :: c_ptr, c_int, c_signed_char
+
+            integer(kind=c_signed_char), value :: uplo_
+            integer(kind=c_int), value :: ia_, ja_, n_
+            type(c_ptr), value :: info_
+            integer(kind=c_int), dimension(*) :: desca_
+            type(c_ptr), value :: a_
+         end subroutine dlaf_pzpotri_c
+      end interface
+
+      call dlaf_pzpotri_c(iachar(uplo, c_signed_char), n, c_loc(a(1, 1)), ia, ja, desca, c_loc(info))
+
+   end subroutine dlaf_pzpotri
 
    subroutine dlaf_pssyevd(uplo, n, a, ia, ja, desca, w, z, iz, jz, descz, info)
       !! {!docs/snippets/pssyevd.md!}

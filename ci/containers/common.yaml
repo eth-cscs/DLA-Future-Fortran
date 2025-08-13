@@ -13,15 +13,13 @@ packages:
     target: [x86_64]
     require:
       - "platform=linux"
-      - "os=ubuntu22.04"
+      - "os=ubuntu24.04"
   blas:
     require: 'intel-oneapi-mkl'
   lapack:
     require: 'intel-oneapi-mkl'
   scalapack:
     require: 'intel-oneapi-mkl'
-  mpi:
-    require: 'mpich'
   intel-oneapi-mkl:
     require:
       - 'threads=none'
@@ -30,19 +28,31 @@ packages:
   openblas:
     variants:
       - 'threads=openmp'
-  mpich:
-    # Requirement for ABI compatibility on the test system
-    require:
-      - '@3.4.2'
-    variants:
-      - '~libxml2'
   hwloc:
     variants:
       - '~libxml2'
   dla-future:
     require:
-      - '@0.9.0'
+      - '@0.10.0'
   git:
     # Force git as non-buildable to allow deprecated versions in environments
     # https://github.com/spack/spack/pull/30040
     buildable: false
+  # FIXME: Workaround until CE provides a full MPI replacement (as SARUS did)
+  mpi:
+    require: 'cray-mpich'
+  # FIXME: Workaround until CE provides a full MPI replacement (as SARUS did)
+  libfabric:
+    # Specify libfabric version to match the system version
+    require: '@1.22.0'
+  xpmem:
+    require:
+      - '~kernel-module'
+  cray-gtl:
+    buildable: True
+  cray-mpich:
+    buildable: True
+  cray-pals:
+    buildable: True
+  cray-pmi:
+    buildable: True
