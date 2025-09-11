@@ -55,7 +55,7 @@ contains
          subroutine p${name}$gvd_test
 
             integer, parameter :: n = 4
-            character, parameter :: uplo = 'L' ! NOTE: pxheevd limited to uplo='L'
+            character, parameter :: uplo = 'L' ! NOTE: pxhegvd limited to uplo='L'
             integer(kind=i8), parameter :: eval_idx_begin = 1
             integer(kind=i8), parameter :: eval_idx_end = 2
 
@@ -209,7 +209,7 @@ contains
             call dlaf_free_grid(ictxt)
             call dlaf_finalize()
             if (info /= 0) then
-               write (error_unit, *) 'ERROR: dlaf_p${name}$evd returned info = ', info
+               write (error_unit, *) 'ERROR: dlaf_p${name}$gvd returned info = ', info
                call terminate(ictxt)
             end if
 
@@ -415,9 +415,9 @@ contains
                if (allocated(Z_dlaf)) deallocate (Z_dlaf)
                if (allocated(Z_lapack)) deallocate (Z_lapack)
                if (allocated(Z_scalapack)) deallocate (Z_scalapack)
-	       if (allocated(Z_dlaf_factorized)) deallocate(Z_dlaf_factorized)
-	       if (allocated(Z_dlaf_partial_spectrum)) deallocate(Z_dlaf_partial_spectrum)
-	       if (allocated(Z_dlaf_partial_spectrum_factorized)) deallocate(Z_dlaf_partial_spectrum_factorized)
+               if (allocated(Z_dlaf_factorized)) deallocate(Z_dlaf_factorized)
+               if (allocated(Z_dlaf_partial_spectrum)) deallocate(Z_dlaf_partial_spectrum)
+               if (allocated(Z_dlaf_partial_spectrum_factorized)) deallocate(Z_dlaf_partial_spectrum_factorized)
             end if
             if (allocated(A_local_dlaf)) deallocate (A_local_dlaf)
             if (allocated(A_local_scalapack)) deallocate (A_local_scalapack)

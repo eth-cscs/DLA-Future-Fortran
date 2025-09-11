@@ -301,7 +301,7 @@ contains
 
             if (rank == 0) then
                if (allocated(A)) deallocate (A)
-	       if (allocated(W_lapack)) deallocate(W_lapack)
+               if (allocated(W_lapack)) deallocate(W_lapack)
                if (allocated(Z_dlaf)) deallocate (Z_dlaf)
                if (allocated(Z_scalapack)) deallocate (Z_scalapack)
             end if
