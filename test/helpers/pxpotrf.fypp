@@ -147,7 +147,8 @@ contains
                   write (error_unit, *) "ERROR: DLAF != ScaLAPACK (uplo='${uplo}$')"
                end if
 
-               ! Solve with LAPACK
+               ! Check against LAPACK
+
                call ${name}$potrf(uplo, n, A, n, info)
                if (info /= 0) then
                   write (error_unit, *) 'ERROR: ${name}$potrf returned info = ', info

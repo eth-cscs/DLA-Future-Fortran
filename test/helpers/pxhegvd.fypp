@@ -368,7 +368,7 @@ contains
                     abs(Z_dlaf(:,eval_idx_end+1:n))) &
                   ) then
                   failed = .true.
-                  write (error_unit, *) "ERROR: DLAF Partial Spectrum != DLAF (eigenvectors [end+1, N])"
+                  write (error_unit, *) "ERROR: DLAF Partial Spectrum == DLAF (eigenvectors [end+1, N])"
                end if
 
                if ( &
@@ -386,7 +386,7 @@ contains
                     abs(Z_dlaf(:,eval_idx_end+1:n))) &
                   ) then
                   failed = .true.
-                  write (error_unit, *) "ERROR: DLAF Partial Spectrum Factorized != DLAF (eigenvectors [end+1, N])"
+                  write (error_unit, *) "ERROR: DLAF Partial Spectrum Factorized == DLAF (eigenvectors [end+1, N])"
                end if
 
                if (.not. allclose(abs(Z_dlaf), abs(Z_lapack), atol=abstol)) then

@@ -158,9 +158,18 @@ contains
                   write (error_unit, *) "ERROR: DLAF != ScaLAPACK"
                end if
 
-               ! Check against LAPACK too
+               ! Check against LAPACK
+
                call ${name}$potrf(uplo, n, A, n, info)
+               if (info /= 0) then
+                  write (error_unit, *) 'ERROR: ${name}$potrf returned info = ', info
+               end if
+
                call ${name}$potri(uplo, n, A, n, info)
+               if (info /= 0) then
+                  write (error_unit, *) 'ERROR: ${name}$potri returned info = ', info
+               end if
+
                if (.not. allclose(R_dlaf, A, uplo=uplo)) then
                   failed = .true.
                   write (error_unit, *) "ERROR: DLAF != LAPACK"

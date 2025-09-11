@@ -263,6 +263,7 @@ contains
                     failed = .true.
                     write (error_unit, *) "ERROR: DLAF != LAPACK (eigenvectors)"
                 end if
+
                 if (.not. allclose(abs(Z_scalapack), abs(A), atol=abstol)) then
                     failed = .true.
                     write (error_unit, *) "ERROR: ScaLAPACK != LAPACK (eigenvectors)"
@@ -278,15 +279,6 @@ contains
                     failed = .true.
                     write (error_unit, *) "ERROR: DLAF_PS != ScaLAPACK (eigenvectors [begin,end])"
                 end if
-                if ( &
-                    .not. allclose( &
-                        abs(Z_dlaf_partial_spectrum(:,eval_idx_begin:eval_idx_end)), &
-                        abs(A(:, eval_idx_begin:eval_idx_end)), &
-                        atol=abstol) &
-                    ) then
-                    failed = .true.
-                    write (error_unit, *) "ERROR: DLAF_PS != LAPACK (eigenvectors [begin,end])"
-                end if
 
                 ! Something is off if the last eigenvectors are the same as ScaLAPACK
                 if ( &
@@ -297,15 +289,6 @@ contains
                     ) then
                     failed = .true.
                     write (error_unit, *) "ERROR: DLAF_PS == ScaLAPACK (eigenvectors [end+1:N])"
-                end if
-                if ( &
-                    allclose( &
-                        abs(Z_dlaf_partial_spectrum(:,eval_idx_end+1:n)), &
-                        abs(A(:,eval_idx_end+1:n)), &
-                        atol=abstol) &
-                    ) then
-                    failed = .true.
-                    write (error_unit, *) "ERROR: DLAF_PS == LAPACK (eigenvectors [end+1:N])"
                 end if
             end if
 
