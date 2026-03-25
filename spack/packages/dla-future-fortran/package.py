@@ -48,6 +48,8 @@ class DlaFutureFortran(CMakePackage):
     depends_on("mpi", when="+test")
     depends_on("py-fypp", when="+test", type="build")
 
+    conflicts("netlib-scalapack@2.2.2")
+
     # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # FIXME: Variants only available on the DLA-Future-Fortran repo
     # FIXME: Remove those variants from the official Spack package
