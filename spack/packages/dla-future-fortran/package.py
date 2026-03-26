@@ -48,6 +48,7 @@ class DlaFutureFortran(CMakePackage):
     depends_on("mpi", when="+test")
     depends_on("py-fypp", when="+test", type="build")
 
+    # See https://github.com/eth-cscs/DLA-Future-Fortran/pull/48
     conflicts("netlib-scalapack@2.2.2")
 
     # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
